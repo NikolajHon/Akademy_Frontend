@@ -1,0 +1,13 @@
+<div class="course-detail-container" *ngIf="course">
+  <div class="course-header">
+    <h2>{{ course.name }}</h2>
+    <p>{{ course.description }}</p>
+  </div>
+
+  <h3 class="lessons-title">Lessons</h3>
+  <ul class="lessons-list">
+    <li *ngFor="let lesson of course.lessons">{{ lesson.title }}</li>
+  </ul>
+</div>
+
+<p class="loading-text" *ngIf="!course">Loading...</p>

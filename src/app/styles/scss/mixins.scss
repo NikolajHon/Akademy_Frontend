@@ -1,0 +1,7 @@
+@mixin soft-shadow {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+@mixin transition {
+  transition: all $transition-speed ease-in-out;
+}

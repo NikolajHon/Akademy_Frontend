@@ -25,8 +25,9 @@ export class UserService {
   }
 
   public logout() {
-    this.oauthService.logOut();
+    this.oauthService.logOut(true);
   }
+
 
   public isLoggedIn(): boolean {
     return this.oauthService.hasValidAccessToken();
