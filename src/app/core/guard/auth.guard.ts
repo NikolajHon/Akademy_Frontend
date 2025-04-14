@@ -9,11 +9,9 @@ export const authGuard: CanActivateFn = async (route, state) => {
     await oauthService.loadDiscoveryDocumentAndTryLogin();
 
     if (oauthService.hasValidAccessToken()) {
-        console.log('✅ Access token найден, продолжаем');
         return true;
     }
 
-    console.warn('🔒 Нет access token, запускаем OAuth flow');
     oauthService.initCodeFlow();
     return false;
 };

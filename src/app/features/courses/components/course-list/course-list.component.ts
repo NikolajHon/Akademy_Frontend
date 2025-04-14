@@ -20,10 +20,10 @@ export class CourseListComponent implements OnInit {
     this.courseService.getCourses().subscribe({
       next: (courses) => {
         this.courses = courses;
-        console.log('Курсы получены:', courses);
+        console.log('Courses received:', courses);
       },
       error: (err) => {
-        console.error('Ошибка при получении курсов:', err);
+        console.error('Error in receiving courses:', err);
       }
     });
   }
@@ -31,7 +31,6 @@ export class CourseListComponent implements OnInit {
 
 
   openCourse(id: number): void {
-    console.log('Клик по курсу, id:', id);
     this.router.navigate(['/courses', id]);
   }
 

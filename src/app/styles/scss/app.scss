@@ -5,7 +5,6 @@ body {
   margin: 0;
 }
 
-// Курс — список
 .course-list {
   display: flex;
   flex-wrap: wrap;
@@ -41,7 +40,6 @@ body {
   }
 }
 
-// Курс — детали
 .course-detail-container {
   max-width: 800px;
   margin: 2rem auto;

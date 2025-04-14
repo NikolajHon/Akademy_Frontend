@@ -17,10 +17,8 @@ export class CourseDetailPageComponent {
 
   ngOnInit(): void {
     const courseId = Number(this.route.snapshot.paramMap.get('id'));
-    console.log('Открыт маршрут с courseId =', courseId);
 
     this.courseService.getCourses().subscribe(courses => {
-      console.log('Доступные курсы в detail page:', courses);
       this.course = courses.find(c => c.id === courseId) || null;
     });
   }
