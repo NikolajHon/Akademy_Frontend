@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { authCodeFlowConfig } from '../config/authCodeFlowConfig.config';
 
@@ -6,41 +6,47 @@ import { authCodeFlowConfig } from '../config/authCodeFlowConfig.config';
   providedIn: 'root'
 })
 export class UserService {
-
-  userData: any;
+  private user = signal<any | undefined>(undefined);
 
   constructor(private oauthService: OAuthService) {
     this.oauthService.configure(authCodeFlowConfig);
-
     this.tryLogin();
   }
 
-  public async tryLogin() {
+  async tryLogin() {
     await this.oauthService.loadDiscoveryDocumentAndTryLogin();
     this.loadUserData();
+
+    if (this.oauthService.hasValidAccessToken()) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
   }
 
-  public login() {
+  login() {
     this.oauthService.initLoginFlow();
   }
 
-  public logout() {
+  logout() {
     this.oauthService.logOut(true);
+    this.user.set(undefined);
   }
 
-
-  public isLoggedIn(): boolean {
+  isLoggedIn(): boolean {
     return this.oauthService.hasValidAccessToken();
   }
 
   private loadUserData() {
-    let claims: any = this.oauthService.getIdentityClaims();
+    const claims = this.oauthService.getIdentityClaims();
     if (claims) {
-      this.userData = claims;
+      this.user.set(claims);
     }
   }
 
-  public getAccessToken(): string {
+  getAccessToken(): string {
     return this.oauthService.getAccessToken();
+  }
+
+  getUserSignal() {
+    return this.user.asReadonly();
   }
 }
