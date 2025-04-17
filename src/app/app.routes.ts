@@ -6,7 +6,7 @@ import {authGuard} from './core/guard/auth.guard';
 
 export const routes: Routes = [
   {
-    path: 'courses',
+    path: 'course-page',
     canActivate: [authGuard],
     children: [
       {
@@ -21,11 +21,11 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'courses',
+    redirectTo: 'course-page',
     pathMatch: 'full'
   },
   {
     path: '**',
-    redirectTo: 'courses'
+    redirectTo: 'course-page'
   }
 ];
