@@ -31,7 +31,7 @@ export class CourseListComponent implements OnInit {
 
 
   openCourse(id: number): void {
-    this.router.navigate(['/courses', id]);
+    this.router.navigate(['/course-page', id]);
   }
 
 }

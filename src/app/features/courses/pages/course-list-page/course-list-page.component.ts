@@ -23,8 +23,4 @@ export class CourseListPageComponent  implements OnInit {
       error: (err) => console.error('Ошибка при загрузке курсов', err),
     });
   }
-
-  openCourse(id: number): void {
-    this.router.navigate(['/courses', id]);
-  }
 }

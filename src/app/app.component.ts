@@ -1,32 +1,25 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { authCodeFlowConfig } from './core/config/authCodeFlowConfig.config';
-import {Router, RouterModule} from '@angular/router';
+import {Component, inject} from '@angular/core';
+import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
+import {UserService} from './core/services/user.service';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [
+    RouterOutlet
+  ],
   templateUrl: './app.component.html'
 })
+export class AppComponent {
 
-export class AppComponent implements OnInit {
-  private router = inject(Router);
-  private oauthService = inject(OAuthService);
-  loggedIn = false;
+  userService = inject(UserService);
 
-  async ngOnInit() {
-    this.oauthService.configure(authCodeFlowConfig);
+  user = this.userService.getUserSignal();
 
-    await this.oauthService.loadDiscoveryDocumentAndTryLogin();
+  logout() {
+    this.userService.logout();
+  }
 
-    if (!this.oauthService.hasValidAccessToken()) {
-      this.oauthService.initCodeFlow();
-      return;
-    }
-    console.log("we were login")
-    this.loggedIn = true;
-    this.router.navigate(['/courses']);
+  login() {
+    this.userService.login();
   }
 }

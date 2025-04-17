@@ -1,19 +1,30 @@
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { AuthInterceptor } from './core/interceptors/auth.interceptor';
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { OAuthModule } from 'angular-oauth2-oidc';
-import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
+import {ApplicationConfig, importProvidersFrom, LOCALE_ID, provideZoneChangeDetection} from '@angular/core';
+import {provideRouter, withEnabledBlockingInitialNavigation} from '@angular/router';
+
+import {routes} from './app.routes';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi} from '@angular/common/http';
+import localeSk from '@angular/common/locales/sk';
+import {registerLocaleData} from '@angular/common';
+import {DefaultOAuthInterceptor, OAuthModule} from 'angular-oauth2-oidc';
+
+registerLocaleData(localeSk, 'sk');
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(OAuthModule.forRoot()),
-    provideHttpClient(withInterceptorsFromDi()),
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
-    provideRouter(routes)
+    provideZoneChangeDetection({eventCoalescing: true}),
+    provideRouter(routes, withEnabledBlockingInitialNavigation()),
+    provideHttpClient(
+      withInterceptorsFromDi()
+    ),
+    importProvidersFrom(
+      OAuthModule.forRoot({
+        resourceServer: {
+          sendAccessToken: true
+        },
+      })
+    ),
+
+    {provide: HTTP_INTERCEPTORS, useClass: DefaultOAuthInterceptor, multi: true}
+
   ]
 };
