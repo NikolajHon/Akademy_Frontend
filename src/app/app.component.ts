@@ -10,16 +10,4 @@ import {UserService} from './core/services/user.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-
-  userService = inject(UserService);
-
-  user = this.userService.getUserSignal();
-
-  logout() {
-    this.userService.logout();
-  }
-
-  login() {
-    this.userService.login();
-  }
 }
