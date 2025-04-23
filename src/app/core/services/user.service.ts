@@ -4,67 +4,77 @@ import {OAuthService} from 'angular-oauth2-oidc';
 import {authCodeFlowConfig} from '../config/authCodeFlowConfig.config';
 import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot} from '@angular/router';
 
-@Injectable({
-  providedIn: 'root'
-})
+
+@Injectable({ providedIn: 'root' })
 export class UserService {
+  private user = signal<UserModel|undefined>(undefined);
 
-  private user = signal<UserModel | undefined>(undefined);
-
-  constructor(private oauthService: OAuthService) {
+  constructor(
+    private oauthService: OAuthService,
+    private router: Router
+  ) {
     this.oauthService.configure(authCodeFlowConfig);
     this.tryLogin();
   }
-
 
   getUserSignal() {
     return this.user.asReadonly();
   }
 
-  tryLogin() {
-    return this.oauthService.loadDiscoveryDocumentAndTryLogin()
+  tryLogin(): Promise<UserModel|undefined> {
+    return this.oauthService
+      .loadDiscoveryDocumentAndTryLogin()
       .then(() => {
-        let userModel = this.oauthService.getIdentityClaims() as UserModel;
-        this.user.set(userModel);
+        const claims = this.oauthService.getIdentityClaims() as UserModel;
+        this.user.set(claims);
 
-        return userModel;
-      })
+        const target = this.oauthService.state;
+        if (target) {
+          this.router.navigateByUrl(decodeURIComponent(target));
+        }
+
+        return claims;
+      });
   }
 
-  login() {
-    this.oauthService.loadDiscoveryDocumentAndLogin()
-      .then(() => {
-        this.user.set(this.oauthService.getIdentityClaims() as UserModel);
-      })
-  }
 
-  logout() {
+
+  logout(): void {
     this.oauthService.logOut();
     this.user.set(undefined);
   }
 
-  isUserLoggedIn() {
-    return this.tryLogin()
-      .then((userModel : UserModel | undefined) => {
-        return !!userModel;
-      })
+  isUserLoggedIn(): boolean {
+    const token = this.oauthService.getAccessToken();
+    const expMs  = this.oauthService.getAccessTokenExpiration();
+    const msLeft = expMs - Date.now();
+    console.log(
+      `Access token present: ${!!token}, expires in ${Math.floor(msLeft/1000)} sec`
+    );
+    if(msLeft < 0) {
+      this.logout();
+    }
+    return !!token && msLeft > 0;
   }
-
+  login(redirectUrl?: string): void {
+    this.oauthService.initCodeFlow(redirectUrl);
+  }
 }
 
 
-export const canActiveHome: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-  const router = inject(Router);
+
+export const canActiveHome: CanActivateFn = async (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+): Promise<boolean> => {
   const userService = inject(UserService);
 
+  await userService.tryLogin();
+  console.log('user logged in', userService.isUserLoggedIn());
 
-  return userService.isUserLoggedIn()
-    .then(value => {
-      if (value) {
-        return true;
-      } else {
-        userService.login();
-        return false;
-      }
-    })
+  if (userService.isUserLoggedIn()) {
+    return true;
+  }
+  userService.login(state.url);
+  return false;
 };

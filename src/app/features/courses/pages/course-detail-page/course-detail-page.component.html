@@ -1,13 +1,22 @@
-<div class="course-detail-container" *ngIf="course">
-  <div class="course-header">
-    <h2>{{ course.name }}</h2>
-    <p>{{ course.description }}</p>
+<div class="container-fluid px-4 py-4">
+  <div class="row gx-5">
+
+    <div class="col-xl-9 col-lg-10 col-md-12 mb-4">
+      <div class="course-detail-container">
+        <h3 class="lessons-title mb-3">Lessons</h3>
+        <app-lessons-list
+          [lessons]="course!.lessons"
+          (goToLesson)="onGoToLesson($event)"
+          (viewTasks)="onViewTasks($event)"
+          (startPractice)="onStartPractice($event)"
+          (viewQuestions)="onViewQuestions($event)">
+        </app-lessons-list>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-lg-2 col-md-12">
+      <app-top-five-list></app-top-five-list>
+    </div>
+
   </div>
-
-  <h3 class="lessons-title">Lessons</h3>
-  <ul class="lessons-list">
-    <li *ngFor="let lesson of course.lessons">{{ lesson.title }}</li>
-  </ul>
 </div>
-
-<p class="loading-text" *ngIf="!course">Loading...</p>

@@ -1,0 +1,32 @@
+<div class="lessons-list">
+  <div class="lesson-card"
+       *ngFor="let lesson of lessons; index as i"
+       [style.--delay]="i * 80 + 'ms'">
+
+    <!-- Круговой прогресс -->
+    <div class="progress-circle"
+         [style.--offset]="100 - 50">
+      <svg viewBox="0 0 36 36">
+        <circle class="track"   cx="18" cy="18" r="16"></circle>
+        <circle class="indicator"
+                cx="18" cy="18" r="16"
+                [attr.stroke-dasharray]="50 + ', 100'">
+        </circle>
+      </svg>
+      <span class="percent">{{ 50 }}%</span>
+    </div>
+
+    <!-- Текст -->
+    <div class="info">
+      <h4>{{ lesson.name }}</h4>
+      <p>{{ lesson.description }}</p>
+
+      <div class="actions">
+        <button (click)="goToLesson.emit(lesson)">GO TO LESSON</button>
+        <button (click)="viewTasks.emit(lesson)">TASKS</button>
+        <button (click)="startPractice.emit(lesson)">PRACTISE</button>
+        <button (click)="viewQuestions.emit(lesson)">QUESTIONS</button>
+      </div>
+    </div>
+  </div>
+</div>

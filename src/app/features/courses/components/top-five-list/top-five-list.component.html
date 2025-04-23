@@ -1,0 +1,13 @@
+<div class="top-five-list">
+  <h3>Top 5 Users</h3>
+  <div class="user-card" *ngFor="let u of users">
+    <div class="avatar">
+      <img [src]="u.avatarUrl" alt="{{u.name}} avatar" />
+      <span class="rank">#{{users.indexOf(u) + 1}}</span>
+    </div>
+    <div class="user-info">
+      <span class="name">{{ u.name }}</span>
+      <span class="score">{{ u.score }}</span>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,10 @@
+<nav>
+  <a routerLink="/home" routerLinkActive="active">Home</a>
+  <a routerLink="/course-page" routerLinkActive="active">Courses</a>
+  <span class="nav-actions">
+    <button *ngIf="!user()" (click)="login()">Login</button>
+    <button *ngIf="user()"  (click)="logout()">Logout</button>
+  </span>
+</nav>
+<hr>
 <router-outlet></router-outlet>
