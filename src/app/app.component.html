@@ -1,10 +1,18 @@
+<!-- app.component.html -->
 <nav>
   <a routerLink="/home" routerLinkActive="active">Home</a>
   <a routerLink="/course-page" routerLinkActive="active">Courses</a>
   <a routerLink="/forum" routerLinkActive="active">Forum</a>
   <span class="nav-actions">
-    <button *ngIf="!user()" (click)="login()">Login</button>
-    <button *ngIf="user()"  (click)="logout()">Logout</button>
+    <ng-container *ngIf="user() as u; else showLogin">
+      <span class="user-info">
+        Привет, {{ u.name }} ({{ u.role }})
+      </span>
+      <button (click)="logout()">Logout</button>
+    </ng-container>
+    <ng-template #showLogin>
+      <button (click)="login()">Login</button>
+    </ng-template>
   </span>
 </nav>
 <hr>

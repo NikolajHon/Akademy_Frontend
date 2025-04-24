@@ -1,22 +1,111 @@
 <div class="container-fluid px-4 py-4">
   <div class="row gx-5">
-
     <div class="col-xl-9 col-lg-10 col-md-12 mb-4">
       <div class="course-detail-container">
         <h3 class="lessons-title mb-3">Lessons</h3>
+
         <app-lessons-list
-          [lessons]="course!.lessons"
+          *ngIf="course()"
+          [lessons]="course()!.lessons"
           (goToLesson)="onGoToLesson($event)"
           (viewTasks)="onViewTasks($event)"
           (startPractice)="onStartPractice($event)"
-          (viewQuestions)="onViewQuestions($event)">
-        </app-lessons-list>
+          (viewQuestions)="onViewQuestions($event)"
+        ></app-lessons-list>
+
+        <button
+          *ngIf="isTeacher()"
+          class="btn btn-success mt-3"
+          (click)="openCreateModal()"
+        >
+          Add Lesson
+        </button>
       </div>
     </div>
 
     <div class="col-xl-3 col-lg-2 col-md-12">
       <app-top-five-list></app-top-five-list>
     </div>
+  </div>
+</div>
 
+<div *ngIf="showCreateModal()" class="modal-backdrop fade show"></div>
+
+<div
+  *ngIf="showCreateModal()"
+  class="modal fade show d-block"
+  tabindex="-1"
+  aria-modal="true"
+  role="dialog"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">New Lesson</h5>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="closeModal()"
+        ></button>
+      </div>
+
+      <form (ngSubmit)="createLesson()">
+        <div class="modal-body">
+          <!-- Title -->
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input
+              class="form-control"
+              name="title"
+              [ngModel]="newLesson().title"
+              (ngModelChange)="updateTitle($event)"
+              required
+            />
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea
+              class="form-control"
+              name="description"
+              rows="3"
+              [ngModel]="newLesson().description"
+              (ngModelChange)="updateDescription($event)"
+            ></textarea>
+          </div>
+
+          <!-- Content -->
+          <div class="mb-3">
+            <label class="form-label">Content</label>
+            <textarea
+              class="form-control"
+              name="content"
+              rows="5"
+              [ngModel]="newLesson().content"
+              (ngModelChange)="updateContent($event)"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeModal()"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!newLesson().title.trim()"
+          >
+            Create
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

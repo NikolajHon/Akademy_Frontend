@@ -3,11 +3,13 @@ import {UserModel} from '../models/user-model';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {authCodeFlowConfig} from '../config/authCodeFlowConfig.config';
 import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot} from '@angular/router';
-
+import {UserRole} from '../models/user-role-enum';
+import {JwtHelperService} from '@auth0/angular-jwt';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private user = signal<UserModel|undefined>(undefined);
+  private jwtHelper = new JwtHelperService();
 
   constructor(
     private oauthService: OAuthService,
@@ -21,20 +23,40 @@ export class UserService {
     return this.user.asReadonly();
   }
 
-  tryLogin(): Promise<UserModel|undefined> {
-    return this.oauthService
-      .loadDiscoveryDocumentAndTryLogin()
-      .then(() => {
-        const claims = this.oauthService.getIdentityClaims() as UserModel;
-        this.user.set(claims);
+  async tryLogin(): Promise<UserModel|undefined> {
+    await this.oauthService.loadDiscoveryDocumentAndTryLogin();
 
-        const target = this.oauthService.state;
-        if (target) {
-          this.router.navigateByUrl(decodeURIComponent(target));
-        }
+    const rawToken = this.oauthService.getAccessToken();
+    if (!rawToken) {
+      this.user.set(undefined);
+      return undefined;
+    }
 
-        return claims;
-      });
+    const claims = this.jwtHelper.decodeToken(rawToken) as any;
+    if (!claims) {
+      this.user.set(undefined);
+      return undefined;
+    }
+
+    const roles: string[] = claims.realm_access?.roles || [];
+    const isTeacher = roles.map(r => r.toUpperCase()).includes('TEACHER');
+    const role = isTeacher ? UserRole.TEACHER : UserRole.STUDENT;
+    console.log('🎭 Роль из токена:', roles, '→', role);
+
+    const u: UserModel = {
+      id: claims.sub,
+      name: claims.name,
+      username: claims.preferred_username,
+      email: claims.email,
+      role
+    };
+    this.user.set(u);
+
+    const target = this.oauthService.state;
+    if (target) {
+      this.router.navigateByUrl(decodeURIComponent(target));
+    }
+    return u;
   }
 
 
@@ -46,21 +68,21 @@ export class UserService {
 
   isUserLoggedIn(): boolean {
     const token = this.oauthService.getAccessToken();
-    const expMs  = this.oauthService.getAccessTokenExpiration();
+    const expMs = this.oauthService.getAccessTokenExpiration();
     const msLeft = expMs - Date.now();
     console.log(
-      `Access token present: ${!!token}, expires in ${Math.floor(msLeft/1000)} sec`
+      `Access token present: ${!!token}, expires in ${Math.floor(msLeft / 1000)} sec`
     );
-    if(msLeft < 0) {
+    if (msLeft < 0) {
       this.logout();
     }
     return !!token && msLeft > 0;
   }
+
   login(redirectUrl?: string): void {
     this.oauthService.initCodeFlow(redirectUrl);
   }
 }
-
 
 
 export const canActiveHome: CanActivateFn = async (

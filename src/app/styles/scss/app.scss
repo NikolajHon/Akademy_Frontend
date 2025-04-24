@@ -358,3 +358,104 @@ hr {
     }
   }
 }
+button.btn-success {
+  background: $accent;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: $border-radius-base;
+  color: #fff;
+  font-weight: 600;
+  @include soft-shadow;
+  @include transition;
+
+  &:hover {
+    background: $accent-light;
+    transform: translateY(-3px);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+}
+
+/* Модальное окно */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  animation: fadeInBg $transition-speed forwards;
+}
+
+.modal-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  opacity: 0;
+  animation: slideDown $transition-speed forwards;
+  width: 100%;
+  max-width: 500px;
+}
+
+.modal-content {
+  background: $dark-card-bg;
+  border: 1px solid $dark-border;
+  border-radius: $border-radius-base;
+  overflow: hidden;
+  @include soft-shadow;
+}
+
+.modal-header,
+.modal-footer {
+  padding: $base-spacing;
+  border-bottom: 1px solid $dark-border;
+}
+
+.modal-header {
+  border-bottom: 1px solid $dark-border;
+}
+
+.modal-footer {
+  border-top: 1px solid $dark-border;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-body {
+  padding: $base-spacing;
+}
+
+.modal-title {
+  color: $font-color;
+  margin: 0;
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: $font-color-muted;
+  @include transition;
+
+  &:hover {
+    color: $font-color;
+  }
+}
+
+@keyframes fadeInBg {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translate(-50%, -60%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}

@@ -1,5 +1,15 @@
+
 export interface Lesson {
   id: number;
-  name: string;
+  title: string;
   description: string;
+  content: string;
+  courseId: number;
+}
+
+export interface CreateLessonRequestDto {
+  title: string;
+  description: string;
+  content: string;
+  courseId: number;
 }
