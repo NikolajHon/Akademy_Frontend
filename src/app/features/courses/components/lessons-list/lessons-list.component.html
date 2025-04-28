@@ -22,10 +22,10 @@
       <p>{{ lesson.description }}</p>
 
       <div class="actions">
-        <button (click)="goToLesson.emit(lesson)">GO TO LESSON</button>
-        <button (click)="viewTasks.emit(lesson)">TASKS</button>
-        <button (click)="startPractice.emit(lesson)">PRACTISE</button>
-        <button (click)="viewQuestions.emit(lesson)">QUESTIONS</button>
+        <button>GO TO LESSON</button>
+        <button>TASKS</button>
+        <button (click)="openPractise(lesson)">PRACTISE</button>
+        <button>QUESTIONS</button>
       </div>
     </div>
   </div>

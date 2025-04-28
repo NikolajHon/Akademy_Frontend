@@ -1,15 +1,12 @@
-<!-- toolbar --------------------------------------------------------->
+<!-- ──────────────── root toolbar ──────────────── -->
 <div class="toolbar">
-  <button *ngFor="let t of blockTypes" (click)="addBlock(t)">+ {{ t }}</button>
+  <button *ngFor="let t of rootTypes" (click)="addBlock(t)">+ {{ t }}</button>
   <button class="save-btn" (click)="save()">Save</button>
 </div>
 
-<!-- recursive template --------------------------------------------->
+<!-- ──────────────── recursive template ──────────────── -->
 <ng-template #recursive let-blocks>
-  <div
-    class="block-item"
-    *ngFor="let b of blocks; let i=index; trackBy: trackById"
-  >
+  <div class="block-item" *ngFor="let b of blocks; let i=index; trackBy: trackById">
     <div class="block-controls">
       <button (click)="moveUp(i)">↑</button>
       <button (click)="moveDown(i)">↓</button>
@@ -36,7 +33,7 @@
                       (ngModelChange)="updateData(b.id,b.data)"/> Ordered</label>
 
         <ng-container *ngIf="b.children?.length">
-          <ng-container *ngTemplateOutlet="recursive;context:{ $implicit:b.children }"></ng-container>
+          <ng-container *ngTemplateOutlet="recursive; context:{ $implicit:b.children }"></ng-container>
         </ng-container>
 
         <button class="add-list-item" (click)="addChild(b.id,'paragraph')">+ add item</button>
@@ -46,14 +43,14 @@
       <div *ngSwitchCase="'section'" class="section-block">
         <input class="section-title"
                [(ngModel)]="b.data.title"
-               (ngModelChange)="updateData(b.id,b.data)"/>
+               (ngModelChange)="updateData(b.id,b.data)" />
 
         <ng-container *ngIf="b.children?.length">
-          <ng-container *ngTemplateOutlet="recursive;context:{ $implicit:b.children }"></ng-container>
+          <ng-container *ngTemplateOutlet="recursive; context:{ $implicit:b.children }"></ng-container>
         </ng-container>
 
         <div class="add-section-child">
-          <button *ngFor="let t of blockTypes" (click)="addChild(b.id,t)">+ {{t}}</button>
+          <button *ngFor="let t of childTypes" (click)="addChild(b.id,t)">+ {{ t }}</button>
         </div>
       </div>
 
@@ -69,21 +66,17 @@
         <table>
           <tr *ngFor="let row of b.table; let rIdx=index">
             <td *ngFor="let cell of row; let cIdx=index">
-
-              <!-- мини-toolbar внутри ячейки -->
               <div class="cell-toolbar">
                 <select #sel (change)="addChild(cell.id, $any(sel.value))">
                   <option value="" disabled selected>+ block</option>
-                  <option *ngFor="let t of blockTypes" [value]="t">{{ t }}</option>
+                  <option *ngFor="let t of childTypes" [value]="t">{{ t }}</option>
                 </select>
-
-
                 <button (click)="remove(cell.id)">✕</button>
               </div>
 
               <!-- содержимое ячейки -->
               <ng-container *ngIf="cell.children?.length; else empty">
-                <ng-container *ngTemplateOutlet="recursive;context:{ $implicit: cell.children }"></ng-container>
+                <ng-container *ngTemplateOutlet="recursive; context:{ $implicit: cell.children }"></ng-container>
               </ng-container>
               <ng-template #empty><small class="empty-cell">[ empty ]</small></ng-template>
             </td>
@@ -94,7 +87,5 @@
   </div>
 </ng-template>
 
-<!-- корневой вызов -->
-<ng-container
-  *ngTemplateOutlet="recursive; context:{ $implicit: (blocks$ | async) }">
-</ng-container>
+<!-- ──────────────── root render call ──────────────── -->
+<ng-container *ngTemplateOutlet="recursive; context:{ $implicit: (blocks$ | async) }"></ng-container>
