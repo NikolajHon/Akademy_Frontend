@@ -5,7 +5,7 @@ import { CourseListPageComponent } from './features/courses/pages/course-list-pa
 import { CourseDetailPageComponent } from './features/courses/pages/course-detail-page/course-detail-page.component';
 import {ForumPageComponent} from './features/forum/pages/forum-page/forum-page.component';
 import {AssignmentPageComponent} from './features/courses/pages/assignment-page/assignment-page.component';
-import {TestComponent} from './test/test.component'
+import {RegisterComponent} from './register/register.component'
 import {canActiveHome} from './core/services/user.service';
 
 
@@ -34,7 +34,7 @@ export const routes: Routes = [
     canActivate: [canActiveHome]
   },
   { path: 'test',
-  component: TestComponent
+  component: RegisterComponent
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 

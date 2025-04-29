@@ -1,0 +1,15 @@
+<div class="assignment-list">
+  <div *ngFor="let assignment of assignments" [attr.id]="'assignment-' + assignment.id" class="assignment-card">
+    <h3>{{ assignment.description }}</h3>
+    <textarea
+      class="code-editor"
+      [value]="assignment.templateCode"
+      rows="10"
+      cols="80">
+    </textarea>
+
+    <button class="just-button" (click)="submitAssignment(assignment)">
+      Submit for checking
+    </button>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="sidebar">
+  <h4>Assignments</h4>
+  <ul class="assignment-links">
+    <li *ngFor="let assignment of assignments">
+      <button class="just-button" (click)="scrollToAssignment(assignment.id)">
+        {{ assignment.description }}
+      </button>
+    </li>
+  </ul>
+</div>

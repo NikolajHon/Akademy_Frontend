@@ -7,10 +7,6 @@
         <app-lessons-list
           *ngIf="course()"
           [lessons]="course()!.lessons"
-          (goToLesson)="onGoToLesson($event)"
-          (viewTasks)="onViewTasks($event)"
-          (startPractice)="onStartPractice($event)"
-          (viewQuestions)="onViewQuestions($event)"
         ></app-lessons-list>
 
         <button

@@ -88,9 +88,4 @@ export class CourseDetailPageComponent implements OnInit {
     this.newLesson.update(l => ({ ...l, content: value }));
   }
 
-
-  onGoToLesson(lesson: Lesson)    { console.log('go to lesson', lesson); }
-  onViewTasks(lesson: Lesson)     { console.log('view tasks for', lesson); }
-  onStartPractice(lesson: Lesson) { console.log('start practice for', lesson); }
-  onViewQuestions(lesson: Lesson) { console.log('view questions for', lesson); }
 }

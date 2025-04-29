@@ -1,0 +1,42 @@
+<div class="register-container">
+  <h2 class="title">Регистрация нового пользователя</h2>
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" [(ngModel)]="user.username" required />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" [(ngModel)]="user.password" required />
+    </div>
+
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input id="firstName" name="firstName" type="text" [(ngModel)]="user.firstName" />
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input id="lastName" name="lastName" type="text" [(ngModel)]="user.lastName" />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" [(ngModel)]="user.email" />
+    </div>
+
+    <div class="form-group">
+      <label for="role">Role</label>
+      <select id="role" name="role" [(ngModel)]="user.role">
+        <option value="Student">Ученик</option>
+        <option value="Teacher">Учитель</option>
+      </select>
+    </div>
+
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <button type="submit" [disabled]="loading" class="submit-btn">
+      {{ loading ? 'Запрос...' : 'Зарегистрировать' }}
+    </button>
+  </form>
+</div>
