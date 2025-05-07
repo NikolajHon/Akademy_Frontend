@@ -1,14 +1,12 @@
-// src/environments/environment.prod.ts (или environment.ts для dev)
 export const environment = {
   production: true,
   auth: {
-    issuer:      'http://172.205.72.71/realms/Academia_project',
-    redirectUri: 'http://74.178.109.89/',
-
-    clientId:     'discussion-backend',
+    issuer: 'https://20.223.168.156.nip.io/auth/realms/Academia_project',
+    redirectUri: 'https://20.223.168.156.nip.io/',
+    clientId: 'discussion-backend',
     responseType: 'code',
-    scope:        'openid profile email',
+    scope: 'openid profile email',
     showDebugInformation: false,
-    requireHttps: false,
+    requireHttps: true
   },
 };

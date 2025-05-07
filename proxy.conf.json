@@ -1,12 +1,12 @@
 {
   "/courses": {
-    "target": "http://localhost:8080",
+    "target": "http://68.219.42.218",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/lessons": {
-    "target": "http://localhost:8080",
+    "target": "http://68.219.42.218",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
