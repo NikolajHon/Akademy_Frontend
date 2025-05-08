@@ -5,7 +5,8 @@ import { Assignment, CreateAssignmentRequestDto } from '../models/assignment.mod
 
 @Injectable({ providedIn: 'root' })
 export class AssignmentService {
-  private readonly apiUrl = '/lessons';
+  private readonly apiUrl = '/api/lessons';
+
 
   constructor(private http: HttpClient) {}
 
