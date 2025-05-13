@@ -1,0 +1,14 @@
+<div class="card my-2">
+  <div class="card-body">
+    <textarea class="form-control"
+              rows="3"
+              [(ngModel)]="text"
+              placeholder="Новый вопрос…"></textarea>
+
+    <button class="btn btn-primary btn-sm mt-2"
+            (click)="send()"
+            [disabled]="!text.trim()">
+      Опубликовать
+    </button>
+  </div>
+</div>

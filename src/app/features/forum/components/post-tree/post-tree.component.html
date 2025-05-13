@@ -1,0 +1,22 @@
+<!-- пост + рекурсивные ответы -->
+<div class="card my-2">
+  <div class="card-body">
+    <p>{{ post.content }}</p>
+    <small class="text-muted">{{ post.createdAt | date:'short' }}</small>
+
+    <button class="btn btn-link btn-sm" (click)="toggleReply()">Ответить</button>
+
+    <div *ngIf="replyFormVisible" class="mt-2">
+      <textarea class="form-control" [(ngModel)]="replyText"></textarea>
+      <button class="btn btn-primary btn-sm mt-1" (click)="sendReply()">Отправить</button>
+    </div>
+  </div>
+
+  <div class="ms-4">
+    <app-post-tree *ngFor="let r of post.replies"
+                   [post]="r"
+                   [topicId]="topicId"
+                   (replied)="replied.emit()"></app-post-tree>
+  </div>
+</div>
+
