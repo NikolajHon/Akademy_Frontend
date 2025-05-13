@@ -12,3 +12,18 @@ export interface CreateAssignmentRequestDto {
   expectedOutput: string;
   outputType: 'STRING' | 'INT' | 'JSON';
 }
+export interface SubmissionRequestDto {
+  code: string;
+}
+
+export interface TestCaseResultDto {
+  input: string | null;
+  expectedOutput: string | null;
+  actualOutput: string | null;
+  passed: boolean;
+}
+
+export interface SubmissionResponseDto {
+  results: TestCaseResultDto[];
+  allPassed?: boolean;
+}

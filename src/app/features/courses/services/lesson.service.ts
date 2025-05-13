@@ -6,7 +6,7 @@ import { Lesson, CreateLessonRequestDto } from '../models/lesson.model';
 
 @Injectable({ providedIn: 'root' })
 export class LessonService {
-  private readonly apiUrl = '/api/lessons';
+  private readonly apiUrl = '/lessons';
 
 
   constructor(private http: HttpClient) {}

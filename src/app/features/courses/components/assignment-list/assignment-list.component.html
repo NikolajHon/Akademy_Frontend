@@ -1,15 +1,20 @@
-<div class="assignment-list">
-  <div *ngFor="let assignment of assignments" [attr.id]="'assignment-' + assignment.id" class="assignment-card">
-    <h3>{{ assignment.description }}</h3>
-    <textarea
-      class="code-editor"
-      [value]="assignment.templateCode"
-      rows="10"
-      cols="80">
-    </textarea>
+<div class="assignments-list">
+  <div  *ngFor="let a of assignments">
+    <h3>{{ a.description }}</h3>
 
-    <button class="just-button" (click)="submitAssignment(assignment)">
-      Submit for checking
+    <textarea #editor
+              [value]="a.templateCode"
+              rows="12"
+              cols="80"
+              class="editor"></textarea>
+
+    <button class="just-button" (click)="submit(a, editor.value)"
+            [disabled]="loading[a.id]">
+      {{ loading[a.id] ? 'Checking…' : 'Submit' }}
     </button>
+    <app-submission-result
+      *ngIf="results[a.id]"
+      [results]="results[a.id].results">
+    </app-submission-result>
   </div>
 </div>

@@ -1,29 +1,46 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, throwError, tap } from 'rxjs';
-import { Assignment, CreateAssignmentRequestDto } from '../models/assignment.model';
+import { Observable, tap, catchError, throwError } from 'rxjs';
+import {
+  Assignment,
+  CreateAssignmentRequestDto,
+  SubmissionRequestDto,
+  SubmissionResponseDto,
+} from '../models/assignment.model';
 
 @Injectable({ providedIn: 'root' })
 export class AssignmentService {
-  private readonly apiUrl = '/api/lessons';
-
+  private readonly lessonsUrl = '/lessons';
 
   constructor(private http: HttpClient) {}
 
   getAssignmentsByLesson(lessonId: number): Observable<Assignment[]> {
-    const url = `${this.apiUrl}/${lessonId}/assignments`;
-    console.log('🌐 GET →', url);
+    const url = `${this.lessonsUrl}/${lessonId}/assignments`;
     return this.http.get<Assignment[]>(url).pipe(
-      tap(() => console.log('✅ GET succeeded:', url)),
+      tap(() => console.log('✅ GET assignments', url)),
       catchError(err => throwError(() => err))
     );
   }
 
-  createAssignment(lessonId: number, request: CreateAssignmentRequestDto): Observable<Assignment> {
-    const url = `${this.apiUrl}/${lessonId}/assignments`;
-    console.log('🌐 POST →', url);
-    return this.http.post<Assignment>(url, request).pipe(
-      tap(() => console.log('✅ POST succeeded:', url)),
+  createAssignment(
+    lessonId: number,
+    req: CreateAssignmentRequestDto
+  ): Observable<Assignment> {
+    const url = `${this.lessonsUrl}/${lessonId}/assignments`;
+    return this.http.post<Assignment>(url, req).pipe(
+      tap(() => console.log('✅ POST assignment', url)),
+      catchError(err => throwError(() => err))
+    );
+  }
+
+  submitAssignment(
+    assignmentId: number,
+    code: string
+  ): Observable<SubmissionResponseDto> {
+    const url = `/assignments/${assignmentId}/submissions`;
+    const body: SubmissionRequestDto = { code };
+    return this.http.post<SubmissionResponseDto>(url, body).pipe(
+      tap(() => console.log('✅ SUBMIT', url)),
       catchError(err => throwError(() => err))
     );
   }
