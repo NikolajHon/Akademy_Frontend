@@ -1,6 +1,6 @@
 <!-- forum-page.component.html -->
 <div class="row g-3">
-  <div class="col-4">
+  <div class="col-10">
     <app-topic-form [courseId]="courseId" (created)="topicList.refresh()"></app-topic-form>
 
     <app-topic-list #topicList
@@ -14,7 +14,7 @@
     <app-post-form [topicId]="topic.id" (created)="loadPosts()"></app-post-form>
 
     <div *ngIf="loadingPosts" class="text-center p-5">
-      Загрузка…
+      Loading…
     </div>
 
     <app-post-tree *ngFor="let p of rootPosts"
@@ -23,7 +23,7 @@
                    (replied)="loadPosts()"></app-post-tree>
   </div>
 
-  <div class="col-8 text-muted" *ngIf="!selectedTopic">
-    <p>Выберите тему слева или создайте новую.</p>
+  <div class="col-5 text-muted" *ngIf="!selectedTopic">
+    <p>Select a topic on the left or create a new one.</p>
   </div>
 </div>

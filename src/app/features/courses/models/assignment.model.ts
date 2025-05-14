@@ -8,9 +8,14 @@ export interface Assignment {
 
 export interface CreateAssignmentRequestDto {
   description: string;
+  teacherCode: string;
   templateCode: string;
   expectedOutput: string;
   outputType: 'STRING' | 'INT' | 'JSON';
+  testCases: Array<{
+    input: string;
+    expectedOutput: string;
+  }>;
 }
 export interface SubmissionRequestDto {
   code: string;

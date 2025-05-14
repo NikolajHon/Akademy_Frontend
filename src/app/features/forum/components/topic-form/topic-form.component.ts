@@ -6,6 +6,7 @@ import { Topic } from '../../models/topic.model';
 @Component({
   selector: 'app-topic-form',
   templateUrl: './topic-form.component.html',
+  styleUrls: ['./topic-form.component.scss'],
   imports: [
     ReactiveFormsModule
   ]

@@ -30,4 +30,11 @@ export class LessonService {
       })
     );
   }
+  private base = 'http://localhost:8080';
+  createAssignment(lessonId: number, payload: any): Observable<any> {
+    return this.http.post(
+      `${this.base}/lessons/${lessonId}/assignments`,
+      payload
+    );
+  }
 }

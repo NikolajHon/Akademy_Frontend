@@ -11,6 +11,7 @@ import {NgForOf, NgIf} from '@angular/common';
 @Component({
   selector: 'app-forum-page',
   templateUrl: './forum-page.component.html',
+  styleUrls: ['./forum-page.component.scss'],
   imports: [
     TopicFormComponent,
     TopicListComponent,

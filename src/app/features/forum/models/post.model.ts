@@ -4,7 +4,7 @@ export interface Post {
   id:         number;
   topicId:    number;
   parentId?:  number | null;
-  authorId:   number;
+  authorName: string;
   content:    string;
   createdAt:  string;
   updatedAt?: string | null;

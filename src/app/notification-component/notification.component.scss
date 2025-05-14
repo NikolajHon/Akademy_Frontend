@@ -1,0 +1,31 @@
+.notification {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.25rem;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notification.success {
+  background-color: #28a745; // зелёный
+}
+
+.notification.error {
+  background-color: #dc3545; // красный
+}
+
+.notification.info {
+  background-color: #17a2b8; // синий
+}
+
+.notification.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

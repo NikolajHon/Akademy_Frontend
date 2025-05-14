@@ -1,0 +1,87 @@
+// Futuristic theme for topic-list.component
+// Color variables (assumed imported or defined in this file)
+$dark-bg:      #181818;
+$dark-card-bg: #222;
+$dark-border:  #2e2e2e;
+
+$font-color:       #eaeaea;
+$font-color-muted: #a0a0a0;
+
+$accent:       #6c63ff;
+$accent-light: #928cff;
+
+$base-spacing:        1rem;
+$border-radius-base: 10px;
+$transition-speed:    0.3s;
+
+:host {
+  display: block;
+  background: $dark-bg;
+  padding: $base-spacing;
+}
+
+// Refresh button
+.btn {
+  &.btn-primary {
+    background: $accent;
+    color: $font-color;
+    border: none;
+    border-radius: $border-radius-base;
+    padding: ($base-spacing * 0.5) $base-spacing;
+    box-shadow: 0 0 8px rgba($accent-light, 0.6);
+    transition: background $transition-speed, box-shadow $transition-speed;
+
+    &:hover {
+      background: $accent-light;
+      box-shadow: 0 0 12px rgba($accent-light, 0.8), 0 0 20px rgba($accent, 0.4);
+    }
+  }
+}
+
+// Topic list container
+.list-group {
+  background: rgba($dark-card-bg, 0.9);
+  border: 1px solid $dark-border;
+  border-radius: $border-radius-base;
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+
+  li {
+    position: relative;
+    background: transparent;
+    color: $font-color;
+    padding: $base-spacing 1.5rem;
+    border-bottom: 1px solid $dark-border;
+    cursor: pointer;
+    transition: background $transition-speed, transform $transition-speed;
+
+    &:hover {
+      background: rgba($accent, 0.1);
+      transform: translateX(5px);
+      box-shadow: inset 2px 0 0 $accent;
+    }
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .badge {
+      font-weight: 500;
+      color: #fff;
+      border-radius: $border-radius-base;
+      padding: 0.25em 0.6em;
+      transition: background $transition-speed;
+
+      &.bg-success {
+        background: mix($accent, #28a745, 20%);
+      }
+      &.bg-secondary {
+        background: $dark-border;
+      }
+      &.bg-warning {
+        background: mix($accent, #ffc107, 30%);
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+// Futuristic theme for topic-form.component
+// Color variables (imported or defined globally)
+$dark-bg:      #181818;
+$dark-card-bg: #222;
+$dark-border:  #2e2e2e;
+
+$font-color:       #eaeaea;
+$font-color-muted: #a0a0a0;
+
+$accent:       #6c63ff;
+$accent-light: #928cff;
+
+$base-spacing:        1rem;
+$border-radius-base: 10px;
+$transition-speed:    0.3s;
+
+:host {
+  display: block;
+  background: $dark-bg;
+  padding: $base-spacing;
+}
+
+form {
+  display: flex;
+  gap: $base-spacing;
+  align-items: center;
+
+  .form-control {
+    flex: 1;
+    background: $dark-card-bg;
+    color: $font-color;
+    border: 1px solid $dark-border;
+    border-radius: $border-radius-base;
+    padding: ($base-spacing * 0.5) $base-spacing;
+    transition: border $transition-speed, box-shadow $transition-speed;
+
+    &::placeholder {
+      color: $font-color-muted;
+    }
+    &:focus {
+      outline: none;
+      border-color: $accent;
+      box-shadow: 0 0 8px rgba($accent-light, 0.6);
+    }
+  }
+
+  .btn {
+    &.btn-success {
+      background: $accent;
+      color: $font-color;
+      border: none;
+      border-radius: $border-radius-base;
+      padding: ($base-spacing * 0.5) $base-spacing;
+      box-shadow: 0 0 8px rgba($accent-light, 0.6);
+      transition: background $transition-speed, box-shadow $transition-speed;
+
+      &:hover:not(:disabled) {
+        background: $accent-light;
+        box-shadow: 0 0 12px rgba($accent-light, 0.8), 0 0 20px rgba($accent, 0.4);
+      }
+
+      &:disabled {
+        background: $dark-border;
+        color: $font-color-muted;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+    }
+  }
+}

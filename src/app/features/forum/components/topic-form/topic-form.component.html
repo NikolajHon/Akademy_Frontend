@@ -1,6 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="submit()" class="d-flex gap-2">
-  <input class="form-control" placeholder="Новая тема…" formControlName="title" />
+  <input class="form-control" placeholder="New topic..." formControlName="title" />
   <button class="btn btn-success" type="submit" [disabled]="form.invalid">
-    Создать
+    Create
   </button>
 </form>

@@ -1,0 +1,86 @@
+// Futuristic theme for post editor (post-editor.component)
+// Color variables assumed imported or defined globally
+$dark-bg:       #181818;
+$dark-card-bg:  #222;
+$dark-border:   #2e2e2e;
+
+$font-color:       #eaeaea;
+$font-color-muted: #a0a0a0;
+
+$accent:       #6c63ff;
+$accent-light: #928cff;
+
+$base-spacing:        1rem;
+$border-radius-base:  10px;
+$transition-speed:     0.3s;
+
+:host {
+  padding: $base-spacing;
+}
+
+.card {
+  background: rgba($dark-card-bg, 0.95);
+  border: 1px solid $dark-border;
+  border-radius: $border-radius-base;
+  margin: ($base-spacing * 0.5) 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition: transform $transition-speed;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  }
+
+  .card-body {
+    padding: $base-spacing;
+    color: $font-color;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-control {
+    background: $dark-bg;
+    color: $font-color;
+    border: 1px solid $dark-border;
+    border-radius: $border-radius-base;
+    padding: ($base-spacing * 0.5);
+    resize: vertical;
+    min-height: 3em;
+    transition: border $transition-speed, box-shadow $transition-speed;
+
+    &::placeholder {
+      color: $font-color-muted;
+    }
+    &:focus {
+      outline: none;
+      border-color: $accent;
+      box-shadow: 0 0 8px rgba($accent-light, 0.6);
+    }
+  }
+
+  .btn {
+    &.btn-primary {
+      align-self: flex-end;
+      margin-top: $base-spacing;
+      background: $accent;
+      color: $font-color;
+      border: none;
+      border-radius: $border-radius-base;
+      padding: ($base-spacing * 0.25) ($base-spacing * 0.75);
+      box-shadow: 0 0 6px rgba($accent-light, 0.6);
+      transition: background $transition-speed, box-shadow $transition-speed;
+
+      &:hover:not(:disabled) {
+        background: $accent-light;
+        box-shadow: 0 0 10px rgba($accent-light, 0.8), 0 0 16px rgba($accent, 0.4);
+      }
+
+      &:disabled {
+        background: $dark-border;
+        color: $font-color-muted;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+    }
+  }
+}

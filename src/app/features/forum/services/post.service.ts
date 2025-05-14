@@ -35,7 +35,12 @@ export class PostService {
   }
 
   /** PUT /posts/{id} */
-  update(id: number, dto: UpdatePostRequest) {
+  update(id: number, dto: UpdatePostRequest): Observable<Post> {
     return this.http.put<Post>(`/posts/${id}`, dto);
+  }
+
+  /** DELETE /posts/{postId} */
+  deletePost(postId: number): Observable<void> {
+    return this.http.delete<void>(`/posts/${postId}`);
   }
 }

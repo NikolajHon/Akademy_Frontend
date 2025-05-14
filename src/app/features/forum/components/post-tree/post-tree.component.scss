@@ -1,0 +1,159 @@
+$dark-bg: #181818;
+$dark-card-bg: #222;
+$dark-border: #2e2e2e;
+
+$font-color: #eaeaea;
+$font-color-muted: #a0a0a0;
+
+$accent: #6c63ff;
+$accent-light: #928cff;
+
+$base-spacing: 1rem;
+$border-radius-base: 10px;
+$transition-speed: 0.3s;
+
+.card {
+  background: $dark-card-bg;
+  border: 1px solid $dark-border;
+  border-radius: $border-radius-base;
+  margin: $base-spacing 0;
+  color: $font-color;
+  transition: background $transition-speed, box-shadow $transition-speed;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba($accent, 0.2);
+  }
+
+  .card-body {
+    padding: $base-spacing;
+
+    /* Header: author and delete button */
+    .d-flex {
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .card-subtitle {
+        margin-bottom: 0.25rem;
+        color: $font-color-muted;
+      }
+
+      .card-text {
+        margin: 0.5rem 0;
+        color: $font-color;
+      }
+
+      .text-secondary {
+        color: $font-color-muted;
+        font-size: 0.85rem;
+      }
+
+      button.btn-link {
+        transition: color $transition-speed;
+
+        &:hover {
+          color: $accent-light;
+        }
+      }
+    }
+
+    /* Action buttons: reply and toggle replies */
+    .mt-2 {
+      display: flex;
+      gap: $base-spacing;
+
+      button {
+        transition: color $transition-speed;
+
+        &:hover {
+          color: $accent-light;
+        }
+      }
+    }
+
+    /* Reply form styling */
+    div.mt-2:has(textarea) {
+      overflow: hidden;
+      animation: fadeIn $transition-speed ease-in-out;
+
+      textarea.form-control {
+        background: $dark-bg;
+        border: 1px solid $dark-border;
+        border-radius: $border-radius-base / 2;
+        color: $font-color;
+        transition: border $transition-speed;
+
+        &:focus {
+          border-color: $accent;
+          outline: none;
+          box-shadow: 0 0 0 0.2rem rgba($accent, 0.25);
+        }
+      }
+
+      button.btn-primary {
+        background: $accent;
+        border-color: $accent;
+        color: #fff;
+        transition: background $transition-speed, border-color $transition-speed;
+
+        &:hover {
+          background: $accent-light;
+          border-color: $accent-light;
+        }
+      }
+    }
+  }
+
+  /* Replies container */
+  .ms-4 {
+    margin-left: $base-spacing * 0.5;
+
+    app-post-tree {
+      animation: slideDown $transition-speed ease-out;
+    }
+
+    .text-center {
+      margin: $base-spacing 0;
+
+      button {
+        border-radius: $border-radius-base;
+        transition: background $transition-speed;
+
+        &:hover {
+          background: rgba($accent, 0.1);
+        }
+      }
+    }
+  }
+}
+
+/* Определяем анимацию fadeIn */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Изначально невидимый, чтобы анимация сработала корректно */
+.fade-in {
+  opacity: 0;
+  /* Можно добавить transform здесь, если хотите сдвиг */
+  animation: fadeIn 300ms ease-out forwards;
+}
+
+
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  to {
+    max-height: 1000px;
+    opacity: 1;
+  }
+}

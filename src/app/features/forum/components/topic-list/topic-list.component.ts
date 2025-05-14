@@ -7,6 +7,7 @@ import {AsyncPipe, NgClass, NgForOf} from '@angular/common';
 @Component({
   selector: 'app-topic-list',
   templateUrl: './topic-list.component.html',
+  styleUrls: ['./topic-list.component.scss'],
   imports: [
     NgClass,
     NgForOf,

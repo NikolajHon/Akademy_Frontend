@@ -5,6 +5,7 @@ import {FormsModule} from '@angular/forms';
 @Component({
   selector: 'app-post-form',
   templateUrl: './post-form.component.html',
+  styleUrls: ['./post-form.component.scss'],
   imports: [
     FormsModule
   ]

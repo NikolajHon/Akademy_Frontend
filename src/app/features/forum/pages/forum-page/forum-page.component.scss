@@ -1,0 +1,76 @@
+// Futuristic theme for forum-page.component
+// Color variables (import or define globally)
+$dark-bg:      #181818;
+$dark-card-bg: #222;
+$dark-border:  #2e2e2e;
+
+$font-color:       #eaeaea;
+$font-color-muted: #a0a0a0;
+
+$accent:       #6c63ff;
+$accent-light: #928cff;
+
+$base-spacing:        1rem;
+$border-radius-base: 10px;
+$transition-speed:    0.3s;
+
+:host {
+  display: block;
+  background: $dark-bg;
+  padding: $base-spacing;
+}
+
+.row.g-3 {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: $base-spacing;
+}
+
+.col-4,
+.col-8 {
+  display: flex;
+  flex-direction: column;
+  gap: $base-spacing;
+}
+
+// Sidebar (topics form + list)
+.col-4 {
+  // The individual components already styled
+}
+
+.col-8 {
+  background: rgba($dark-card-bg, 0.9);
+  border: 1px solid $dark-border;
+  border-radius: $border-radius-base;
+  padding: $base-spacing;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  transition: transform $transition-speed;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  h4 {
+    margin: 0;
+    color: $accent;
+    text-shadow: 0 0 6px rgba($accent-light, 0.6);
+  }
+
+  // Placeholder when no topic selected
+  &.text-muted {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+
+    p {
+      color: $font-color-muted;
+      font-style: italic;
+    }
+  }
+
+  // Loading state
+  .text-center {
+    color: $font-color;
+  }
+}

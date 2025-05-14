@@ -3,12 +3,12 @@
     <textarea class="form-control"
               rows="3"
               [(ngModel)]="text"
-              placeholder="Новый вопрос…"></textarea>
+              placeholder="New question..."></textarea>
 
     <button class="btn btn-primary btn-sm mt-2"
             (click)="send()"
             [disabled]="!text.trim()">
-      Опубликовать
+      Publish
     </button>
   </div>
 </div>
