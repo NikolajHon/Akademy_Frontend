@@ -1,31 +1,56 @@
-.notification {
+/* src/app/notification-component/notification.component.scss */
+.toast-container {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
-  padding: 1rem 1.5rem;
-  border-radius: 0.25rem;
+  top: 1rem;     /* теперь отступ от верхнего края */
+  right: 1rem;   /* или left: 1rem, если нужна другая сторона */
+  bottom: auto;  /* очищаем старое значение */
+  z-index: 1050;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+
+.toast {
+  display: block;
+  min-width: 200px;
+  max-width: 320px;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
   color: #fff;
-  font-weight: 500;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
+  pointer-events: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
   opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(20px);
+  animation: slideIn 0.3s forwards;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  &__close {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  &__body { font-size: 0.9rem; }
+
+  &--success { background: #28a745; }
+  &--error   { background: #dc3545; }
+  &--info    { background: #17a2b8; }
+  &--warning { background: #ffc107; color: #000; }
 }
 
-.notification.success {
-  background-color: #28a745; // зелёный
-}
-
-.notification.error {
-  background-color: #dc3545; // красный
-}
-
-.notification.info {
-  background-color: #17a2b8; // синий
-}
-
-.notification.visible {
-  opacity: 1;
-  transform: translateY(0);
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

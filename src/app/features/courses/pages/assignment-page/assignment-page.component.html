@@ -1,9 +1,16 @@
+<!-- Вставляем уведомление в начало шаблона -->
+
+
 <div class="container py-4">
   <div class="row">
     <div class="col-md-9">
       <h2>Assignments</h2>
       <ng-container *ngIf="user() as u">
-        <button *ngIf="u.role === UserRole.TEACHER" (click)="openCreateModal()" class="just-button">
+        <button
+          *ngIf="u.role === UserRole.TEACHER"
+          (click)="openCreateModal()"
+          class="just-button"
+        >
           Add New Assignment
         </button>
       </ng-container>

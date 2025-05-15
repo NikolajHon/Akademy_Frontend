@@ -1,7 +1,14 @@
-<div
-  class="notification"
-  [ngClass]="type"
-  *ngIf="visible"
->
-  {{ message }}
+<!-- src/app/notification-component/notification.component.html -->
+<div class="toast-container">
+  <div
+    *ngFor="let t of toasts"
+    class="toast toast--{{t.type}}"
+    (click)="dismiss(t.id)"
+  >
+    <div class="toast__header">
+      <strong *ngIf="t.title">{{ t.title }}</strong>
+      <button class="toast__close">&times;</button>
+    </div>
+    <div class="toast__body">{{ t.message }}</div>
+  </div>
 </div>
