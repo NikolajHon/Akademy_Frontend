@@ -1,3 +1,4 @@
+// src/app/features/assignments/pages/assignment-page/assignment-page.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -8,8 +9,8 @@ import { UserRole } from '../../../../core/models/user-role-enum';
 import { AssignmentListComponent } from '../../components/assignment-list/assignment-list.component';
 import { AssignmentSidebarComponent } from '../../components/assignment-sidebar/assignment-sidebar.component';
 import { AssignmentCreateModalComponent } from '../../components/assignment-create-modal/assignment-create-modal.component';
-import {ToastService} from '../../services/toast.service';
-
+import { ToastService } from '../../services/toast.service';
+import { NotificationComponent } from '../../../../notification-component/notification.component';
 
 @Component({
   selector: 'app-assignment-page',
@@ -18,7 +19,8 @@ import {ToastService} from '../../services/toast.service';
     CommonModule,
     AssignmentListComponent,
     AssignmentSidebarComponent,
-    AssignmentCreateModalComponent
+    AssignmentCreateModalComponent,
+    NotificationComponent
   ],
   templateUrl: './assignment-page.component.html'
 })
@@ -26,16 +28,18 @@ export class AssignmentPageComponent implements OnInit {
   assignments: Assignment[] = [];
   lessonId!: number;
   showCreateModal = false;
+
+  // объявляем поле без инициализации
   public user!: ReturnType<UserService['getUserSignal']>;
   public UserRole = UserRole;
 
-  // Внедряем ToastService в конструкторе
   constructor(
     private assignmentService: AssignmentService,
     private route: ActivatedRoute,
     private userService: UserService,
-    private toast: ToastService           // ← сюда
+    private toast: ToastService
   ) {
+    // здесь this.userService уже доступен
     this.user = this.userService.getUserSignal();
   }
 
@@ -46,36 +50,14 @@ export class AssignmentPageComponent implements OnInit {
 
   private loadAssignments(): void {
     if (!this.lessonId) return;
-    console.log('[AssignmentPage] loadAssignments() начинаем загрузку для урока', this.lessonId);
     this.assignmentService.getAssignmentsByLesson(this.lessonId).subscribe({
-      next: (data) => {
-        console.log('[AssignmentPage] loadAssignments.next(): получены данные', data);
+      next: data => {
         this.assignments = data;
-        console.log('[AssignmentPage] вызываем toast.show(success)');
-        this.toast.show({ type: 'success', message: 'Задания загружены' });
+        this.toast.success('Задания загружены', 'Успех');
       },
-      error: (err) => {
-        console.error('[AssignmentPage] loadAssignments.error():', err);
-        console.log('[AssignmentPage] вызываем toast.show(error)');
-        this.toast.show({ type: 'error', message: 'Не удалось загрузить задания' });
-      }
-    });
-  }
-
-  closeCreateModal(): void {
-    console.log('[AssignmentPage] closeCreateModal()');
-    this.showCreateModal = false;
-    this.assignmentService.getAssignmentsByLesson(this.lessonId).subscribe({
-      next: (data) => {
-        console.log('[AssignmentPage] после закрытия: данные', data);
-        this.assignments = data;
-        console.log('[AssignmentPage] вызываем toast.show(success) для создания');
-        this.toast.show({ type: 'success', message: 'Новое задание успешно создано' });
-      },
-      error: (err) => {
-        console.error('[AssignmentPage] ошибка при создании:', err);
-        console.log('[AssignmentPage] вызываем toast.show(error) для создания');
-        this.toast.show({ type: 'error', message: 'Ошибка при создании задания' });
+      error: err => {
+        console.error(err);
+        this.toast.error('Не удалось загрузить задания', 'Ошибка');
       }
     });
   }
@@ -84,4 +66,17 @@ export class AssignmentPageComponent implements OnInit {
     this.showCreateModal = true;
   }
 
+  closeCreateModal(): void {
+    this.showCreateModal = false;
+    this.assignmentService.getAssignmentsByLesson(this.lessonId).subscribe({
+      next: data => {
+        this.assignments = data;
+        this.toast.success('Новое задание успешно создано', 'Успех');
+      },
+      error: err => {
+        console.error(err);
+        this.toast.error('Ошибка при создании задания', 'Ошибка');
+      }
+    });
+  }
 }

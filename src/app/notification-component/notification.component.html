@@ -1,14 +1,28 @@
-<!-- src/app/notification-component/notification.component.html -->
 <div class="toast-container">
   <div
     *ngFor="let t of toasts"
-    class="toast toast--{{t.type}}"
+    class="toast toast--{{ t.type }}"
+    [class.toast--exit]="exitingMap[t.id]"
     (click)="dismiss(t.id)"
   >
     <div class="toast__header">
+      <ng-container *ngIf="t.iconUrl; else unicodeIcon">
+        <img class="toast__icon" [src]="t.iconUrl" alt="icon" />
+      </ng-container>
+      <ng-template #unicodeIcon>
+        <span class="toast__icon">{{ t.icon }}</span>
+      </ng-template>
+
       <strong *ngIf="t.title">{{ t.title }}</strong>
       <button class="toast__close">&times;</button>
     </div>
+
     <div class="toast__body">{{ t.message }}</div>
+
+    <div
+      *ngIf="t.showProgress"
+      class="toast__progress"
+      [style.animation-duration]="(t.timeout || 3000) + 'ms'"
+    ></div>
   </div>
 </div>

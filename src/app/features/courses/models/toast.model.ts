@@ -1,9 +1,16 @@
-// src/app/core/models/toast.model.ts
+export type ToastType = 'success' | 'error' | 'info' | 'warning' | 'pending' | 'custom';
+
 export interface Toast {
   id: number;
-  type: 'success' | 'error' | 'info' | 'warning';
-  message: string;
   title?: string;
-  timeout?: number;    // в миллисекундах
-  icon?: string;       // CSS-класс или URL SVG
+  message: string;
+  type: ToastType;
+  /** Если указан — будет показываться вместо unicode-значка */
+  iconUrl?: string;
+  /** Unicode-значок (например, '🔥', 'ℹ️', '✔️') */
+  icon?: string;
+  /** Таймаут в миллисекундах */
+  timeout?: number;
+  /** Показывать прогресс-бар? */
+  showProgress?: boolean;
 }
