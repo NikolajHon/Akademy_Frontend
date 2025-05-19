@@ -58,46 +58,57 @@ export class RegisterComponent {
         };
 
         this.http.post<HttpResponse<any>>(
-          '/admin/realms/akademia_project/users',
+          '/admin/realms/Academia_project/users',
           payload,
           { headers: adminHeaders, observe: 'response' }
         ).subscribe({
+          // внутри вашего RegisterComponent, в том же месте, где вы вытаскиваете userId:
           next: async createRes => {
             const location = createRes.headers.get('location') || '';
             const userId = location.substring(location.lastIndexOf('/') + 1);
 
             try {
+              // 1) убираем дефолтную роль
               const rolesList = await this.http.get<any[]>(
-                '/admin/realms/akademia_project/roles',
+                '/admin/realms/Academia_project/roles',
                 { headers: adminHeaders }
               ).toPromise();
-
-              const defaultRole = rolesList!.find(r => r.name === 'default-roles-akademia_project');
+              const defaultRole = rolesList!.find(r => r.name === 'default-roles-Academia_project');
               if (defaultRole) {
                 await this.http.request(
                   'DELETE',
-                  `/admin/realms/akademia_project/users/${userId}/role-mappings/realm`,
+                  `/admin/realms/Academia_project/users/${userId}/role-mappings/realm`,
                   { headers: adminHeaders, body: [defaultRole] }
                 ).toPromise();
               }
 
+              // 2) назначаем нужную роль
               const roleObj = rolesList!.find(r => r.name === this.user.role);
               if (!roleObj) throw new Error(`Role ${this.user.role} not found`);
-
               await this.http.post(
-                `/admin/realms/akademia_project/users/${userId}/role-mappings/realm`,
+                `/admin/realms/Academia_project/users/${userId}/role-mappings/realm`,
                 [roleObj],
                 { headers: adminHeaders }
               ).toPromise();
 
-              console.log('User created successfully and role assigned');
+              // 3) *** вот этот блок добавляем для автоматической отправки письма ***
+              await this.http.put(
+                `/admin/realms/Academia_project/users/${userId}/execute-actions-email` +
+                `?lifespan=86400`,          // время жизни ссылок в секундах (здесь 24ч)
+                ['VERIFY_EMAIL','UPDATE_PASSWORD'], // required actions
+                { headers: adminHeaders }
+              ).toPromise();
+
+              console.log('User created, role assigned and verify-email sent');
               this.loading = false;
+
             } catch (err) {
-              console.error('Role mapping error', err);
+              console.error('Error in user setup flow', err);
               this.error = (err as any).message;
               this.loading = false;
             }
           },
+
           error: err => {
             console.error('User creation error', err);
             this.error = err.status === 409 ? 'User already exists' : err.message;
