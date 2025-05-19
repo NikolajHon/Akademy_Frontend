@@ -44,4 +44,12 @@ export class AssignmentService {
       catchError(err => throwError(() => err))
     );
   }
+
+  deleteAssignment(assignmentId: number): Observable<void> {
+    const url = `/assignments/${assignmentId}`;
+    return this.http.delete<void>(url).pipe(
+      tap(() => console.log('✅ DELETE assignment', url)),
+      catchError(err => throwError(() => err))
+    );
+  }
 }

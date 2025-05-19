@@ -294,6 +294,34 @@ button.btn-success {
 // --------------------------------------------------
 // ANIMATIONS
 // --------------------------------------------------
+// --------------------------------------------------
+// ASSIGNMENTS LIST BUTTONS
+// --------------------------------------------------
+.assignments-list .just-button {
+  background: linear-gradient(135deg, #4c85ff 0%, #6d5cff 100%);
+  color: #fff;
+  @include fx-transition(opacity, .15s);
+  &:disabled { opacity: .45; cursor: default; }
+}
+
+// добавляем стили для «мусорного ведра»
+.assignments-list .trash-button {
+  background: transparent;
+  border: none;
+  padding: $base-spacing / 2;
+  margin-left: $base-spacing / 2;
+  font-size: 1.2rem;
+  color: $danger;               // из твоих переменных, например $danger: #e74c3c;
+  cursor: pointer;
+  //@include fx-transition(background, .2s); fx-transition(opacity, .15s);
+
+  &:hover {
+    background: rgba($danger, 0.1);
+  }
+  &:active {
+    opacity: .9;
+  }
+}
 
 @keyframes fillRing { 0% { stroke-dashoffset: 100;} 100% { stroke-dashoffset: var(--offset);} }
 @keyframes glowPulse { 0%,100% { box-shadow: 0 0 12px rgba($accent, .55);} 50% { box-shadow: 0 0 20px rgba($accent, .85);} }

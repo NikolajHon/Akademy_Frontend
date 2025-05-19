@@ -7,6 +7,7 @@ import {ForumPageComponent} from './features/forum/pages/forum-page/forum-page.c
 import {AssignmentPageComponent} from './features/courses/pages/assignment-page/assignment-page.component';
 import {RegisterComponent} from './register/register.component'
 import {canActiveHome} from './core/services/user.service';
+import {QuestionsPageComponent} from './features/courses/pages/questions-page/questions-page.component';
 
 
 
@@ -31,6 +32,11 @@ export const routes: Routes = [
   {
     path: 'course-page/:id/assignment/:id',
     component: AssignmentPageComponent,
+    canActivate: [canActiveHome]
+  },
+  {
+    path: 'course-page/:lessonId/questions',
+    component: QuestionsPageComponent,
     canActivate: [canActiveHome]
   },
   { path: 'test',

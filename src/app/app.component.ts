@@ -14,7 +14,8 @@ import {NotificationComponent} from './notification-component/notification.compo
     RouterLinkActive,
     NotificationComponent
   ],
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   private userService = inject(UserService);

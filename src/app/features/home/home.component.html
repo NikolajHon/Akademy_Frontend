@@ -1,7 +1,16 @@
+<div class="hero">
+  <div class="overlay"></div>
 
-<div class="course-detail-container">
-  <h1>Welcome to the Public Page!</h1>
-  <p>Here you can find information that does not require authorization.</p>
-  <a class="btn btn-primary" routerLink="/course-page">Go to Courses (Login Required)</a>
+  <section class="hero-content">
+    <h1 class="headline">Code. Learn. Grow.</h1>
+    <p class="tagline">Самые интерактивные курсы по&nbsp;программированию онлайн</p>
 
+    <a class="btn btn-primary" routerLink="/course-page">
+      Go&nbsp;to&nbsp;Courses&nbsp;(Login&nbsp;Required)
+    </a>
+  </section>
+
+  <section class="code-wrapper">
+    <pre><code [innerText]="displayedCode"></code><span class="cursor"></span></pre>
+  </section>
 </div>

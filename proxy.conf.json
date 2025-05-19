@@ -17,7 +17,12 @@
     "changeOrigin": true,
     "logLevel": "debug"
   },
-
+  "/questions": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
   "/topics": {
     "target": "http://localhost:8080",
     "secure": false,
@@ -30,14 +35,12 @@
     "changeOrigin": true,
     "logLevel": "debug"
   },
-
   "/users": {
     "target": "http://localhost:8080",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
-
   "/submissions": {
     "target": "http://localhost:8080",
     "secure": false,
@@ -50,7 +53,6 @@
     "changeOrigin": true,
     "logLevel": "debug"
   },
-
   "/realms": {
     "target": "http://localhost:8081",
     "secure": false,

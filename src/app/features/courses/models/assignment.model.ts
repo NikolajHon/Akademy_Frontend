@@ -3,7 +3,7 @@ export interface Assignment {
   description: string;
   templateCode: string;
   expectedOutput: string;
-  outputType: 'STRING' | 'INT' | 'JSON'; // Типы вывода
+  outputType: 'STRING' | 'INT' | 'JSON';
 }
 
 export interface CreateAssignmentRequestDto {

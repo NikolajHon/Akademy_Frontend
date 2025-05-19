@@ -1,5 +1,5 @@
 <div class="assignments-list">
-  <div  *ngFor="let a of assignments">
+  <div *ngFor="let a of assignments">
     <h3>{{ a.description }}</h3>
 
     <textarea #editor
@@ -8,10 +8,19 @@
               cols="80"
               class="editor"></textarea>
 
-    <button class="just-button" (click)="submit(a, editor.value)"
+    <button class="just-button"
+            (click)="submit(a, editor.value)"
             [disabled]="loading[a.id]">
       {{ loading[a.id] ? 'Checking…' : 'Submit' }}
     </button>
+
+    <button *ngIf="isTeacher()"
+            class="trash-button"
+            (click)="delete(a)"
+            [disabled]="loading[a.id]">
+      🗑️
+    </button>
+
     <app-submission-result
       *ngIf="results[a.id]"
       [results]="results[a.id].results">

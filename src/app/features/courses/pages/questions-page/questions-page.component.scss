@@ -1,0 +1,100 @@
+$primary-color:    #2c3e50;
+$secondary-color:  #7f8c8d;
+$card-bg:          #ffffff;
+$card-shadow:      rgba(0,0,0,0.1);
+$hover-shadow:     rgba(0,0,0,0.15);
+$border-radius:    8px;
+$gutter:           16px;
+
+.questions-page {
+  padding: $gutter;
+
+  .page-title {
+    margin-bottom: $gutter;
+    font-size: 2rem;
+    color: $primary-color;
+  }
+
+  .questions-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $gutter;
+
+    .question-card {
+      background: $card-bg;
+      border-radius: $border-radius;
+      box-shadow: 0 2px 8px $card-shadow;
+      padding: $gutter;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 16px $hover-shadow;
+      }
+
+      &[data-type="OPEN"] {
+        border-left: 4px solid #e67e22;
+      }
+      &[data-type="SINGLE_CHOICE"] {
+        border-left: 4px solid #2980b9;
+      }
+      &[data-type="MULTIPLE_CHOICE"] {
+        border-left: 4px solid #27ae60;
+      }
+
+      .question-header {
+        display: flex;
+        align-items: baseline;
+        margin-bottom: $gutter / 2;
+
+        .question-index {
+          font-weight: bold;
+          margin-right: 0.5rem;
+          color: $primary-color;
+        }
+        .question-text {
+          margin: 0;
+          font-size: 1.125rem;
+          color: darken($primary-color, 10%);
+        }
+      }
+
+      // для OPEN‑ответа
+      .open-answer {
+        margin-top: $gutter / 2;
+
+        .open-input {
+          width: 100%;
+          padding: 0.5rem;
+          font-size: 1rem;
+          border: 1px solid $secondary-color;
+          border-radius: $border-radius / 2;
+          background: #fafafa;
+        }
+      }
+
+      // для вариантов
+      .options-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        .option-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.75rem;
+
+          input {
+            margin-right: 0.5rem;
+            // чекбокс/радио по умолчанию имеют нужную форму
+          }
+
+          label {
+            color: $secondary-color;
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+  }
+}

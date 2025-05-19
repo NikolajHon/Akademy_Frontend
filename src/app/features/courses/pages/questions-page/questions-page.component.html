@@ -1,0 +1,55 @@
+<!-- questions-page.component.html -->
+<div class="questions-page" *ngIf="questions">
+  <h1 class="page-title">Questions for Lesson #{{ lessonId }}</h1>
+
+  <div class="questions-container">
+    <div
+      class="question-card"
+      *ngFor="let q of questions; let i = index"
+      [attr.data-type]="q.type"
+    >
+      <div class="question-header">
+        <span class="question-index">{{ i + 1 }}.</span>
+        <h3 class="question-text">{{ q.text }}</h3>
+      </div>
+
+      <!-- OPEN: текстовое поле -->
+      <div *ngIf="q.type === 'OPEN'" class="open-answer">
+        <input
+          type="text"
+          class="open-input"
+          placeholder="Your answer…"
+          [(ngModel)]="openAnswers[q.id]"
+        />
+      </div>
+
+      <!-- SINGLE_CHOICE и MULTIPLE_CHOICE -->
+      <ul *ngIf="q.type !== 'OPEN'" class="options-list">
+        <li *ngFor="let opt of q.options" class="option-item">
+
+          <!-- одиночный выбор: радио -->
+          <input
+            *ngIf="q.type === 'SINGLE_CHOICE'"
+            type="radio"
+            [name]="'q' + q.id"
+            [value]="opt.id"
+            [(ngModel)]="singleAnswers[q.id]"
+          />
+
+          <input
+            *ngIf="q.type === 'MULTIPLE_CHOICE'"
+            type="checkbox"
+            [checked]="multiAnswers[q.id].includes(opt.id)"
+            (change)="onCheckboxChange(
+              q.id,
+              opt.id,
+              $any($event.target).checked
+            )"
+          />
+
+          <label>{{ opt.text }}</label>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
