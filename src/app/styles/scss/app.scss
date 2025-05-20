@@ -1,0 +1,12 @@
+.just-button {
+  padding: .45rem 1.15rem;
+  border: none;
+  border-radius: .5rem;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.just-button:hover  { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0 0 0 /.2); }
+.just-button:active { transform: scale(.97); }

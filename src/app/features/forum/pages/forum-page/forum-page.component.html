@@ -1,29 +1,38 @@
-<!-- forum-page.component.html -->
-<div class="row g-3">
-  <div class="col-10">
-    <app-topic-form [courseId]="courseId" (created)="topicList.refresh()"></app-topic-form>
+<div class="forum-page">
+  <aside class="sidebar">
+    <h3>Discussions</h3>
+    <p>Choose a topic or create a new discussion to join the conversation!</p>
+    <app-topic-form
+      [courseId]="courseId"
+      (created)="topicList.refresh()"
+    ></app-topic-form>
+    <app-topic-list
+      #topicList
+      [courseId]="courseId"
+      (select)="onTopicSelected($event)"
+    ></app-topic-list>
+  </aside>
 
-    <app-topic-list #topicList
-                    [courseId]="courseId"
-                    (select)="onTopicSelected($event)"></app-topic-list>
-  </div>
-
-  <div class="col-8" *ngIf="selectedTopic as topic">
+  <section class="content" *ngIf="selectedTopic as topic; else noTopic">
     <h4>{{ topic.title }}</h4>
+    <app-post-form
+      [topicId]="topic.id"
+      (created)="loadPosts()"
+      class="post-form"
+    ></app-post-form>
+    <div *ngIf="loadingPosts" class="loading">Loading posts…</div>
+    <div class="section-title">Вопросы по этой теме</div>
+    <app-post-tree
+      *ngFor="let p of rootPosts"
+      [post]="p"
+      [topicId]="topic.id"
+      (replied)="loadPosts()"
+    ></app-post-tree>
+  </section>
 
-    <app-post-form [topicId]="topic.id" (created)="loadPosts()"></app-post-form>
-
-    <div *ngIf="loadingPosts" class="text-center p-5">
-      Loading…
-    </div>
-
-    <app-post-tree *ngFor="let p of rootPosts"
-                   [post]="p"
-                   [topicId]="topic.id"
-                   (replied)="loadPosts()"></app-post-tree>
-  </div>
-
-  <div class="col-5 text-muted" *ngIf="!selectedTopic">
-    <p>Select a topic on the left or create a new one.</p>
-  </div>
+  <ng-template #noTopic>
+    <section class="content">
+      <p class="loading">No topic selected. Select one on the left or create a new discussion.</p>
+    </section>
+  </ng-template>
 </div>

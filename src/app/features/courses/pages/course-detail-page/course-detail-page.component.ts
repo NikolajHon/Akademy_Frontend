@@ -25,6 +25,7 @@ import {UserRole} from '../../../../core/models/user-role-enum';
     TopFiveListComponent
   ],
   templateUrl: './course-detail-page.component.html',
+  styleUrls: ['./course-detail-page.component.scss']
 })
 export class CourseDetailPageComponent implements OnInit {
   private route = inject(ActivatedRoute);

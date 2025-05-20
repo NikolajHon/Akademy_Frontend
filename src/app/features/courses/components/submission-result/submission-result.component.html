@@ -1,14 +1,13 @@
-<h4 class="title">Results</h4>
+<div class="submission-results">
+  <h4 class="title">Results</h4>
 
-<div *ngFor="let r of results" class="line">
-  <span class="icon" [class.ok]="r.passed" [class.fail]="!r.passed">
-    {{ r.passed ? '✓' : '✗' }}
-  </span>
+  <div *ngFor="let r of results" class="line" [class.passed]="r.passed" [class.failed]="!r.passed">
+    <span class="icon">
+      {{ r.passed ? '✓' : '✗' }}
+    </span>
 
-  <code class="io">in: {{ r.input ?? '—' }}</code>
-  <code class="io">out: {{ r.actualOutput ?? '—' }}</code>
-
-  <span class="expect" *ngIf="!r.passed">
-    expected: {{ r.expectedOutput ?? '—' }}
-  </span>
+    <code class="io">in: {{ r.input ?? '—' }}</code>
+    <code class="io">out: {{ r.actualOutput ?? '—' }}</code>
+    <code class="io expected">expected: {{ r.expectedOutput ?? '—' }}</code>
+  </div>
 </div>

@@ -7,6 +7,7 @@ import { Assignment } from '../../models/assignment.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './assignment-sidebar.component.html',
+  styleUrls: ['./assignment-sidebar.component.scss']
 })
 export class AssignmentSidebarComponent {
   @Input() assignments: Assignment[] = [];

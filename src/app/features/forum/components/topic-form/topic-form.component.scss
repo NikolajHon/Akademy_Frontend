@@ -1,70 +1,54 @@
-// Futuristic theme for topic-form.component
-// Color variables (imported or defined globally)
-$dark-bg:      #181818;
-$dark-card-bg: #222;
-$dark-border:  #2e2e2e;
-
-$font-color:       #eaeaea;
-$font-color-muted: #a0a0a0;
-
-$accent:       #6c63ff;
-$accent-light: #928cff;
-
-$base-spacing:        1rem;
-$border-radius-base: 10px;
-$transition-speed:    0.3s;
-
-:host {
-  display: block;
-  background: $dark-bg;
-  padding: $base-spacing;
-}
-
-form {
+.topic-create-form {
+  margin-bottom: 1.5rem;
   display: flex;
-  gap: $base-spacing;
   align-items: center;
+  gap: 1rem;
+  background: var(--color-surface);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
-  .form-control {
+  input {
     flex: 1;
-    background: $dark-card-bg;
-    color: $font-color;
-    border: 1px solid $dark-border;
-    border-radius: $border-radius-base;
-    padding: ($base-spacing * 0.5) $base-spacing;
-    transition: border $transition-speed, box-shadow $transition-speed;
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--text-secondary);
+    border-radius: 0.5rem;
+    background: var(--color-background);
+    color: var(--text-primary);
+    transition: border-color 0.3s, box-shadow 0.3s;
 
     &::placeholder {
-      color: $font-color-muted;
+      color: var(--text-secondary);
     }
+
     &:focus {
       outline: none;
-      border-color: $accent;
-      box-shadow: 0 0 8px rgba($accent-light, 0.6);
+      border-color: var(--color-info);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-info) 20%, transparent);
+      transform: scale(1.02);
     }
   }
 
-  .btn {
-    &.btn-success {
-      background: $accent;
-      color: $font-color;
-      border: none;
-      border-radius: $border-radius-base;
-      padding: ($base-spacing * 0.5) $base-spacing;
-      box-shadow: 0 0 8px rgba($accent-light, 0.6);
-      transition: background $transition-speed, box-shadow $transition-speed;
+  .create-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.5rem;
+    background: var(--color-info);
+    color: #fff;
+    cursor: pointer;
+    transition: filter 0.2s, transform 0.2s;
 
-      &:hover:not(:disabled) {
-        background: $accent-light;
-        box-shadow: 0 0 12px rgba($accent-light, 0.8), 0 0 20px rgba($accent, 0.4);
-      }
+    &:hover:not(:disabled) {
+      filter: brightness(0.9);
+      transform: translateY(-2px);
+    }
 
-      &:disabled {
-        background: $dark-border;
-        color: $font-color-muted;
-        cursor: not-allowed;
-        box-shadow: none;
-      }
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
   }
 }

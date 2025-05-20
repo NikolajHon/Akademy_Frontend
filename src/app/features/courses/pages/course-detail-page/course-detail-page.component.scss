@@ -1,0 +1,36 @@
+.course-hero {
+  background: var(--color-surface) !important;
+  color: var(--text-primary);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+
+  .course-title {
+    margin-bottom: .5rem;
+    color: var(--text-primary);
+  }
+
+  .course-description {
+    margin-bottom: 1rem;
+    color: var(--text-secondary) !important;
+  }
+
+  .badge {
+    background: var(--color-primary) !important;
+    color: var(--text-on-primary, #fff) !important;
+    font-weight: 500;
+  }
+
+  .progress {
+    background: var(--color-background);
+    height: .5rem;
+
+    .progress-bar {
+      background: var(--color-primary);
+    }
+  }
+
+  small {
+    color: var(--text-secondary);
+  }
+}

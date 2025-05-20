@@ -1,0 +1,111 @@
+.assignments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 0;
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ───── Code Editor Area ───── */
+  .editor {
+    width: 100%;
+    max-width: 100%;
+    min-height: 12rem;
+    font-family: "Fira Code", "JetBrains Mono", Consolas, monospace;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    tab-size: 2;
+
+    background: var(--color-surface);
+    color: var(--text-primary);
+
+    border: 1px solid var(--text-secondary);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    resize: vertical;
+
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s, box-shadow 0.3s;
+
+    &::selection {
+      background: var(--color-primary);
+      color: #fff;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 40%, transparent);
+    }
+
+    /* custom scrollbars */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) transparent;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-primary);
+      border-radius: 4px;
+    }
+  }
+
+  /* ───── Buttons ───── */
+  .just-button,
+  .trash-button {
+    margin-top: 1rem;
+    margin-right: 0.75rem;
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: filter 0.2s, transform 0.2s;
+  }
+
+  .just-button {
+    background: var(--color-primary);
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.9);
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .trash-button {
+    background: var(--color-error);
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.9);
+      transform: scale(1.02);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  app-submission-result {
+    margin-top: 1rem;
+    display: block;
+  }
+}

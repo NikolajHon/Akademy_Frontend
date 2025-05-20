@@ -1,17 +1,11 @@
-<!-- topic-list.component.html -->
-<button class="btn btn-sm btn-primary mb-2"
-        (click)="refresh()">⟳ Update</button>
-
-<ul class="list-group">
-  <li *ngFor="let t of topics$ | async"
-      class="list-group-item list-group-item-action"
-      (click)="select.emit(t)">
-    {{ t.title }}
-    <span class="badge rounded-pill float-end"
-          [ngClass]="{
-            'bg-success': t.status==='OPEN',
-            'bg-secondary': t.status==='CLOSED',
-            'bg-warning': t.status==='ARCHIVED'
-         }">{{ t.status }}</span>
-  </li>
-</ul>
+<!-- topics-list.component.html -->
+<div class="topics-list">
+  <div class="topics-header">
+    🔖 Discussion Topics (click on a title to view posts)
+  </div>
+  <ul class="topics-links">
+    <li *ngFor="let t of topics$ | async" (click)="select.emit(t)">
+      {{ t.title }}
+    </li>
+  </ul>
+</div>

@@ -1,65 +1,69 @@
-<div class="card my-2 fade-in">
-  <div class="card-body">
-    <div class="d-flex justify-content-between align-items-start">
-      <div>
-        <h6 class="card-subtitle mb-2 ">{{ post.authorName }}</h6>
-        <p class="card-text">{{ post.content }}</p>
-        <small class="text-secondary">{{ post.createdAt | date:'short' }}</small>
+<div class="posts-section">
+  <div class="card my-2 fade-in">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h6 class="card-subtitle mb-2 ">{{ post.authorName }}</h6>
+          <p class="card-text">{{ post.content }}</p>
+          <small class="text-secondary">{{ post.createdAt | date:'short' }}</small>
+        </div>
+        <button
+          *ngIf="canDelete"
+          class="btn btn-link btn-sm text-danger"
+          (click)="deletePost()"
+          title="Delete post"
+        >
+          🗑️
+        </button>
       </div>
-      <button
-        *ngIf="canDelete"
-        class="btn btn-link btn-sm text-danger"
-        (click)="deletePost()"
-        title="Delete post"
-      >
-        🗑️
-      </button>
-    </div>
 
-    <div class="mt-2">
-      <button class="btn btn-link btn-sm" (click)="toggleReply()">
-        {{ replyFormVisible ? 'Cancel' : 'Answer' }}
-      </button>
+      <div class="mt-2">
+        <button class="btn btn-link btn-sm" (click)="toggleReply()">
+          {{ replyFormVisible ? 'Cancel' : 'Answer' }}
+        </button>
 
-      <button
-        class="btn btn-link btn-sm"
-        *ngIf="post.replies?.length"
-        (click)="toggleReplies()"
-      >
-        {{ repliesVisible
-        ? 'Hide answers'
-        : 'Showing replies (' + post.replies!.length + ')' }}
-      </button>
-    </div>
+        <button
+          class="btn btn-link btn-sm"
+          *ngIf="post.replies?.length"
+          (click)="toggleReplies()"
+        >
+          {{
+            repliesVisible
+              ? 'Hide answers'
+              : 'Showing replies (' + post.replies!.length + ')'
+          }}
+        </button>
+      </div>
 
-    <div *ngIf="replyFormVisible" class="mt-2">
+      <div *ngIf="replyFormVisible" class="mt-2">
       <textarea
         class="form-control"
         rows="3"
         [(ngModel)]="replyText"
         placeholder="Your answer..."
       ></textarea>
-      <button
-        class="btn btn-primary btn-sm mt-2"
-        (click)="sendReply()"
-      >
-        Send
-      </button>
+        <button
+          class="btn btn-primary btn-sm mt-2"
+          (click)="sendReply()"
+        >
+          Send
+        </button>
+      </div>
     </div>
-  </div>
 
-  <div class="ms-4" *ngIf="repliesVisible">
-    <app-post-tree
-      *ngFor="let r of visibleReplies"
-      [post]="r"
-      [topicId]="topicId"
-      (replied)="replied.emit()"
-    ></app-post-tree>
+    <div class="ms-4" *ngIf="repliesVisible">
+      <app-post-tree
+        *ngFor="let r of visibleReplies"
+        [post]="r"
+        [topicId]="topicId"
+        (replied)="replied.emit()"
+      ></app-post-tree>
 
-    <div class="text-center my-2" *ngIf="post.replies && displayCount < post.replies.length">
-      <button class="btn btn-outline-secondary btn-sm" (click)="showMore()">
-        Показать ещё
-      </button>
+      <div class="text-center my-2" *ngIf="post.replies && displayCount < post.replies.length">
+        <button class="btn btn-outline-secondary btn-sm" (click)="showMore()">
+          Показать ещё
+        </button>
+      </div>
     </div>
   </div>
 </div>

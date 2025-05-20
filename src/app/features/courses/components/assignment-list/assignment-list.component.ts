@@ -20,7 +20,8 @@ import {UserRole} from '../../../../core/models/user-role-enum';
     FormsModule,
     SubmissionResultComponent
   ],
-  templateUrl: './assignment-list.component.html'
+  templateUrl: './assignment-list.component.html',
+  styleUrls: ['./assignment-list.component.scss']
 })
 export class AssignmentListComponent {
   @Input() assignments: Assignment[] = [];

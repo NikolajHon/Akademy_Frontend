@@ -23,7 +23,6 @@ export class TopicFormComponent implements OnInit {
     private srv: TopicService
   ) {}
 
-  /** теперь создаём форму ПOСЛЕ того, как fb будет проинжектирован */
   ngOnInit(): void {
     this.form = this.fb.group({
       title: ['', Validators.required],

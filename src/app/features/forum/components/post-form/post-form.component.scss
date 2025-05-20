@@ -1,86 +1,69 @@
-// Futuristic theme for post editor (post-editor.component)
-// Color variables assumed imported or defined globally
-$dark-bg:       #181818;
-$dark-card-bg:  #222;
-$dark-border:   #2e2e2e;
-
-$font-color:       #eaeaea;
-$font-color-muted: #a0a0a0;
-
-$accent:       #6c63ff;
-$accent-light: #928cff;
-
-$base-spacing:        1rem;
-$border-radius-base:  10px;
-$transition-speed:     0.3s;
-
-:host {
-  padding: $base-spacing;
-}
-
-.card {
-  background: rgba($dark-card-bg, 0.95);
-  border: 1px solid $dark-border;
-  border-radius: $border-radius-base;
-  margin: ($base-spacing * 0.5) 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  transition: transform $transition-speed;
-
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
-  }
+.card.my-2 {
+  background: var(--color-surface);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  margin: 1rem 0;
+  animation: slideUp 0.4s ease-out both;
 
   .card-body {
-    padding: $base-spacing;
-    color: $font-color;
     display: flex;
     flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
   }
 
-  .form-control {
-    background: $dark-bg;
-    color: $font-color;
-    border: 1px solid $dark-border;
-    border-radius: $border-radius-base;
-    padding: ($base-spacing * 0.5);
+  textarea.form-control {
+    width: 100%;
+    font-family: inherit;
+    font-size: 1rem;
+    background: var(--color-background);
+    color: var(--text-primary);
+    border: 1px solid var(--text-secondary);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
     resize: vertical;
-    min-height: 3em;
-    transition: border $transition-speed, box-shadow $transition-speed;
+    transition: border-color 0.3s, box-shadow 0.3s;
 
     &::placeholder {
-      color: $font-color-muted;
+      color: var(--text-secondary);
     }
+
     &:focus {
       outline: none;
-      border-color: $accent;
-      box-shadow: 0 0 8px rgba($accent-light, 0.6);
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+      transform: scale(1.01);
     }
   }
 
-  .btn {
+  button.btn {
+    align-self: flex-end;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: filter 0.2s, transform 0.2s;
+
     &.btn-primary {
-      align-self: flex-end;
-      margin-top: $base-spacing;
-      background: $accent;
-      color: $font-color;
-      border: none;
-      border-radius: $border-radius-base;
-      padding: ($base-spacing * 0.25) ($base-spacing * 0.75);
-      box-shadow: 0 0 6px rgba($accent-light, 0.6);
-      transition: background $transition-speed, box-shadow $transition-speed;
+      background: var(--color-info);
+      color: #fff;
+    }
 
-      &:hover:not(:disabled) {
-        background: $accent-light;
-        box-shadow: 0 0 10px rgba($accent-light, 0.8), 0 0 16px rgba($accent, 0.4);
-      }
+    &:hover:not(:disabled) {
+      filter: brightness(0.9);
+      transform: translateY(-2px);
+    }
 
-      &:disabled {
-        background: $dark-border;
-        color: $font-color-muted;
-        cursor: not-allowed;
-        box-shadow: none;
-      }
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
   }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

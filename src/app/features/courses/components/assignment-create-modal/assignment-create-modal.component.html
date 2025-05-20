@@ -17,19 +17,37 @@
           <ng-container *ngIf="step === 1">
             <div class="mb-3">
               <label class="form-label">Description</label>
-              <textarea formControlName="description" class="form-control"></textarea>
+              <textarea
+                formControlName="description"
+                class="form-control"
+                rows="3"
+              ></textarea>
             </div>
             <div class="mb-3">
               <label class="form-label">Teacher Code</label>
-              <input type="text" formControlName="teacherCode" class="form-control" />
+              <textarea
+                formControlName="teacherCode"
+                class="form-control"
+                rows="10"
+                placeholder="Напиши здесь полный С‑код с плейсхолдерами {{'INPUT'}} и {{STUDENT_CODE'}}"
+              ></textarea>
             </div>
             <div class="mb-3">
               <label class="form-label">Template Code</label>
-              <textarea formControlName="templateCode" class="form-control" rows="5"></textarea>
+              <textarea
+                formControlName="templateCode"
+                class="form-control"
+                rows="5"
+                placeholder="Что увидит студент — сигнатура метода и TODO"
+              ></textarea>
             </div>
             <div class="mb-3">
               <label class="form-label">Expected Output</label>
-              <input type="text" formControlName="expectedOutput" class="form-control" />
+              <input
+                type="text"
+                formControlName="expectedOutput"
+                class="form-control"
+              />
             </div>
           </ng-container>
 
@@ -38,28 +56,76 @@
             <div class="mb-3">
               <label class="form-label">Output Type</label>
               <select formControlName="outputType" class="form-select">
-                <option *ngFor="let o of outputTypes" [value]="o.value">{{ o.label }}</option>
+                <option *ngFor="let o of outputTypes" [value]="o.value">
+                  {{ o.label }}
+                </option>
               </select>
             </div>
             <div formArrayName="testCases">
-              <div *ngFor="let tc of testCases.controls; let i = index" [formGroupName]="i" class="mb-3 p-2 border rounded">
+              <div
+                *ngFor="let tc of testCases.controls; let i = index"
+                [formGroupName]="i"
+                class="mb-3 p-2 border rounded"
+              >
                 <label class="form-label">Test Case {{ i + 1 }}</label>
-                <input formControlName="input" placeholder="Input" class="form-control mb-2" />
-                <input formControlName="expectedOutput" placeholder="Expected Output" class="form-control" />
-                <button type="button" class="btn btn-danger btn-sm mt-2" (click)="removeTestCase(i)">Remove</button>
+                <input
+                  formControlName="input"
+                  placeholder="Input"
+                  class="form-control mb-2"
+                />
+                <input
+                  formControlName="expectedOutput"
+                  placeholder="Expected Output"
+                  class="form-control"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm mt-2"
+                  (click)="removeTestCase(i)"
+                >
+                  Remove
+                </button>
               </div>
-              <button type="button" class="btn btn-secondary" (click)="addTestCase()">Add Test Case</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="addTestCase()"
+              >
+                Add Test Case
+              </button>
             </div>
           </ng-container>
         </form>
       </div>
 
       <div class="modal-footer">
-        <!-- Кнопка закрытия модального окна -->
-        <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
-        <button *ngIf="step === 2" type="button" class="btn btn-secondary" (click)="back()">Back</button>
-        <button *ngIf="step === 1" type="button" class="btn btn-primary" (click)="next()">Next</button>
-        <button *ngIf="step === 2" type="button" class="btn btn-success" (click)="submit()">Submit</button>
+        <button type="button" class="btn btn-secondary" (click)="close()">
+          Cancel
+        </button>
+        <button
+          *ngIf="step === 2"
+          type="button"
+          class="btn btn-secondary"
+          (click)="back()"
+        >
+          Back
+        </button>
+        <button
+          *ngIf="step === 1"
+          type="button"
+          class="btn btn-primary"
+          (click)="next()"
+        >
+          Next
+        </button>
+        <button
+          *ngIf="step === 2"
+          type="button"
+          class="btn btn-success"
+          (click)="submit()"
+        >
+          Submit
+        </button>
       </div>
     </div>
   </div>

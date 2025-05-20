@@ -1,0 +1,71 @@
+.course-list {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  padding: 0;
+  list-style: none;
+}
+
+/* карточка */
+.course {
+  position: relative;
+  padding: 1.75rem 1.5rem 2.25rem;
+  background: var(--color-surface);
+  color: var(--text-primary);
+  border-radius: 1rem;
+  box-shadow: 0 12px 32px rgba(0 0 0 /.06);
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
+  overflow: hidden;
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: .5rem;
+  }
+
+  p {
+    font-size: .95rem;
+    color: var(--text-secondary);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at 30% 30%,
+        color-mix(in srgb, var(--color-primary) 14%, transparent),
+        transparent 60%);
+    opacity: 0;
+    transition: opacity .35s;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0 0 0 /.12);
+    &::after { opacity: 1; }
+  }
+
+  &:active { transform: scale(.98); }
+}
+
+/* бейдж “HIT/NEW” */
+.course[data-badge]::before {
+  content: attr(data-badge);
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  font-size: .7rem;
+  padding: .25rem .55rem;
+  border-radius: .5rem;
+  background: var(--color-primary);
+  color: #fff;
+  letter-spacing: .03em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+html.dark-theme .course {
+  box-shadow: 0 6px 24px rgba(0 0 0 /.3);
+}
