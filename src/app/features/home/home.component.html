@@ -1,16 +1,28 @@
 <div class="hero">
+  <!-- затемняющая плёнка -->
   <div class="overlay"></div>
 
-  <section class="hero-content">
-    <h1 class="headline">Code. Learn. Grow.</h1>
-    <p class="tagline">Самые интерактивные курсы по&nbsp;программированию онлайн</p>
+  <div class="hero-inner">
+    <!-- левый/верхний блок с текстом -->
+    <section class="hero-content">
+      <h1 class="headline">
+        <span class="word">Code.</span>
+        <span class="word">Learn.</span>
+        <span class="word">Grow.</span>
+      </h1>
 
-    <a class="btn btn-primary" routerLink="/course-page">
-      Go&nbsp;to&nbsp;Courses&nbsp;(Login&nbsp;Required)
-    </a>
-  </section>
+      <p class="tagline">
+        Самые&nbsp;интерактивные&nbsp;курсы по&nbsp;программированию&nbsp;онлайн
+      </p>
 
-  <section class="code-wrapper">
-    <pre><code [innerText]="displayedCode"></code><span class="cursor"></span></pre>
-  </section>
+      <a class="btn btn-primary" routerLink="/course-page">
+        Go&nbsp;to&nbsp;Courses&nbsp;(Login&nbsp;Required)
+      </a>
+    </section>
+
+    <!-- правый/нижний блок с «печатающимся» кодом -->
+    <pre class="code-block">
+      <code [innerText]="displayedCode"></code><span class="cursor"></span>
+    </pre>
+  </div>
 </div>

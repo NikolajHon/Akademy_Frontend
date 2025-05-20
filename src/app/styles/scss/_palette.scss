@@ -1,0 +1,56 @@
+
+$light-primary:    #1e88e5;
+$light-secondary:  #fdd835;
+$light-background: #ffffff;
+$light-surface:    #f5f5f5;
+$light-error:      #e53935;
+$light-success:    #43a047;  // зеленый для подтверждений, успеха
+$light-info:       #0288d1;  // бирюзовый для инфо сообщений
+$light-text-primary:   #212121;  // почти черный основной текст
+$light-text-secondary: #616161;  // серый для второстепенного текста
+
+// === Dark Theme ===
+$dark-primary:     #90caf9;  // светло-синий акцент на темном фоне
+$dark-secondary:   #fff59d;  // светло-желтый для вторичных элементов
+$dark-background:  #121212;  // очень тёмный фон
+$dark-surface:     #1e1e1e;  // тёмно-серый фон карточек, панелей
+$dark-error:       #ef5350;  // более мягкий красный
+$dark-success:     #66bb6a;  // более мягкий зеленый
+$dark-info:        #29b6f6;  // более мягкий бирюзовый
+$dark-text-primary:   #e0e0e0;  // почти белый основной текст
+$dark-text-secondary: #bdbdbd;  // светло-серый второстепенный текст
+
+// Миксины для переключения тем
+@mixin theme-light {
+  --color-primary:       #{$light-primary};
+  --color-secondary:     #{$light-secondary};
+  --color-background:    #{$light-background};
+  --color-surface:       #{$light-surface};
+  --color-error:         #{$light-error};
+  --color-success:       #{$light-success};
+  --color-info:          #{$light-info};
+  --text-primary:        #{$light-text-primary};
+  --text-secondary:      #{$light-text-secondary};
+}
+
+@mixin theme-dark {
+  --color-primary:       #{$dark-primary};
+  --color-secondary:     #{$dark-secondary};
+  --color-background:    #{$dark-background};
+  --color-surface:       #{$dark-surface};
+  --color-error:         #{$dark-error};
+  --color-success:       #{$dark-success};
+  --color-info:          #{$dark-info};
+  --text-primary:        #{$dark-text-primary};
+  --text-secondary:      #{$dark-text-secondary};
+}
+
+// Применяем тему по умолчанию (светлая)
+:root {
+  @include theme-light;
+}
+
+// Класс для тёмной темы
+.dark-theme {
+  @include theme-dark;
+}
