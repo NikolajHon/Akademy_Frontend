@@ -7,7 +7,8 @@ import {Router} from '@angular/router';
   selector: 'app-lessons-list',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './lessons-list.component.html'
+  templateUrl: './lessons-list.component.html',
+  styleUrls: ['./lessons-list.component.scss']
 })
 export class LessonsListComponent {
   private router = inject(Router);

@@ -1,37 +1,20 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CourseService } from '../../services/course.service';
-import { Course } from '../../models/course.model';
-import { Router } from '@angular/router';
+import {Course} from '../../models/course.model';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './course-list.component.html'
+  templateUrl: './course-list.component.html',
+  styleUrls: ['./course-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CourseListComponent implements OnInit {
-  private router = inject(Router);
-  private courseService = inject(CourseService);
-  courses: Course[] = [];
+export class CourseListComponent {
+  @Input() courses: Course[] = [];
+  @Output() select = new EventEmitter<number>();
 
-  ngOnInit() {
-    console.log('CourseListComponent инициализирован');
-    this.courseService.getCourses().subscribe({
-      next: (courses) => {
-        this.courses = courses;
-        console.log('Courses received:', courses);
-      },
-      error: (err) => {
-        console.error('Error in receiving courses:', err);
-      }
-    });
+  openCourse(course: Course) {
+    this.select.emit(course.id);
   }
-
-
-
-  openCourse(id: number): void {
-    this.router.navigate(['/course-page', id]);
-  }
-
 }

@@ -1,3 +1,15 @@
 <div class="page-container">
-  <app-course-list></app-course-list>
+  <h2 class="page-title">Каталог&nbsp;курсов</h2>
+
+  <input
+    type="search"
+    class="course-search"
+    placeholder="Поиск курса…"
+    (input)="onSearch($any($event.target).value)" />
+
+
+  <app-course-list
+    [courses]="filteredCourses()"
+    (select)="openCourse($event)">
+  </app-course-list>
 </div>

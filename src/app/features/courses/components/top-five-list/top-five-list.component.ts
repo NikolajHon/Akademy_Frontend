@@ -11,7 +11,8 @@ interface TopUser {
   selector: 'app-top-five-list',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './top-five-list.component.html'
+  templateUrl: './top-five-list.component.html',
+  styleUrls: ['./top-five-list.component.scss']
 })
 export class TopFiveListComponent {
   users: TopUser[] = Array.from({ length: 5 }, (_, i) => ({

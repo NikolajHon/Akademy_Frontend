@@ -1,0 +1,149 @@
+/* --------------------------------------------------
+   Lessons List Component  (обновлённая версия)
+   -------------------------------------------------- */
+
+/* ───────── БАЗА (unchanged) ───────── */
+
+.lesson-card {
+  --shadow: 0 4px 18px rgba(0, 0, 0, .18);
+
+  position: relative;
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.75rem 2rem;
+  border-radius: 1.25rem;
+  background: var(--color-surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+
+  animation: rise-in .55s cubic-bezier(.34,1.56,.64,1) both;
+  animation-delay: var(--delay, 0ms);
+
+  transition: transform .3s ease, box-shadow .3s ease;
+
+  &:hover   { transform: translateY(-6px); box-shadow: 0 10px 28px rgba(0,0,0,.22); }
+  &:active  { transform: scale(.985); }
+  &:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 4px; }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ───────── ПРОГРЕСС‑КРУГ ───────── */
+
+.progress-circle {
+  --size: 74px;
+  --stroke: 4;
+  --radius: calc((var(--size) - var(--stroke)) / 2);
+  --circumference: calc(var(--radius) * 2 * 3.1416);
+
+  width: var(--size);
+  height: var(--size);
+  position: relative;
+  flex: 0 0 var(--size);
+
+  svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+  circle {
+    fill: none;
+    stroke-width: var(--stroke);
+    r: var(--radius);
+    cx: calc(var(--size) / 2);
+    cy: calc(var(--size) / 2);
+  }
+
+  /* трек (фон линии) — теперь различим и на светлом */
+  .track    { stroke: rgba(0, 0, 0, .08); }
+
+  /* индикатор прогресса */
+  .indicator {
+    stroke: var(--color-primary);
+    stroke-linecap: round;
+    stroke-dasharray: var(--circumference);
+    stroke-dashoffset: calc(var(--circumference) * var(--offset, 0) / 100);
+    transition: stroke-dashoffset .6s ease;
+  }
+
+  /* число процентов */
+  .percent {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .9rem;
+    font-weight: 700;
+    color: var(--text-primary);   /* будет видно и на светлом, и на тёмном */
+  }
+}
+
+/* ───────── КОНТЕНТ ───────── */
+
+.info {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h4 {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.35;
+    color: var(--text-primary);   /* <‑‑ изменили: раньше был #fff */
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: .95rem;
+    line-height: 1.5;
+  }
+}
+
+.actions {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+
+  button {
+    padding: .55rem 1.1rem;
+    border: 2px solid transparent;
+    border-radius: .55rem;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .03em;
+    cursor: pointer;
+    transition: background .25s, transform .15s, box-shadow .2s;
+
+    &:hover  { background: color-mix(in srgb, var(--color-primary) 85%, #fff); box-shadow: 0 4px 14px rgba(0,0,0,.25); transform: translateY(-2px); }
+    &:active { transform: scale(.97); }
+  }
+}
+
+/* ───────── АДАПТИВ ───────── */
+
+@media (max-width: 540px) {
+  .lessons-list { grid-template-columns: 1fr; }
+
+  .lesson-card { flex-direction: column; align-items: center; text-align: center; }
+  .progress-circle { margin-bottom: 1rem; }
+}
+
+/* ───────── ТЁМНАЯ ТЕМА ───────── */
+
+html.dark-theme {
+  .lesson-card { --shadow: 0 4px 18px rgba(0, 0, 0, .55); }
+
+  /* контраст трека на тёмном */
+  .progress-circle .track { stroke: rgba(255, 255, 255, .12); }
+
+  /* делаем заголовок и % белыми, чтоб не терялись */
+  .info h4,
+  .progress-circle .percent { color: #fff; }
+}

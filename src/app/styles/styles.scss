@@ -5,3 +5,10 @@
 @import 'scss/app';
 @import 'scss/dark-theme-overrides';
 @import "scss/_palette";
+/* базовый фон и цвет текста для всей страницы */
+html, body {
+  background: var(--color-background);
+  color: var(--text-primary);
+  transition: background .25s ease, color .25s ease;
+  min-height: 100%;          /* чтобы фон растягивался на всю страницу */
+}

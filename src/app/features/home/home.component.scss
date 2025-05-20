@@ -1,26 +1,18 @@
-/* --------------------------------------------------
-   Переменные цветов уже есть в :root / .dark-theme
-   (см. _palette.scss) — используем var(--color-…)
-   -------------------------------------------------- */
 
-/* базовый сброс отступов */
 * { margin: 0; box-sizing: border-box; }
 
-/* ---------- ОБЩИЙ КОНТЕЙНЕР ---------- */
 .hero {
   position: relative;
-  min-height: 100vh;                        /* «во весь экран» */
+  min-height: 100vh;
   padding: 4rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background:
-    /* необязательно, но красиво: фон‑картинка */
-    url('/assets/hero-bg.jpg') center/cover no-repeat,
+
     var(--color-background);
 }
 
-/* полупрозрачная затемняющая вуаль */
 .overlay {
   position: absolute;
   inset: 0;
@@ -134,3 +126,60 @@
 @keyframes slide-up {
   to { transform: translateY(0); opacity: 1; }
 }
+/* ── 1. Шиммер‑градиент на заголовке ────────────────── */
+.headline.shimmer {
+  position: relative;
+  overflow: hidden;                // обрезаем «блик»
+  color: var(--text-primary);
+
+  &::after {                       // полупрозрачный блик
+    content: '';
+    position: absolute;
+    top: 0; left: -150%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(
+        75deg,
+        transparent 0 20%,
+        rgba(var(--color-primary-rgb, 30,136,229), .25) 40%,
+        transparent 60% 100%);
+    animation: slide-shine 7s infinite;
+  }
+}
+
+@keyframes slide-shine { to { left: 100%; } }
+
+
+/* ── 2. Секция «features» ───────────────────────────── */
+.features {
+  margin: 1.75rem 0 2.25rem;
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+
+  /* две колонки на средних экранах */
+  @media (min-width: 600px) { grid-template-columns: repeat(2, 1fr); }
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: .65rem;
+    font-size: .95rem;
+    line-height: 1.35;
+
+    /* лёгкий “highlight” слева */
+    padding-left: .1rem;
+    border-left: 3px solid color-mix(in srgb,
+      var(--color-primary) 60%, transparent);
+
+    .icon {
+      font-size: 1.25rem;
+      line-height: 1;
+      transform: translateY(.1rem);
+    }
+  }
+}
+
+/* ── 3. Кнопка чуть ближе к тексту ──────────────────── */
+.btn.btn-primary { margin-top: .25rem; }
