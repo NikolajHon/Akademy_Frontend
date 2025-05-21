@@ -15,7 +15,7 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class TopicService {
-  private readonly base = '/courses';
+  private readonly base = 'api/courses';
 
   constructor(private http: HttpClient) {}
 
@@ -40,6 +40,6 @@ export class TopicService {
 
   /** PUT /topics/{topicId} */
   updateTopic(id: number, dto: UpdateTopicRequest): Observable<Topic> {
-    return this.http.put<Topic>(`/topics/${id}`, dto);
+    return this.http.put<Topic>(`api/topics/${id}`, dto);
   }
 }

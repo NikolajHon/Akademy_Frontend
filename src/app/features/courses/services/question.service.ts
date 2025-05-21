@@ -12,8 +12,8 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class QuestionService {
-  private readonly baseUrl = '/lessons';
-  private readonly questionsUrl = '/questions';
+  private readonly baseUrl = 'api/lessons';
+  private readonly questionsUrl = 'api/questions';
 
   constructor(private http: HttpClient) {}
 

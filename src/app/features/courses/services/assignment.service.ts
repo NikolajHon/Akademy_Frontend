@@ -10,7 +10,7 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class AssignmentService {
-  private readonly lessonsUrl = '/lessons';
+  private readonly lessonsUrl = 'api/lessons';
 
   constructor(private http: HttpClient) {}
 
@@ -37,7 +37,7 @@ export class AssignmentService {
     assignmentId: number,
     code: string
   ): Observable<SubmissionResponseDto> {
-    const url = `/assignments/${assignmentId}/submissions`;
+    const url = `api/assignments/${assignmentId}/submissions`;
     const body: SubmissionRequestDto = { code };
     return this.http.post<SubmissionResponseDto>(url, body).pipe(
       tap(() => console.log('✅ SUBMIT', url)),
@@ -46,7 +46,7 @@ export class AssignmentService {
   }
 
   deleteAssignment(assignmentId: number): Observable<void> {
-    const url = `/assignments/${assignmentId}`;
+    const url = `api/assignments/${assignmentId}`;
     return this.http.delete<void>(url).pipe(
       tap(() => console.log('✅ DELETE assignment', url)),
       catchError(err => throwError(() => err))

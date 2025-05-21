@@ -7,7 +7,6 @@ import { Toast, ToastType } from '../models/toast.model';
 export class ToastService {
   private toasts: Toast[] = [];
   private subject = new BehaviorSubject<Toast[]>([]);
-  /** Новый поток: «автоматически истёкшие» тосты */
   private expireSubject = new Subject<number>();
   public expire$ = this.expireSubject.asObservable();
 

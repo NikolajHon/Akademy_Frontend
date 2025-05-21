@@ -1,0 +1,9 @@
+<nav class="question-nav">
+  <button
+    *ngFor="let _ of questions; let i = index"
+    class="nav-btn"
+    (click)="scrollTo(i)"
+  >
+    {{ i + 1 }}
+  </button>
+</nav>

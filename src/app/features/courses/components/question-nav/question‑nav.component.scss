@@ -1,0 +1,27 @@
+.question-nav {
+  position: fixed;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;      /* поверх остального контента */
+}
+
+/* круглые кнопки с цифрами */
+.nav-btn {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  font-weight: 600;
+  background: #f2f2f2;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-btn:hover,
+.nav-btn:focus {
+  background: #dcdcdc;
+}
