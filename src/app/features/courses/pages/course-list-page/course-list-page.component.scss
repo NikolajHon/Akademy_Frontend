@@ -1,37 +1,24 @@
-/* --------------------------------------------------
-   Catalog Page (component, <app‑catalog‑page>)
-   -------------------------------------------------- */
 
-/* 1. Контейнер страницы */
 .page-container {
-  /* центрируем и ограничиваем ширину */
   max-width: 1200px;
   margin-inline: auto;
-
-  /* «умные» отступы: больше на десктопе, меньше на мобиле */
   padding-block: clamp(2rem, 6vw, 3.5rem);
   padding-inline: clamp(1rem, 4vw, 2.5rem);
-
   display: flex;
   flex-direction: column;
   gap: 2rem;
-
-  /* анимация появления всей страницы */
-  animation: fade-slide-in .5s ease-out both;
+  animation: fade-slide-in 0.5s ease-out both;
 }
 
 @keyframes fade-slide-in {
   from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0);  }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* 2. Заголовок */
 .page-title {
   font-size: clamp(1.5rem, 2.2vw + 1rem, 2.25rem);
   font-weight: 700;
   line-height: 1.25;
-
-  /* декоративная цветная «полоска» слева */
   position: relative;
   padding-left: 1.25rem;
 
@@ -40,56 +27,194 @@
     position: absolute;
     inset-block: 0;
     left: 0;
-    width: .35rem;
-    border-radius: .25rem;
+    width: 0.35rem;
+    border-radius: 0.25rem;
     background: var(--color-primary);
   }
 }
 
-/* 3. Поле поиска */
 .course-search {
-  --_border: rgba(0,0,0,.12);
+  --_border: rgba(0, 0, 0, 0.12);
   width: 100%;
-
-  padding: .85rem 1.1rem;
+  padding: 0.85rem 1.1rem;
   border: 2px solid var(--_border);
-  border-radius: .75rem;
-
+  border-radius: 0.75rem;
   background: var(--color-surface);
   color: var(--text-primary);
   font-size: 1rem;
   line-height: 1.2;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 
-  transition:
-    border-color .2s ease,
-    box-shadow  .2s ease,
-    background  .2s ease;
-
-  &::placeholder { color: var(--text-secondary); }
-
-  /* при наведении / фокусе */
-  &:hover  { border-color: var(--color-primary); }
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+  &:hover {
+    border-color: var(--color-primary);
+  }
   &:focus,
   &:focus-visible {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 30,136,229), .25);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.25);
     outline: none;
   }
 }
 
-/* 4. Тёмная тема – слегка увеличим контраст + мягкое свечение */
-html.dark-theme {
-  .course-search {
-    --_border: rgba(255,255,255,.15);
+html.dark-theme .course-search {
+  --_border: rgba(255, 255, 255, 0.15);
 
-    &:focus,
-    &:focus-visible {
-      box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 144,202,249), .35);
+  &:focus,
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.35);
+  }
+}
+
+@media (max-width: 420px) {
+  .page-container {
+    gap: 1.5rem;
+  }
+}
+
+.create-btn {
+  align-self: flex-start;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--color-primary);
+  color: var(--color-background);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+
+  &:hover {
+    background: rgba(var(--color-primary-rgb), 0.8);
+  }
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  animation: fade-in 0.3s forwards;
+  z-index: 1000;
+}
+
+.modal-wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+.modal-content {
+  pointer-events: all;
+  background: var(--color-surface);
+  color: var(--text-primary);
+  width: 90%;
+  max-width: 600px;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(-20px) scale(0.96);
+  animation: slide-down 0.3s forwards;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-content h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.modal-content label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  color: var(--text-secondary);
+
+  input,
+  textarea {
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--_border);
+    border-radius: 0.5rem;
+    background: var(--color-background);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+    &:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+      outline: none;
     }
   }
 }
 
-/* 5. Мелкая адаптивность (<420 px) — заголовок и поле ближе друг к другу */
-@media (max-width: 420px) {
-  .page-container { gap: 1.5rem; }
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.submit-btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--color-primary);
+  color: var(--color-background);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+
+  &:hover {
+    background: rgba(var(--color-primary-rgb), 0.8);
+  }
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.cancel-btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1.5px solid var(--color-secondary);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--color-secondary);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+
+  &:hover {
+    background: var(--color-secondary);
+    color: var(--color-background);
+  }
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@keyframes fade-in {
+  to { opacity: 1; }
+}
+
+@keyframes slide-down {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

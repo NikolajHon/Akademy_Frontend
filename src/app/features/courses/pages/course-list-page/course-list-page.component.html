@@ -1,15 +1,45 @@
 <div class="page-container">
-  <h2 class="page-title">Каталог&nbsp;курсов</h2>
+  <h2 class="page-title">Course Catalog</h2>
 
   <input
     type="search"
     class="course-search"
-    placeholder="Поиск курса…"
+    placeholder="Search course…"
     (input)="onSearch($any($event.target).value)" />
 
+  <button class="just-button" (click)="openNewCourseModal()">
+    Create Course
+  </button>
 
   <app-course-list
     [courses]="filteredCourses()"
     (select)="openCourse($event)">
   </app-course-list>
 </div>
+
+<ng-container *ngIf="isModalOpen()">
+  <div class="modal-backdrop" (click)="closeModal()"></div>
+  <div class="modal-wrapper">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>New Course</h3>
+      <label>
+        Name:
+        <input
+          type="text"
+          [(ngModel)]="newCourseName"
+          placeholder="Enter name" />
+      </label>
+      <label>
+        Description:
+        <textarea
+          rows="5"
+          [(ngModel)]="newCourseDescription"
+          placeholder="Enter description"></textarea>
+      </label>
+      <div class="modal-actions">
+        <button class="submit-btn" (click)="submitNewCourse()">Submit</button>
+        <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</ng-container>
