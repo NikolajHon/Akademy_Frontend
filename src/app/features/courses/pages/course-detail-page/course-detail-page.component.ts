@@ -1,5 +1,4 @@
-// src/app/pages/course-detail-page/course-detail-page.component.ts
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,8 +11,9 @@ import { LessonService } from '../../services/lesson.service';
 
 import { Course } from '../../models/course.model';
 import { Lesson, CreateLessonRequestDto } from '../../models/lesson.model';
-import {UserService} from '../../../../core/services/user.service';
-import {UserRole} from '../../../../core/models/user-role-enum';
+import { UserService } from '../../../../core/services/user.service';
+import { UserRole } from '../../../../core/models/user-role-enum';
+import { CourseDto, UserDto, UsersResponseDto } from '../../../../core/models/user-model';
 
 @Component({
   selector: 'app-course-detail-page',
@@ -33,8 +33,7 @@ export class CourseDetailPageComponent implements OnInit {
   private lessonService = inject(LessonService);
   private userService = inject(UserService);
 
-  course = signal<Course|null>(null);
-
+  course = signal<Course | null>(null);
   private userSignal = this.userService.getUserSignal();
   isTeacher = computed(() => this.userSignal()?.role === UserRole.TEACHER);
 
@@ -46,9 +45,13 @@ export class CourseDetailPageComponent implements OnInit {
     courseId: 0
   });
 
+  showUsersModal = signal(false);
+  users = signal<UserDto[]>([]);
+  filterTerm = signal('');
+  private currentCourseId = computed(() => this.course()?.id ?? 0);
+
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    // загрузить курс и сразу проставить courseId в dto
     this.courseService.getCourses().subscribe(list => {
       const found = list.find(c => c.id === id) || null;
       this.course.set(found);
@@ -58,14 +61,15 @@ export class CourseDetailPageComponent implements OnInit {
     });
   }
 
-  openCreateModal() {
+  openCreateModal(): void {
     this.showCreateModal.set(true);
   }
-  closeModal() {
+
+  closeCreateModal(): void {
     this.showCreateModal.set(false);
   }
 
-  createLesson() {
+  createLesson(): void {
     const dto = this.newLesson();
     if (!dto.courseId) return;
 
@@ -73,18 +77,68 @@ export class CourseDetailPageComponent implements OnInit {
       this.courseService.getCourses().subscribe(list => {
         this.course.set(list.find(c => c.id === dto.courseId) || null);
       });
-      this.closeModal();
+      this.closeCreateModal();
       this.newLesson.set({ title: '', description: '', content: '', courseId: dto.courseId });
     });
   }
-  updateTitle(value: string) {
+
+  updateTitle(value: string): void {
     this.newLesson.update(l => ({ ...l, title: value }));
   }
-  updateDescription(value: string) {
+
+  updateDescription(value: string): void {
     this.newLesson.update(l => ({ ...l, description: value }));
   }
-  updateContent(value: string) {
+
+  updateContent(value: string): void {
     this.newLesson.update(l => ({ ...l, content: value }));
   }
 
+  loadUsers(): void {
+    this.userService.getAllUsers().subscribe((res: UsersResponseDto) => {
+      this.users.set(res.users);
+    });
+  }
+
+  openUsersModal(): void {
+    this.loadUsers();
+    this.showUsersModal.set(true);
+  }
+
+  closeUsersModal(): void {
+    this.showUsersModal.set(false);
+    this.filterTerm.set('');
+  }
+
+  onUserClick(user: UserDto): void {
+    const courseId = this.currentCourseId();
+    if (this.isEnrolled(user)) {
+      console.log(`User ${user.id} is already enrolled in course ${courseId}`);
+      return;
+    }
+
+    console.log(`Enrolling user ${user.id} into course ${courseId}`);
+    this.userService.enrollUserToCourse(user.id, courseId).subscribe({
+      next: () => {
+        console.log(`Successfully enrolled user ${user.id} in course ${courseId}`);
+        this.loadUsers();
+      },
+      error: err => {
+        console.error('Enrollment error:', err);
+      }
+    });
+  }
+
+  filteredUsers(): UserDto[] {
+    const term = this.filterTerm().trim().toLowerCase();
+    if (!term) return this.users();
+    return this.users().filter(u =>
+      (`${u.givingName} ${u.familyName}`.toLowerCase().includes(term)) ||
+      u.email.toLowerCase().includes(term)
+    );
+  }
+
+  isEnrolled(user: UserDto): boolean {
+    return user.courses.some((c: CourseDto) => c.id === this.currentCourseId());
+  }
 }

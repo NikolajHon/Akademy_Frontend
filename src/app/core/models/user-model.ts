@@ -1,4 +1,3 @@
-// user-model.ts
 import { UserRole } from './user-role-enum';
 
 export interface UserModel {
@@ -7,4 +6,23 @@ export interface UserModel {
   username: string;
   email: string;
   role: UserRole;
+}
+export interface CourseDto {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export interface UserDto {
+  id: number;
+  givingName: string;
+  familyName: string;
+  email: string;
+  role: string;
+  rating: number;
+  courses: CourseDto[];
+}
+
+export interface UsersResponseDto {
+  users: UserDto[];
 }

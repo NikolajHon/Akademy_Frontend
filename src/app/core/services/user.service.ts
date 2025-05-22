@@ -1,26 +1,40 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {UserModel} from '../models/user-model';
+import {UserModel, UsersResponseDto} from '../models/user-model';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {authCodeFlowConfig} from '../config/authCodeFlowConfig.config';
 import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot} from '@angular/router';
 import {UserRole} from '../models/user-role-enum';
 import {JwtHelperService} from '@auth0/angular-jwt';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private user = signal<UserModel|undefined>(undefined);
   private jwtHelper = new JwtHelperService();
+  private baseUrl = 'api/users';
 
   constructor(
     private oauthService: OAuthService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     this.oauthService.configure(authCodeFlowConfig);
     this.tryLogin();
   }
-
+  getAllUsers(): Observable<UsersResponseDto> {
+    return this.http.get<UsersResponseDto>(`${this.baseUrl}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+  }
   getUserSignal() {
     return this.user.asReadonly();
+  }
+  enrollUserToCourse(userId: number, courseId: number): Observable<void> {
+    const url = `${this.baseUrl}/${userId}/courses/${courseId}`;
+    return this.http.post<void>(url, null, {
+      headers: { 'Accept': 'application/json' }
+    });
   }
 
   async tryLogin(): Promise<UserModel|undefined> {

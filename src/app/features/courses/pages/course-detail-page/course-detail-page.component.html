@@ -25,13 +25,20 @@
           (click)="openCreateModal()">
           Add Lesson
         </button>
+        <button
+          *ngIf="isTeacher()"
+          class="just-button mt-3"
+          (click)="openUsersModal()">
+          Show All Users
+        </button>
       </div>
     </div>
 
     <div class="col-lg-4">
-        <app-top-five-list></app-top-five-list>
+      <app-top-five-list></app-top-five-list>
     </div>
   </div>
+
   <ng-container *ngIf="showCreateModal()">
     <div class="modal-backdrop" (click)="closeModal()"></div>
     <div class="modal-wrapper">
@@ -64,4 +71,42 @@
     </div>
   </ng-container>
 
+  <ng-container *ngIf="showUsersModal()">
+    <div class="modal-backdrop" (click)="closeUsersModal()"></div>
+    <div class="modal-wrapper">
+      <div class="modal-content">
+        <h2>Users</h2>
+        <input
+          type="text"
+          placeholder="Search by name or email"
+          [(ngModel)]="filterTerm"
+        />
+
+        <ul class="user-list">
+          <li
+            *ngFor="let user of filteredUsers()"
+            class="user-item"
+            [ngClass]="{ 'enrolled': isEnrolled(user), 'clickable': !isEnrolled(user) }"
+            (click)="onUserClick(user)"
+          >
+            <div class="user-info">
+              {{ user.givingName }} {{ user.familyName }}
+              <small>({{ user.email }})</small>
+            </div>
+            <div class="enrolled-mark" *ngIf="isEnrolled(user)">✓</div>
+          </li>
+        </ul>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="closeUsersModal()"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>
