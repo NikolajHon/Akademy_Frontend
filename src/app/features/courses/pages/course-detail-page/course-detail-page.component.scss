@@ -34,3 +34,124 @@
     color: var(--text-secondary);
   }
 }
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  animation: fade-in 0.25s forwards;
+  z-index: 1000;
+}
+
+.modal-wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+.modal-content {
+  pointer-events: all;
+  background: var(--color-surface);
+  color: var(--text-primary);
+  width: 90%;
+  max-width: 600px;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+  animation: slide-down 0.3s forwards;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.modal-content h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.modal-content label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  color: var(--text-secondary);
+
+  input,
+  textarea {
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--_border);
+    border-radius: 0.5rem;
+    background: var(--color-background);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+    &:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+      outline: none;
+    }
+  }
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  .submit-btn,
+  .cancel-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .submit-btn {
+    border: none;
+    background: var(--color-primary);
+    color: var(--color-background);
+
+    &:hover {
+      background: rgba(var(--color-primary-rgb), 0.85);
+    }
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  .cancel-btn {
+    border: 1.5px solid var(--color-secondary);
+    background: transparent;
+    color: var(--color-secondary);
+
+    &:hover {
+      background: var(--color-secondary);
+      color: var(--color-background);
+    }
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+}
+
+@keyframes fade-in {
+  to { opacity: 1; }
+}
+
+@keyframes slide-down {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

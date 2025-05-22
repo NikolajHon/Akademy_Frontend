@@ -10,7 +10,6 @@
   </div>
 
   <div class="row gx-5">
-    <!-- Lessons List -->
     <div class="col-lg-8 mb-4">
       <div class="course-detail-container">
         <h3 class="lessons-title mb-4 border-start border-3 border-primary ps-3">Lessons</h3>
@@ -33,4 +32,36 @@
         <app-top-five-list></app-top-five-list>
     </div>
   </div>
+  <ng-container *ngIf="showCreateModal()">
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal-wrapper">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>New Lesson</h3>
+
+        <label>
+          Title:
+          <input
+            type="text"
+            [value]="newLesson().title"
+            (input)="updateTitle($any($event.target).value)"
+            placeholder="Enter title" />
+        </label>
+
+        <label>
+          Content:
+          <textarea
+            rows="6"
+            [value]="newLesson().content"
+            (input)="updateContent($any($event.target).value)"
+            placeholder="Enter content"></textarea>
+        </label>
+
+        <div class="modal-actions">
+          <button class="submit-btn" (click)="createLesson()">Submit</button>
+          <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
 </div>

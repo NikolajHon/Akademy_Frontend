@@ -70,12 +70,10 @@ export class CourseDetailPageComponent implements OnInit {
     if (!dto.courseId) return;
 
     this.lessonService.createLesson(dto).subscribe(() => {
-      // перезагрузим уроки в курсе
       this.courseService.getCourses().subscribe(list => {
         this.course.set(list.find(c => c.id === dto.courseId) || null);
       });
       this.closeModal();
-      // очистить форму
       this.newLesson.set({ title: '', description: '', content: '', courseId: dto.courseId });
     });
   }
