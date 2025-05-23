@@ -17,7 +17,7 @@
       <p>{{ lesson.content }}</p>
 
       <div class="actions">
-        <button class="just-button">GO TO LESSON</button>
+        <button class="just-button" (click)="openVideo(lesson)">GO TO LESSON</button>
         <button class="just-button" (click)="openPractise(lesson)">PRACTISE</button>
         <button class="just-button" (click)="openQuestions(lesson)">QUESTIONS</button>
       </div>

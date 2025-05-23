@@ -1,0 +1,54 @@
+<div class="video-page">
+  <h2>Lesson {{ lessonId }} Video Materials</h2>
+  <p class="subtitle">Enhance your skills with curated video lessons</p>
+  <button class="just-button" (click)="modalOpen = true">Add New Video</button>
+
+  <ng-container *ngIf="modalOpen">
+    <div class="overlay" (click)="modalOpen = false">
+      <div class="modal-window" (click)="$event.stopPropagation()">
+        <button class="btn-close" (click)="modalOpen = false">&times;</button>
+        <h3>New Video Entry</h3>
+        <form [formGroup]="form" (ngSubmit)="onSubmit(); modalOpen = false">
+          <label>
+            Title
+            <input formControlName="title" placeholder="Enter video title" />
+          </label>
+          <div *ngIf="form.get('title')?.invalid && form.get('title')?.touched" class="error">
+            Title is required
+          </div>
+
+          <label>
+            Link
+            <input formControlName="url" placeholder="https://..." />
+          </label>
+          <div *ngIf="form.get('url')?.invalid && form.get('url')?.touched" class="error">
+            Valid URL is required
+          </div>
+
+          <button type="submit" [disabled]="form.invalid" class="btn-save">Save Video</button>
+        </form>
+      </div>
+    </div>
+  </ng-container>
+
+  <hr />
+
+  <div *ngIf="loading" class="loading">Loading videos...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngFor="let vm of videoMaterials" class="video-card">
+    <h3>{{ vm.title }}</h3>
+    <div *ngIf="isYouTube(vm.url)" class="video-frame">
+      <iframe
+        [src]="safeUrls[vm.id]"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <div *ngIf="!isYouTube(vm.url)" class="video-frame">
+      <video controls [src]="vm.url">Your browser does not support video.</video>
+    </div>
+    <button class="btn-delete" (click)="onDelete(vm)">Remove</button>
+  </div>
+</div>

@@ -40,7 +40,7 @@
   </div>
 
   <ng-container *ngIf="showCreateModal()">
-    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal-backdrop" (click)="closeCreateModal()"></div>
     <div class="modal-wrapper">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <h3>New Lesson</h3>
@@ -65,7 +65,7 @@
 
         <div class="modal-actions">
           <button class="submit-btn" (click)="createLesson()">Submit</button>
-          <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+          <button class="cancel-btn" (click)="closeCreateModal()">Cancel</button>
         </div>
       </div>
     </div>

@@ -3,13 +3,12 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
 import { CourseListPageComponent } from './features/courses/pages/course-list-page/course-list-page.component';
 import { CourseDetailPageComponent } from './features/courses/pages/course-detail-page/course-detail-page.component';
-import {ForumPageComponent} from './features/forum/pages/forum-page/forum-page.component';
-import {AssignmentPageComponent} from './features/courses/pages/assignment-page/assignment-page.component';
-import {RegisterComponent} from './register/register.component'
-import {canActiveHome} from './core/services/user.service';
-import {QuestionsPageComponent} from './features/courses/pages/questions-page/questions-page.component';
-
-
+import { ForumPageComponent } from './features/forum/pages/forum-page/forum-page.component';
+import { AssignmentPageComponent } from './features/courses/pages/assignment-page/assignment-page.component';
+import { RegisterComponent } from './register/register.component';
+import { QuestionsPageComponent } from './features/courses/pages/questions-page/questions-page.component';
+import { VideoPageComponent } from './features/courses/pages/video-page/video-page.component';  // <-- ваш компонент
+import { canActiveHome } from './core/services/user.service';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -30,7 +29,7 @@ export const routes: Routes = [
     canActivate: [canActiveHome]
   },
   {
-    path: 'course-page/:id/assignment/:id',
+    path: 'course-page/:id/assignment/:assignmentId',
     component: AssignmentPageComponent,
     canActivate: [canActiveHome]
   },
@@ -39,11 +38,15 @@ export const routes: Routes = [
     component: QuestionsPageComponent,
     canActivate: [canActiveHome]
   },
-  { path: 'test',
-  component: RegisterComponent
-  },
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
 
+  // --- Добавляем роут для видео-материалов ---
+  {
+    path: 'course-page/:lessonId/video',
+    component: VideoPageComponent,
+    canActivate: [canActiveHome]
+  },
+
+  { path: 'test', component: RegisterComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
 ];
-

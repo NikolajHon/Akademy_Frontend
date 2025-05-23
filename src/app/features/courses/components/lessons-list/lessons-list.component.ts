@@ -29,6 +29,9 @@ export class LessonsListComponent {
   openQuestions(lesson: Lesson) {
     this.router.navigate(['/course-page', lesson.id, 'questions']);
   }
+  openVideo(lesson: Lesson) {
+    this.router.navigate(['/course-page', lesson.id, 'video']);
+  }
 
 
 }
