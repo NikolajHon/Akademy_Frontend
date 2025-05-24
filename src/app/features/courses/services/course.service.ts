@@ -29,25 +29,25 @@ export class CourseService {
     return this.http.post<void>(this.apiUrl, dto);
   }
 
-  getCompletedLessonIds(courseId: number, userId: number): Observable<number[]> {
+  getCompletedLessonIds(courseId: number, userId: string): Observable<number[]> {
     return this.http
       .get<{ lessons: number[] }>(
-        `${this.apiUrl}/${courseId}/users/2/progress`
+        `${this.apiUrl}/${courseId}/users/${userId}/progress`
       )
       .pipe(map(resp => resp.lessons));
   }
 
-  addCompletedLesson(courseId: number, userId: number, lessonId: number): Observable<void> {
-    const body: AddLessonRequestDto = { lessonId };
+  addCompletedLesson(courseId: number, userId: string, lessonId: number): Observable<void> {
     return this.http.post<void>(
-      `${this.apiUrl}/${courseId}/users/2/progress`,
-      body
+      `${this.apiUrl}/${courseId}/users/${userId}/progress/lessons/${lessonId}`,
+      null
     );
   }
 
-  removeCompletedLesson(courseId: number, userId: number, lessonId: number): Observable<void> {
+  removeCompletedLesson(courseId: number, userId: string, lessonId: number): Observable<void> {
     return this.http.delete<void>(
-      `${this.apiUrl}/${courseId}/users/2/progress/lessons/${lessonId}`
+      `${this.apiUrl}/${courseId}/users/${userId}/progress/lessons/${lessonId}`
     );
   }
+
 }

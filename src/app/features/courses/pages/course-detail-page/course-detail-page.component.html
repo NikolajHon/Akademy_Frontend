@@ -1,13 +1,43 @@
 <div class="container-fluid px-4 py-5">
-  <div class="course-hero bg-light rounded p-4 mb-5">
-    <h1 class="course-title mb-2">{{ course()?.name }}</h1>
-    <p class="course-description text-muted mb-3">{{ course()?.description }}</p>
-    <div class="d-flex align-items-center gap-3">
+  <!-- course-detail-page.component.html -->
+  <div class="course-hero bg-light rounded p-4 mb-5 d-flex align-items-center justify-content-between">
+    <!-- Левая часть: заголовок, описание и бейдж -->
+    <div class="course-info">
+      <h1 class="course-title mb-2">{{ course()?.name }}</h1>
+      <p class="course-description text-muted mb-3">{{ course()?.description }}</p>
       <div class="badge bg-primary text-white px-3 py-2">
-        {{ course()!.lessons.length }} {{ course()!.lessons.length === 1 ? 'Lesson' : 'Lessons' }}
+        {{ course()!.lessons.length }}
+        {{ course()!.lessons.length === 1 ? 'Lesson' : 'Lessons' }}
       </div>
     </div>
+
+    <!-- Правая часть: прогресс-круг -->
+    <div
+      class="progress-circle"
+      [style.--offset]="completionPercentage()"
+    >
+      <svg viewBox="0 0 36 36">
+        <!-- фоновая дорожка -->
+        <circle class="track" cx="18" cy="18" r="16"></circle>
+
+        <!-- индикатор прогресса: динамический stroke-dasharray -->
+        <circle
+          class="indicator"
+          cx="18"
+          cy="18"
+          r="16"
+          [attr.stroke-dasharray]="completionPercentage() + ', 100'"
+        ></circle>
+      </svg>
+
+      <!-- динамический процент -->
+      <span class="percent">
+    {{ completionPercentage() }}%
+  </span>
+    </div>
+
   </div>
+
 
   <div class="row gx-5">
     <div class="col-lg-8 mb-4">

@@ -3,14 +3,6 @@
        *ngFor="let lesson of lessons; index as i"
        [style.--delay]="i * 80 + 'ms'">
 
-    <div class="progress-circle" style="--offset: 50;">
-      <svg viewBox="0 0 36 36">
-        <circle class="track"      cx="18" cy="18" r="16"></circle>
-        <circle class="indicator"  cx="18" cy="18" r="16"
-                stroke-dasharray="50, 100"></circle>
-      </svg>
-      <span class="percent">50%</span>
-    </div>
 
     <div class="info">
       <h4>

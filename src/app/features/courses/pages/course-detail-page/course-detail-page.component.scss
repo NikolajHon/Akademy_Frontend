@@ -1,4 +1,34 @@
+:root {
+  --bg-card-light: #ffffff;
+  --bg-card-dark: #1e1e1e;
+  --card-bg: var(--bg-card-light);
+  --card-color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --card-bg: var(--bg-card-dark);
+    --card-color: #f9f9f9;
+  }
+}
+
+$primary: #4f46e5;
+$secondary: #6366f1;
+$shadow: 0 6px 16px rgba(0, 0, 0, .08);
+$radius: 1.25rem;
+
+$ease-bounce: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+@mixin flex-center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 .course-hero {
+
   background: var(--color-surface) !important;
   color: var(--text-primary);
   border-radius: 1rem;
@@ -235,7 +265,44 @@
   flex-direction: column;
   gap: 0.75rem;
 }
+.progress-circle {
+  --size: 8rem;
+  width: var(--size);
+  height: var(--size);
+  flex-shrink: 0;
+  position: relative;
+  animation: popIn 0.45s calc(var(--delay, 0ms) + 180ms) var(--ease-bounce) backwards;
 
+  svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .track {
+    fill: none;
+    stroke: #e5e7eb;
+    stroke-width: 4;
+  }
+
+  .indicator {
+    fill: none;
+    stroke: $primary;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: var(--offset, 0) 100;
+    transition: stroke-dasharray 1s ease-out;
+  }
+
+  .percent {
+    @include flex-center();
+    position: absolute;
+    inset: 0;
+    font-size: .875rem;
+    font-weight: 600;
+    color: $primary;
+  }
+}
 .user-item {
   display: flex;
   align-items: center;

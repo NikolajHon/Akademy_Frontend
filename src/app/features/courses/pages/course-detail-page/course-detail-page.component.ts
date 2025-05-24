@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -37,7 +37,16 @@ export class CourseDetailPageComponent implements OnInit {
   course = signal<Course | null>(null);
   private userSignal = this.userService.getUserSignal();
   isTeacher = computed(() => this.userSignal()?.role === UserRole.TEACHER);
+  radius = 20;
+  circumference = 2 * Math.PI * this.radius;
 
+  // Percentage of completed lessons
+  completionPercentage = computed(() => {
+    const total = this.course()?.lessons.length ?? 0;
+    if (!total) return 0;
+    const done = this.completedLessonIds().length;
+    return Math.round((done / total) * 100);
+  });
   showCreateModal = signal(false);
   newLesson = signal<CreateLessonRequestDto>({
     title: '',
@@ -45,14 +54,18 @@ export class CourseDetailPageComponent implements OnInit {
     content: '',
     courseId: 0
   });
-
+  constructor() {
+    effect(() => {
+      const user = this.userSignal();
+      console.log('Current user ID from signal:', user?.id);
+    });
+  }
   showUsersModal = signal(false);
   users = signal<UserDto[]>([]);
   filterTerm = signal('');
   private currentCourseId = computed(() => this.course()?.id ?? 0);
 
   ngOnInit(): void {
-    // Подписываемся на paramMap, чтобы ловить любые изменения URL-параметра
     this.route.paramMap.subscribe((params: ParamMap) => {
       const courseId = Number(params.get('id'));
       if (isNaN(courseId)) {
@@ -72,7 +85,7 @@ export class CourseDetailPageComponent implements OnInit {
           const user = this.userSignal();
           if (user?.id != null) {
             this.courseService
-              .getCompletedLessonIds(courseId, Number(user.id))
+              .getCompletedLessonIds(courseId, user.id)
               .subscribe(ids => this.completedLessonIds.set(ids));
           }
         }
@@ -81,7 +94,9 @@ export class CourseDetailPageComponent implements OnInit {
   }
   onToggleLesson(lesson: Lesson) {
     const courseId = this.course()!.id;
-    const userId   = Number(this.userSignal()!.id);
+    const userId   = this.userSignal()!.id;
+
+    console.log('Keycloak user ID:', userId);
 
     if (this.completedLessonIds().includes(lesson.id)) {
       this.courseService
@@ -99,6 +114,7 @@ export class CourseDetailPageComponent implements OnInit {
         });
     }
   }
+
   openCreateModal(): void {
     this.showCreateModal.set(true);
   }
