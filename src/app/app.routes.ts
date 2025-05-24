@@ -39,14 +39,13 @@ export const routes: Routes = [
     canActivate: [canActiveHome]
   },
 
-  // --- Добавляем роут для видео-материалов ---
   {
     path: 'course-page/:lessonId/video',
     component: VideoPageComponent,
     canActivate: [canActiveHome]
   },
 
-  { path: 'test', component: RegisterComponent },
+  { path: 'test', component: RegisterComponent, canActivate: [canActiveHome] },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
 ];

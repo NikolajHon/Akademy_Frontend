@@ -1,11 +1,11 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {UserModel, UsersResponseDto} from '../models/user-model';
+import {CreateUserRequestDto, UserModel, UsersResponseDto} from '../models/user-model';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {authCodeFlowConfig} from '../config/authCodeFlowConfig.config';
 import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot} from '@angular/router';
 import {UserRole} from '../models/user-role-enum';
 import {JwtHelperService} from '@auth0/angular-jwt';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -36,7 +36,14 @@ export class UserService {
       headers: { 'Accept': 'application/json' }
     });
   }
-
+  createUser(dto: CreateUserRequestDto): Observable<UserModel> {
+    const token = this.oauthService.getAccessToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.post<UserModel>(`${this.baseUrl}`, dto, { headers });
+  }
   async tryLogin(): Promise<UserModel|undefined> {
     await this.oauthService.loadDiscoveryDocumentAndTryLogin();
 

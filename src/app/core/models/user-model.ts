@@ -26,3 +26,10 @@ export interface UserDto {
 export interface UsersResponseDto {
   users: UserDto[];
 }
+export interface CreateUserRequestDto {
+  givingName: string;
+  familyName: string;
+  email: string;
+  role: UserRole;
+  keycloakId: string;
+}

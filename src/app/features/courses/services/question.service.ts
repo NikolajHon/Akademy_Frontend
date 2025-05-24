@@ -22,7 +22,7 @@ export class QuestionService {
     page: number,
     size: number
   ): Observable<QuestionsResponse> {
-    const url = `${this.baseUrl}/${lessonId}${this.questionsUrl}`;
+    const url = `${this.baseUrl}/${lessonId}/questions`;
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());

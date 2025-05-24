@@ -1,4 +1,4 @@
-// src/app/notification-component/notification.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { NgForOf, NgIf } from '@angular/common';
 import {ToastService} from '../features/courses/services/toast.service';

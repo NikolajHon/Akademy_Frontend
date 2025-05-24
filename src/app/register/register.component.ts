@@ -1,12 +1,26 @@
+// src/app/register/register.component.ts
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpHeaders, HttpParams, HttpClientModule, HttpResponse } from '@angular/common/http';
+import {
+  HttpBackend,
+  HttpClient,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse,
+  HttpClientModule
+} from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { UserRole } from '../core/models/user-role-enum';
+import { UserService } from '../core/services/user.service';
+import {ToastService} from '../features/courses/services/toast.service';
+import {NotificationComponent} from '../notification-component/notification.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, NotificationComponent],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -17,110 +31,134 @@ export class RegisterComponent {
     firstName: '',
     lastName: '',
     email: '',
-    role: 'student'
+    role: UserRole.STUDENT
   };
+
   loading = false;
   error: string | null = null;
+  private http: HttpClient;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    handler: HttpBackend,
+    private userService: UserService,
+    private toastService: ToastService
+  ) {
+    this.http = new HttpClient(handler);
+  }
 
-  onSubmit(form: any): void {
-    if (!form.valid) return;
+  async onSubmit(form: any) {
+    if (!form.valid) {
+      this.toastService.error('Please fill in all required fields', 'Invalid Form');
+      return;
+    }
 
     this.loading = true;
     this.error = null;
+    this.toastService.pending('Registering user...', 'Please wait');
 
-    const params = new HttpParams()
-      .set('grant_type', 'password')
-      .set('client_id', 'admin-cli')
-      .set('username', 'admin')
-      .set('password', 'admin');
+    const realm = 'Academia_project';
 
-    this.http.post<any>(
-      '/realms/master/protocol/openid-connect/token',
-      params.toString(),
-      { headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }) }
-    ).subscribe({
-      next: tokenRes => {
-        const token = tokenRes.access_token as string;
-        const adminHeaders = new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        });
+    try {
+      const tokenParams = new HttpParams()
+        .set('grant_type', 'password')
+        .set('client_id', 'admin-cli')
+        .set('username', 'admin')
+        .set('password', 'admin');
 
-        const payload = {
-          username: this.user.username,
-          firstName: this.user.firstName,
-          lastName: this.user.lastName,
-          email: this.user.email,
-          enabled: true,
-          credentials: [{ type: 'password', value: this.user.password, temporary: false }]
-        };
+      const tokenRes = await firstValueFrom(
+        this.http.post<any>(
+          'realms/master/protocol/openid-connect/token',
+          tokenParams.toString(),
+          { headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }) }
+        )
+      );
+      const adminToken = tokenRes.access_token as string;
 
+      const payload = {
+        username: this.user.username,
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        email: this.user.email,
+        enabled: true,
+        credentials: [
+          { type: 'password', value: this.user.password, temporary: false }
+        ]
+      };
+
+      const createRes = await firstValueFrom(
         this.http.post<HttpResponse<any>>(
-          '/admin/realms/Academia_project/users',
+          `admin/realms/${realm}/users`,
           payload,
-          { headers: adminHeaders, observe: 'response' }
-        ).subscribe({
-          // внутри вашего RegisterComponent, в том же месте, где вы вытаскиваете userId:
-          next: async createRes => {
-            const location = createRes.headers.get('location') || '';
-            const userId = location.substring(location.lastIndexOf('/') + 1);
-
-            try {
-              // 1) убираем дефолтную роль
-              const rolesList = await this.http.get<any[]>(
-                '/admin/realms/Academia_project/roles',
-                { headers: adminHeaders }
-              ).toPromise();
-              const defaultRole = rolesList!.find(r => r.name === 'default-roles-Academia_project');
-              if (defaultRole) {
-                await this.http.request(
-                  'DELETE',
-                  `/admin/realms/Academia_project/users/${userId}/role-mappings/realm`,
-                  { headers: adminHeaders, body: [defaultRole] }
-                ).toPromise();
-              }
-
-              // 2) назначаем нужную роль
-              const roleObj = rolesList!.find(r => r.name === this.user.role);
-              if (!roleObj) throw new Error(`Role ${this.user.role} not found`);
-              await this.http.post(
-                `/admin/realms/Academia_project/users/${userId}/role-mappings/realm`,
-                [roleObj],
-                { headers: adminHeaders }
-              ).toPromise();
-
-              // 3) *** вот этот блок добавляем для автоматической отправки письма ***
-              await this.http.put(
-                `/admin/realms/Academia_project/users/${userId}/execute-actions-email` +
-                `?lifespan=86400`,          // время жизни ссылок в секундах (здесь 24ч)
-                ['VERIFY_EMAIL','UPDATE_PASSWORD'], // required actions
-                { headers: adminHeaders }
-              ).toPromise();
-
-              console.log('User created, role assigned and verify-email sent');
-              this.loading = false;
-
-            } catch (err) {
-              console.error('Error in user setup flow', err);
-              this.error = (err as any).message;
-              this.loading = false;
-            }
-          },
-
-          error: err => {
-            console.error('User creation error', err);
-            this.error = err.status === 409 ? 'User already exists' : err.message;
-            this.loading = false;
+          {
+            headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${adminToken}`
+            }),
+            observe: 'response'
           }
-        });
-      },
-      error: err => {
-        console.error('Token retrieval error', err);
-        this.error = err.message;
-        this.loading = false;
+        )
+      );
+      const location = createRes.headers.get('location') || '';
+      const keycloakId = location.substring(location.lastIndexOf('/') + 1);
+
+      const rolesList = await firstValueFrom(
+        this.http.get<any[]>(
+          `admin/realms/${realm}/roles`,
+          { headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }) }
+        )
+      );
+      const defaultRole = rolesList.find(r => r.name === `default-roles-${realm}`);
+      if (defaultRole) {
+        await firstValueFrom(
+          this.http.request(
+            'DELETE',
+            `admin/realms/${realm}/users/${keycloakId}/role-mappings/realm`,
+            {
+              headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }),
+              body: [defaultRole]
+            }
+          )
+        );
       }
-    });
+
+      const wantedRole = rolesList.find(r => r.name === this.user.role);
+      if (!wantedRole) throw new Error(`Role "${this.user.role}" not found in realm`);
+      await firstValueFrom(
+        this.http.post(
+          `admin/realms/${realm}/users/${keycloakId}/role-mappings/realm`,
+          [wantedRole],
+          { headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }) }
+        )
+      );
+
+      await firstValueFrom(
+        this.http.put(
+          `admin/realms/${realm}/users/${keycloakId}/execute-actions-email?lifespan=86400`,
+          ['VERIFY_EMAIL', 'UPDATE_PASSWORD'],
+          { headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }) }
+        )
+      );
+
+      const dto = {
+        givingName: this.user.firstName,
+        familyName: this.user.lastName,
+        email: this.user.email,
+        role: this.user.role,
+        keycloakId
+      };
+      console.log(dto);
+      await firstValueFrom(this.userService.createUser(dto));
+
+      this.toastService.success('User successfully registered', 'Registration Complete');
+      this.loading = false;
+    } catch (err: any) {
+      const message =
+        err.status === 409
+          ? 'User already exists'
+          : err.message || 'An unexpected error occurred';
+      this.toastService.error(message, 'Registration Failed');
+      this.error = message;
+      this.loading = false;
+    }
   }
 }

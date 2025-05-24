@@ -13,7 +13,22 @@
     </div>
 
     <div class="info">
-      <h4>{{ lesson.title }}</h4>
+      <h4>
+        {{ lesson.title }}
+        <button
+          class="status-button"
+          [class.completed]="isCompleted(lesson)"
+          [class.pending]="!isCompleted(lesson)"
+          (click)="onToggle(lesson)"
+          [attr.aria-label]="
+    isCompleted(lesson)
+      ? 'Mark lesson as not completed'
+      : 'Mark lesson as completed'
+  ">
+          {{ isCompleted(lesson) ? '✓' : '×' }}
+        </button>
+
+      </h4>
       <p>{{ lesson.content }}</p>
 
       <div class="actions">

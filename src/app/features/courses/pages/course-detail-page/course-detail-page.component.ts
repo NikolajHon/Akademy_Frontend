@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -33,6 +33,7 @@ export class CourseDetailPageComponent implements OnInit {
   private lessonService = inject(LessonService);
   private userService = inject(UserService);
 
+  completedLessonIds = signal<number[]>([]);
   course = signal<Course | null>(null);
   private userSignal = this.userService.getUserSignal();
   isTeacher = computed(() => this.userSignal()?.role === UserRole.TEACHER);
@@ -51,16 +52,53 @@ export class CourseDetailPageComponent implements OnInit {
   private currentCourseId = computed(() => this.course()?.id ?? 0);
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.courseService.getCourses().subscribe(list => {
-      const found = list.find(c => c.id === id) || null;
-      this.course.set(found);
-      if (found) {
-        this.newLesson.update(dto => ({ ...dto, courseId: found.id }));
+    // Подписываемся на paramMap, чтобы ловить любые изменения URL-параметра
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      const courseId = Number(params.get('id'));
+      if (isNaN(courseId)) {
+        console.error('Invalid course ID in URL:', params.get('id'));
+        return;
       }
+
+      // Обновляем поле для создания урока
+      this.newLesson.update(l => ({ ...l, courseId }));
+
+      // Загружаем данные курса
+      this.courseService.getCourses().subscribe(list => {
+        const found = list.find(c => c.id === courseId) || null;
+        this.course.set(found);
+
+        if (found) {
+          const user = this.userSignal();
+          if (user?.id != null) {
+            this.courseService
+              .getCompletedLessonIds(courseId, Number(user.id))
+              .subscribe(ids => this.completedLessonIds.set(ids));
+          }
+        }
+      });
     });
   }
+  onToggleLesson(lesson: Lesson) {
+    const courseId = this.course()!.id;
+    const userId   = Number(this.userSignal()!.id);
 
+    if (this.completedLessonIds().includes(lesson.id)) {
+      this.courseService
+        .removeCompletedLesson(courseId, userId, lesson.id)
+        .subscribe(() => {
+          this.completedLessonIds.update(ids =>
+            ids.filter(id => id !== lesson.id)
+          );
+        });
+    } else {
+      this.courseService
+        .addCompletedLesson(courseId, userId, lesson.id)
+        .subscribe(() => {
+          this.completedLessonIds.update(ids => [...ids, lesson.id]);
+        });
+    }
+  }
   openCreateModal(): void {
     this.showCreateModal.set(true);
   }
@@ -71,8 +109,9 @@ export class CourseDetailPageComponent implements OnInit {
 
   createLesson(): void {
     const dto = this.newLesson();
+    console.log(dto);
     if (!dto.courseId) return;
-
+    console.log("we are here")
     this.lessonService.createLesson(dto).subscribe(() => {
       this.courseService.getCourses().subscribe(list => {
         this.course.set(list.find(c => c.id === dto.courseId) || null);
@@ -112,20 +151,11 @@ export class CourseDetailPageComponent implements OnInit {
 
   onUserClick(user: UserDto): void {
     const courseId = this.currentCourseId();
-    if (this.isEnrolled(user)) {
-      console.log(`User ${user.id} is already enrolled in course ${courseId}`);
-      return;
-    }
+    if (this.isEnrolled(user)) return;
 
-    console.log(`Enrolling user ${user.id} into course ${courseId}`);
     this.userService.enrollUserToCourse(user.id, courseId).subscribe({
-      next: () => {
-        console.log(`Successfully enrolled user ${user.id} in course ${courseId}`);
-        this.loadUsers();
-      },
-      error: err => {
-        console.error('Enrollment error:', err);
-      }
+      next: () => this.loadUsers(),
+      error: err => console.error(err)
     });
   }
 
@@ -133,7 +163,7 @@ export class CourseDetailPageComponent implements OnInit {
     const term = this.filterTerm().trim().toLowerCase();
     if (!term) return this.users();
     return this.users().filter(u =>
-      (`${u.givingName} ${u.familyName}`.toLowerCase().includes(term)) ||
+      `${u.givingName} ${u.familyName}`.toLowerCase().includes(term) ||
       u.email.toLowerCase().includes(term)
     );
   }

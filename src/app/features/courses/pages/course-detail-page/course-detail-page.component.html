@@ -14,10 +14,13 @@
       <div class="course-detail-container">
         <h3 class="lessons-title mb-4 border-start border-3 border-primary ps-3">Lessons</h3>
 
+
         <app-lessons-list
           *ngIf="course()"
-          [lessons]="course()!.lessons">
-        </app-lessons-list>
+          [lessons]="course()!.lessons"
+          [completedLessonIds]="completedLessonIds()"
+          (toggleLesson)="onToggleLesson($event)"
+        ></app-lessons-list>
 
         <button
           *ngIf="isTeacher()"

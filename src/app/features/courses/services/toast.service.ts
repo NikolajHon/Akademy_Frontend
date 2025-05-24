@@ -42,7 +42,6 @@ export class ToastService {
     }
   }
 
-  /** Удобные методы для стандартных типов */
   success(message: string, title?: string, options?: Partial<Omit<Toast, 'id' | 'message' | 'type'>>) {
     this.show({ type: 'success', message, title, ...options });
   }
@@ -59,20 +58,14 @@ export class ToastService {
     this.show({ type: 'warning', message, title, ...options });
   }
 
-  /** Тост для долгих операций без автозакрытия */
   pending(message: string, title?: string, options?: Partial<Omit<Toast, 'id' | 'message' | 'type'>>) {
     this.show({ type: 'pending', message, title, timeout: 0, showProgress: false, ...options });
   }
 
-  /**
-   * Произвольный тост с кастомным URL-иконкой (png, gif и т.п.)
-   * @param iconUrl — путь к gif/png
-   */
   custom(message: string, iconUrl: string, title?: string, options?: Partial<Omit<Toast, 'id' | 'message' | 'type'>>) {
     this.show({ type: 'custom', message, title, iconUrl, ...options });
   }
 
-  /** Получить дефолтную иконку для типа */
   private getIconForType(type: ToastType): string {
     switch (type) {
       case 'success': return '✔️';
@@ -80,7 +73,7 @@ export class ToastService {
       case 'info':    return 'ℹ️';
       case 'warning': return '⚠️';
       case 'pending': return '⏳';
-      case 'custom':  return '';    // при custom иконка берётся из iconUrl
+      case 'custom':  return '';
       default:        return '';
     }
   }

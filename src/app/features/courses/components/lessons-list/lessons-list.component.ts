@@ -13,7 +13,16 @@ import {Router} from '@angular/router';
 export class LessonsListComponent {
   private router = inject(Router);
   @Input() lessons: Lesson[] = [];
+  @Input() completedLessonIds: number[] = [];
+  @Output() toggleLesson = new EventEmitter<Lesson>();
 
+  isCompleted(lesson: Lesson): boolean {
+    return this.completedLessonIds.includes(lesson.id);
+  }
+
+  onToggle(lesson: Lesson) {
+    this.toggleLesson.emit(lesson);
+  }
   openPractise(lesson: Lesson): void {
     console.log('Lesson:', lesson);
     console.log('CourseId:', lesson.courseId);
