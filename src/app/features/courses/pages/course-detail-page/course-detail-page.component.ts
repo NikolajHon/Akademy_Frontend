@@ -40,7 +40,6 @@ export class CourseDetailPageComponent implements OnInit {
   radius = 20;
   circumference = 2 * Math.PI * this.radius;
 
-  // Percentage of completed lessons
   completionPercentage = computed(() => {
     const total = this.course()?.lessons.length ?? 0;
     if (!total) return 0;

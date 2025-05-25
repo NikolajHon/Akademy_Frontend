@@ -1,0 +1,81 @@
+<div class="question-modal-overlay" (click)="onClose()">
+  <div class="question-modal" (click)="$event.stopPropagation()">
+    <h2>Create New Question</h2>
+    <form (ngSubmit)="onSave()" #qForm="ngForm">
+      <div class="form-group">
+        <label for="q-text">Question Text</label>
+        <input
+          id="q-text"
+          name="text"
+          type="text"
+          required
+          [(ngModel)]="text"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="q-type">Type</label>
+        <select
+          id="q-type"
+          name="type"
+          [(ngModel)]="type"
+        >
+          <option value="OPEN">Open</option>
+          <option value="SINGLE_CHOICE">Single Choice</option>
+          <option value="MULTIPLE_CHOICE">Multiple Choice</option>
+        </select>
+      </div>
+
+      <div *ngIf="type !== 'OPEN'" class="form-group">
+        <h3>Options</h3>
+        <div
+          *ngFor="let opt of options; let i = index"
+          class="option-row"
+        >
+          <input
+            name="optText{{i}}"
+            type="text"
+            placeholder="Option text"
+            required
+            [(ngModel)]="opt.text"
+          />
+          <label>
+            <input
+              name="optCorrect{{i}}"
+              type="checkbox"
+              [(ngModel)]="opt.correct"
+            />
+            Correct
+          </label>
+          <button
+            type="button"
+            class="remove-btn"
+            (click)="removeOption(i)"
+          >×</button>
+        </div>
+        <button
+          type="button"
+          class="add-btn"
+          (click)="addOption()"
+        >+ Add option</button>
+      </div>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="onClose()"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="qForm.invalid"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

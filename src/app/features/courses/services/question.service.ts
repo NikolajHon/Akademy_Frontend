@@ -51,7 +51,7 @@ export class QuestionService {
     lessonId: number,
     request: CreateQuestionRequestDto
   ): Observable<Question> {
-    const url = `${this.baseUrl}/${lessonId}${this.questionsUrl}`;
+    const url = `${this.baseUrl}/${lessonId}/questions`;
     console.log('🌐 POST →', url, request);
     return this.http
       .post<Question>(url, request)

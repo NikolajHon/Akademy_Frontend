@@ -1,53 +1,57 @@
-// questions-page.component.ts
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Question, CreateQuestionRequestDto } from '../../models/question.model';
 import { QuestionService } from '../../services/question.service';
-import { Question } from '../../models/question.model';
-import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
+import {QuestionCreateModalComponent} from '../../components/question-create-modal/question-create-modal.component';
+import {QuestionsListComponent} from '../../components/questions-list/questions-list.component';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-questions-page',
   templateUrl: './questions-page.component.html',
   imports: [
-    FormsModule,
-    NgIf,
-    NgForOf,
-    NgSwitch,
-    NgSwitchCase
+    QuestionCreateModalComponent,
+    QuestionsListComponent,
+    NgIf
   ],
   styleUrls: ['./questions-page.component.scss']
 })
 export class QuestionsPageComponent implements OnInit {
-  lessonId!: number;
+  lessonId = 1;
+  page = 0;
+  size = 20;
   questions: Question[] = [];
+  showCreateModal = false;
 
-  // здесь храним ответы пользователя
-  singleAnswers: { [questionId: number]: number } = {};
-  multiAnswers: { [questionId: number]: number[] } = {};
-  openAnswers: { [questionId: number]: string } = {};
+  constructor(private questionService: QuestionService) {}
 
-  constructor(
-    private route: ActivatedRoute,
-    private qs: QuestionService
-  ) {}
-
-  ngOnInit(): void {
-    this.lessonId = +this.route.snapshot.paramMap.get('lessonId')!;
+  ngOnInit() {
     this.loadQuestions();
   }
 
   loadQuestions() {
-    this.qs.getQuestionsByLesson(this.lessonId, 0, 20)
-      .subscribe(resp => this.questions = resp.questions);
+    this.questionService
+      .getQuestionsByLesson(this.lessonId, this.page, this.size)
+      .subscribe(res => this.questions = res.questions);
   }
 
-  onCheckboxChange(questionId: number, optionId: number, checked: boolean) {
-    const arr = this.multiAnswers[questionId] ||= [];
-    if (checked) {
-      arr.push(optionId);
-    } else {
-      this.multiAnswers[questionId] = arr.filter(id => id !== optionId);
-    }
+  openCreateModal() {
+    this.showCreateModal = true;
+  }
+
+  closeCreateModal() {
+    this.showCreateModal = false;
+  }
+
+  onSave(dto: CreateQuestionRequestDto) {
+    this.questionService
+      .createQuestion(this.lessonId, dto)
+      .subscribe(q => {
+        this.questions.push(q);
+        this.showCreateModal = false;
+      });
+  }
+
+  isTeacher(): boolean {
+    return true;
   }
 }

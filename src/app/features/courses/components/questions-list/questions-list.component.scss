@@ -1,0 +1,123 @@
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.questions-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  padding: 1rem;
+}
+
+.question-card {
+  position: relative;
+  background: linear-gradient(
+      135deg,
+      rgba(var(--color-surface-rgb), 0.85) 0%,
+      rgba(var(--color-surface-rgb), 0.65) 100%
+  );
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left-width: 5px;
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  animation: fadeInUp 0.35s ease forwards;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+
+  &[data-type="OPEN"]          { border-left-color: var(--color-info);      }
+  &[data-type="SINGLE_CHOICE"] { border-left-color: var(--color-primary);   }
+  &[data-type="MULTIPLE_CHOICE"] { border-left-color: var(--color-secondary); }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  }
+
+  .question-header {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    .question-index {
+      font-weight: 700;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    .question-text {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.15rem;
+      line-height: 1.35;
+    }
+  }
+
+  .open-answer {
+    .open-input {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--text-secondary);
+      background: transparent;
+      color: var(--text-primary);
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-info);
+      }
+    }
+  }
+
+  .options-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.45rem;
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      input[type="radio"],
+      input[type="checkbox"] {
+        appearance: none;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        border: 2px solid var(--text-secondary);
+        position: relative;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s;
+
+        &:checked {
+          background: var(--color-primary);
+          border-color: var(--color-primary);
+        }
+
+        &[type="checkbox"] {
+          border-radius: 0.25rem;
+          &:checked { background: var(--color-secondary); border-color: var(--color-secondary); }
+        }
+      }
+
+      label {
+        color: var(--text-secondary);
+        cursor: pointer;
+        user-select: none;
+      }
+    }
+  }
+}
+
+:root,
+.dark-theme {
+  --color-surface-rgb: 245, 245, 245;
+}
+.dark-theme {
+  --color-surface-rgb: 30, 30, 30;
+}

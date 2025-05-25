@@ -1,91 +1,23 @@
-.questions-page {
-  padding: 2rem;
-  color: var(--text-primary);
+:host {
+  display: block;
+  background: var(--color-background);
+  min-height: 100vh;
+  padding: 1.5rem;
+}
 
-  .page-title {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 2rem;
-    color: var(--text-primary);
-  }
+.create-button {
+  margin: 1rem 0;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
 
-  .questions-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .question-card {
-    background: var(--color-surface);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-    transition: background 0.3s ease;
-  }
-
-  .question-header {
-    display: flex;
-    gap: 0.75rem;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-
-    .question-index {
-      font-weight: 600;
-      font-size: 1.125rem;
-      color: var(--color-primary);
-    }
-
-    .question-text {
-      margin: 0;
-      font-size: 1.125rem;
-      font-weight: 500;
-      color: var(--text-primary);
-    }
-  }
-
-  .open-answer {
-    margin-top: 0.5rem;
-
-    .open-input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid #ccc;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      background: var(--color-background);
-      color: var(--text-primary);
-      transition: border-color 0.3s;
-
-      &:focus {
-        border-color: var(--color-primary);
-        outline: none;
-      }
-    }
-  }
-
-  .options-list {
-    list-style: none;
-    padding-left: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-
-    .option-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1rem;
-      color: var(--text-primary);
-
-      input[type="radio"],
-      input[type="checkbox"] {
-        accent-color: var(--color-primary);
-      }
-
-      label {
-        margin: 0;
-        cursor: pointer;
-      }
-    }
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
   }
 }
