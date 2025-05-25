@@ -7,6 +7,7 @@ export interface UserModel {
   email: string;
   role: UserRole;
 }
+
 export interface CourseDto {
   id: number;
   name: string;
@@ -26,10 +27,27 @@ export interface UserDto {
 export interface UsersResponseDto {
   users: UserDto[];
 }
+
 export interface CreateUserRequestDto {
   givingName: string;
   familyName: string;
   email: string;
   role: UserRole;
   keycloakId: string;
+}
+
+export interface RatingDto {
+  rating: number;
+}
+
+export interface CourseProgressIdDto {
+  courseId: number;
+  userId: number;
+}
+
+export interface CourseProgressWithUserDto {
+  courseProgressId: CourseProgressIdDto;
+  user: UserDto;
+  lessonIds: number[];
+  rating: number;
 }

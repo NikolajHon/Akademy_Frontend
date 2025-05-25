@@ -21,7 +21,6 @@
       class="post-form"
     ></app-post-form>
     <div *ngIf="loadingPosts" class="loading">Loading posts…</div>
-    <div class="section-title">Вопросы по этой теме</div>
     <app-post-tree
       *ngFor="let p of rootPosts"
       [post]="p"

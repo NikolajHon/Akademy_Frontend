@@ -63,7 +63,7 @@ export class CourseDetailPageComponent implements OnInit {
   showUsersModal = signal(false);
   users = signal<UserDto[]>([]);
   filterTerm = signal('');
-  private currentCourseId = computed(() => this.course()?.id ?? 0);
+  protected currentCourseId = computed(() => this.course()?.id ?? 0);
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -73,10 +73,8 @@ export class CourseDetailPageComponent implements OnInit {
         return;
       }
 
-      // Обновляем поле для создания урока
       this.newLesson.update(l => ({ ...l, courseId }));
 
-      // Загружаем данные курса
       this.courseService.getCourses().subscribe(list => {
         const found = list.find(c => c.id === courseId) || null;
         this.course.set(found);

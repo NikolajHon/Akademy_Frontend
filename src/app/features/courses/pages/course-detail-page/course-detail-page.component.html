@@ -68,7 +68,9 @@
     </div>
 
     <div class="col-lg-4">
-      <app-top-five-list></app-top-five-list>
+      <app-top-five-list
+        [courseId]="currentCourseId()"
+      ></app-top-five-list>
     </div>
   </div>
 

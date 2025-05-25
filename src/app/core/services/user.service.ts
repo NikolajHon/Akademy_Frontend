@@ -1,5 +1,11 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {CreateUserRequestDto, UserModel, UsersResponseDto} from '../models/user-model';
+import {
+  CourseProgressWithUserDto,
+  CreateUserRequestDto,
+  RatingDto,
+  UserModel,
+  UsersResponseDto
+} from '../models/user-model';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {authCodeFlowConfig} from '../config/authCodeFlowConfig.config';
 import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot} from '@angular/router';
@@ -33,6 +39,26 @@ export class UserService {
   enrollUserToCourse(userId: number, courseId: number): Observable<void> {
     const url = `${this.baseUrl}/${userId}/courses/${courseId}`;
     return this.http.post<void>(url, null, {
+      headers: { 'Accept': 'application/json' }
+    });
+  }
+  setUserCourseRating(userId: number, courseId: number, ratingDto: RatingDto): Observable<void> {
+    const url = `${this.baseUrl}/${userId}/courses/${courseId}/rating`;
+    return this.http.put<void>(url, ratingDto, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  getUserCourseRating(userId: number, courseId: number): Observable<RatingDto> {
+    const url = `${this.baseUrl}/${userId}/courses/${courseId}/rating`;
+    return this.http.get<RatingDto>(url, {
+      headers: { 'Accept': 'application/json' }
+    });
+  }
+
+  listCourseProgressByCourse(courseId: number): Observable<CourseProgressWithUserDto[]> {
+    const url = `${this.baseUrl}/courses/${courseId}/ratings`;
+    return this.http.get<CourseProgressWithUserDto[]>(url, {
       headers: { 'Accept': 'application/json' }
     });
   }

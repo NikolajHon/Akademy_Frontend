@@ -1,13 +1,19 @@
-<div class="top-five-list">
+<!-- src/app/components/top-five-list/top-five-list.component.html -->
+<div class="top-five-list" *ngIf="users.length">
   <h3>Top 5 Users</h3>
-  <div class="user-card" *ngFor="let u of users">
+  <div class="user-card" *ngFor="let u of users; let i = index">
     <div class="avatar">
-      <img [src]="u.avatarUrl" alt="{{u.name}} avatar" />
-      <span class="rank">#{{users.indexOf(u) + 1}}</span>
+      <img
+        [src]="getAvatarUrl(u.user)"
+        alt="{{ u.user.givingName }}'s avatar"
+      />
+      <span class="rank">#{{ i + 1 }}</span>
     </div>
     <div class="user-info">
-      <span class="name">{{ u.name }}</span>
-      <span class="score">{{ u.score }}</span>
+      <span class="name">
+        {{ u.user.givingName }} {{ u.user.familyName }}
+      </span>
+      <span class="score">{{ u.rating }}</span>
     </div>
   </div>
 </div>
