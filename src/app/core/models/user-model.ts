@@ -1,17 +1,12 @@
 import { UserRole } from './user-role-enum';
 
+
 export interface UserModel {
   id: string;
   name: string;
   username: string;
   email: string;
   role: UserRole;
-}
-
-export interface CourseDto {
-  id: number;
-  name: string;
-  description: string;
 }
 
 export interface UserDto {
@@ -23,6 +18,14 @@ export interface UserDto {
   rating: number;
   courses: CourseDto[];
 }
+
+
+export interface CourseDto {
+  id: number;
+  name: string;
+  description: string;
+}
+
 
 export interface UsersResponseDto {
   users: UserDto[];
@@ -42,7 +45,7 @@ export interface RatingDto {
 
 export interface CourseProgressIdDto {
   courseId: number;
-  userId: number;
+  keycloakId: string;
 }
 
 export interface CourseProgressWithUserDto {

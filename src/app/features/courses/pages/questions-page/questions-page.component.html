@@ -1,5 +1,19 @@
 <app-questions-list [questions]="questions"></app-questions-list>
 
+<!-- Студенты видят кнопку отправки ответов -->
+<button
+  *ngIf="!isTeacher()"
+  class="submit-button"
+  [disabled]="submitting"
+  (click)="submitAnswers()"
+>
+  {{ submitting ? 'Submitting…' : 'Submit Answers' }}
+</button>
+
+<div *ngIf="rating !== null" class="result">
+  Your score: {{ rating }}%
+</div>
+
 <button
   *ngIf="isTeacher()"
   class="create-button"

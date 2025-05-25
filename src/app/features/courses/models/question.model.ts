@@ -1,4 +1,8 @@
-import { AnswerOption } from './answer-option.model';
+export interface AnswerOption {
+  id: number;
+  text: string;
+  isCorrect: boolean;   // ← именно так
+}
 
 export type QuestionType = 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE' | 'OPEN';
 
@@ -18,13 +22,13 @@ export interface QuestionsResponse {
 export interface CreateQuestionRequestDto {
   text: string;
   type: QuestionType;
-  options?: Array<{
-    text: string;
-    correct: boolean;
-  }>;
+  options?: { text: string; correct: boolean }[];
 }
 
 export interface UpdateQuestionRequestDto extends CreateQuestionRequestDto {
-  /** Согласно OpenAPI-схеме, в теле PUT-запроса надо передавать и id */
   id: number;
+}
+
+export interface RatingDto {
+  rating: number;
 }

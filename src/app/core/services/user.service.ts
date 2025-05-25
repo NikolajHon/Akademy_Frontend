@@ -12,7 +12,7 @@ import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot} from
 import {UserRole} from '../models/user-role-enum';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {catchError, map, Observable, switchMap, throwError} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -42,14 +42,26 @@ export class UserService {
       headers: { 'Accept': 'application/json' }
     });
   }
-  setUserCourseRating(userId: number, courseId: number, ratingDto: RatingDto): Observable<void> {
+  setUserCourseRating(
+    userId: string,
+    courseId: number,
+    ratingDto: RatingDto
+  ): Observable<void> {
     const url = `${this.baseUrl}/${userId}/courses/${courseId}/rating`;
-    return this.http.put<void>(url, ratingDto, {
-      headers: { 'Content-Type': 'application/json' }
-    });
+
+    return this.getUserCourseRating(userId, courseId).pipe(
+      map(current => current.rating),
+      switchMap(currentRating => {
+        const sumDto: RatingDto = { rating: currentRating + ratingDto.rating };
+        return this.http.put<void>(url, sumDto, {
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }),
+      catchError(err => throwError(() => err))
+    );
   }
 
-  getUserCourseRating(userId: number, courseId: number): Observable<RatingDto> {
+  getUserCourseRating(userId: string, courseId: number): Observable<RatingDto> {
     const url = `${this.baseUrl}/${userId}/courses/${courseId}/rating`;
     return this.http.get<RatingDto>(url, {
       headers: { 'Accept': 'application/json' }
