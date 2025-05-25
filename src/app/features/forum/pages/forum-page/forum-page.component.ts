@@ -22,7 +22,7 @@ import {NgForOf, NgIf} from '@angular/common';
   ]
 })
 export class ForumPageComponent {
-  courseId = 1;              // можно взять из ActivatedRoute
+  courseId = 1;
   selectedTopic?: Topic;
   rootPosts: Post[] = [];
   loadingPosts = false;

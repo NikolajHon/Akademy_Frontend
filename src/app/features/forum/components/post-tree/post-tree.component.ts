@@ -1,10 +1,13 @@
+// src/app/posts/post-tree.component.ts
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { PostService } from '../../services/post.service';
-import {UserService} from '../../../../core/services/user.service';
-import {UserRole} from '../../../../core/models/user-role-enum';
+import { UserService } from '../../../../core/services/user.service';
+import { UserRole } from '../../../../core/models/user-role-enum';
+import {ToastService} from '../../../courses/services/toast.service';
+import {NotificationComponent} from '../../../../notification-component/notification.component';
 
 @Component({
   selector: 'app-post-tree',
@@ -13,7 +16,8 @@ import {UserRole} from '../../../../core/models/user-role-enum';
     NgIf,
     FormsModule,
     NgForOf,
-    DatePipe
+    DatePipe,
+    NotificationComponent
   ],
   templateUrl: './post-tree.component.html',
   styleUrls: ['./post-tree.component.scss']
@@ -31,8 +35,8 @@ export class PostTreeComponent {
 
   private postSrv = inject(PostService);
   private userSrv = inject(UserService);
+  private toast = inject(ToastService);
 
-  /** Публичный readonly-сигнал текущего пользователя */
   userSignal = this.userSrv.getUserSignal();
 
   replyFormVisible = false;
@@ -47,19 +51,34 @@ export class PostTreeComponent {
   }
 
   sendReply(): void {
-    if (!this.replyText.trim()) return;
+    if (!this.replyText.trim()) {
+      this.toast.error('Reply content cannot be empty', 'Validation Error');
+      return;
+    }
     this.postSrv
       .reply(this.post.id, { content: this.replyText })
-      .subscribe(() => {
-        this.replyText = '';
-        this.replyFormVisible = false;
-        this.replied.emit();
+      .subscribe({
+        next: () => {
+          this.replyText = '';
+          this.replyFormVisible = false;
+          this.toast.success('Reply posted successfully', 'Success');
+          this.replied.emit();
+        },
+        error: () => {
+          this.toast.error('Failed to post reply. Please try again.', 'Error');
+        }
       });
   }
 
   deletePost(): void {
-    this.postSrv.deletePost(this.post.id).subscribe(() => {
-      this.replied.emit();
+    this.postSrv.deletePost(this.post.id).subscribe({
+      next: () => {
+        this.toast.success('Post deleted successfully', 'Success');
+        this.replied.emit();
+      },
+      error: () => {
+        this.toast.error('Failed to delete post. Please try again.', 'Error');
+      }
     });
   }
 
