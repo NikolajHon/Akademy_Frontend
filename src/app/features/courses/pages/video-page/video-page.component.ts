@@ -5,6 +5,8 @@ import { VideoMaterialService } from '../../services/video.service';
 import { CreateVideoMaterialRequest, VideoMaterial } from '../../models/video.model';
 import { NgForOf, NgIf } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import {NotificationComponent} from '../../../../notification-component/notification.component';
+import {ToastService} from '../../services/toast.service';
 
 @Component({
   selector: 'app-video-page',
@@ -13,7 +15,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   imports: [
     ReactiveFormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    NotificationComponent
   ]
 })
 export class VideoPageComponent implements OnInit {
@@ -23,17 +26,16 @@ export class VideoPageComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  // Флаг для показа/скрытия модального окна
   modalOpen = false;
 
-  // Словарь безопасных embed-URL для YouTube
   safeUrls: { [id: number]: SafeResourceUrl } = {};
 
   constructor(
     private route: ActivatedRoute,
     private svc: VideoMaterialService,
     private fb: FormBuilder,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -78,6 +80,7 @@ export class VideoPageComponent implements OnInit {
     const dto: CreateVideoMaterialRequest = this.form.value;
     this.svc.create(this.lessonId, dto).subscribe({
       next: vm => {
+        this.toast.success('Video successfully added', 'Success');
         this.videoMaterials.push(vm);
         if (this.isYouTube(vm.url)) {
           const embed = this.toYouTubeEmbed(vm.url);
@@ -85,7 +88,10 @@ export class VideoPageComponent implements OnInit {
         }
         this.closeModal();
       },
-      error: _ => this.error = 'Ошибка при добавлении видео'
+      error: err => {
+        this.toast.error('Failed to add video', 'Error');
+        console.error(err);
+      }
     });
   }
 
@@ -94,12 +100,13 @@ export class VideoPageComponent implements OnInit {
     this.svc.delete(this.lessonId, vm.id).subscribe({
       next: () => {
         this.videoMaterials = this.videoMaterials.filter(x => x.id !== vm.id);
+        this.toast.info('Video deleted', 'Information');
       },
-      error: _ => this.error = 'Ошибка при удалении видео'
+      error: () => {
+        this.toast.error('Failed to delete the video', 'Error');
+      }
     });
   }
-
-  /** Helpers **/
 
   private prepareSafeUrls(): void {
     this.safeUrls = {};

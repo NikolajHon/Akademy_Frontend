@@ -303,6 +303,12 @@ $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     color: $primary;
   }
 }
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
 .user-item {
   display: flex;
   align-items: center;

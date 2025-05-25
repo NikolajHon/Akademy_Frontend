@@ -1,5 +1,5 @@
-import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -11,9 +11,10 @@ import { LessonService } from '../../services/lesson.service';
 
 import { Course } from '../../models/course.model';
 import { Lesson, CreateLessonRequestDto } from '../../models/lesson.model';
-import { UserService } from '../../../../core/services/user.service';
-import { UserRole } from '../../../../core/models/user-role-enum';
-import { CourseDto, UserDto, UsersResponseDto } from '../../../../core/models/user-model';
+import {UserService} from '../../../../core/services/user.service';
+import {CourseProgressWithUserDto, UserDto, UsersResponseDto} from '../../../../core/models/user-model';
+import {UserRole} from '../../../../core/models/user-role-enum';
+
 
 @Component({
   selector: 'app-course-detail-page',
@@ -33,143 +34,110 @@ export class CourseDetailPageComponent implements OnInit {
   private lessonService = inject(LessonService);
   private userService = inject(UserService);
 
+  course          = signal<Course | null>(null);
   completedLessonIds = signal<number[]>([]);
-  course = signal<Course | null>(null);
-  private userSignal = this.userService.getUserSignal();
-  isTeacher = computed(() => this.userSignal()?.role === UserRole.TEACHER);
-  radius = 20;
-  circumference = 2 * Math.PI * this.radius;
+  enrolledUsers   = signal<UserDto[]>([]);
+  users           = signal<UserDto[]>([]);
+  filterTerm      = signal('');
 
+  private userSignal = this.userService.getUserSignal();
+  isTeacher       = computed(() => this.userSignal()?.role === UserRole.TEACHER);
+
+  showCreateModal = signal(false);
+  newLesson       = signal<CreateLessonRequestDto>({
+    title: '',
+    description: '',
+    content: '',
+    courseId: 0
+  });
+
+  showUsersModal = signal(false);
+
+  radius       = 20;
+  circumference = 2 * Math.PI * this.radius;
   completionPercentage = computed(() => {
     const total = this.course()?.lessons.length ?? 0;
     if (!total) return 0;
     const done = this.completedLessonIds().length;
     return Math.round((done / total) * 100);
   });
-  showCreateModal = signal(false);
-  newLesson = signal<CreateLessonRequestDto>({
-    title: '',
-    description: '',
-    content: '',
-    courseId: 0
-  });
-  constructor() {
-    effect(() => {
-      const user = this.userSignal();
-      console.log('Current user ID from signal:', user?.id);
-    });
-  }
-  showUsersModal = signal(false);
-  users = signal<UserDto[]>([]);
-  filterTerm = signal('');
-  protected currentCourseId = computed(() => this.course()?.id ?? 0);
+
+  currentCourseId = computed(() => this.course()?.id ?? 0);
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      const courseId = Number(params.get('id'));
-      if (isNaN(courseId)) {
-        console.error('Invalid course ID in URL:', params.get('id'));
-        return;
-      }
-
-      this.newLesson.update(l => ({ ...l, courseId }));
+      const id = Number(params.get('id'));
+      if (isNaN(id)) return;
+      this.newLesson.update(l => ({ ...l, courseId: id }));
 
       this.courseService.getCourses().subscribe(list => {
-        const found = list.find(c => c.id === courseId) || null;
-        this.course.set(found);
+        this.course.set(list.find(c => c.id === id) || null);
 
-        if (found) {
-          const user = this.userSignal();
-          if (user?.id != null) {
+        if (this.course()) {
+          const userId = this.userSignal()?.id;
+          if (userId) {
             this.courseService
-              .getCompletedLessonIds(courseId, user.id)
+              .getCompletedLessonIds(id, userId)
               .subscribe(ids => this.completedLessonIds.set(ids));
           }
         }
       });
     });
   }
+
   onToggleLesson(lesson: Lesson) {
-    const courseId = this.course()!.id;
-    const userId   = this.userSignal()!.id;
-
-    console.log('Keycloak user ID:', userId);
-
+    const courseId = this.currentCourseId();
+    const userId = this.userSignal()!.id;
     if (this.completedLessonIds().includes(lesson.id)) {
       this.courseService
         .removeCompletedLesson(courseId, userId, lesson.id)
-        .subscribe(() => {
-          this.completedLessonIds.update(ids =>
-            ids.filter(id => id !== lesson.id)
-          );
-        });
+        .subscribe(() =>
+          this.completedLessonIds.update(ids => ids.filter(x => x !== lesson.id))
+        );
     } else {
       this.courseService
         .addCompletedLesson(courseId, userId, lesson.id)
-        .subscribe(() => {
-          this.completedLessonIds.update(ids => [...ids, lesson.id]);
-        });
+        .subscribe(() =>
+          this.completedLessonIds.update(ids => [...ids, lesson.id])
+        );
     }
   }
 
-  openCreateModal(): void {
-    this.showCreateModal.set(true);
-  }
+  openCreateModal()  { this.showCreateModal.set(true); }
+  closeCreateModal() { this.showCreateModal.set(false); }
 
-  closeCreateModal(): void {
-    this.showCreateModal.set(false);
-  }
+  updateTitle(v: string)       { this.newLesson.update(l => ({ ...l, title: v })); }
+  updateDescription(v: string) { this.newLesson.update(l => ({ ...l, description: v })); }
+  updateContent(v: string)     { this.newLesson.update(l => ({ ...l, content: v })); }
 
-  createLesson(): void {
+  createLesson() {
     const dto = this.newLesson();
-    console.log(dto);
     if (!dto.courseId) return;
-    console.log("we are here")
     this.lessonService.createLesson(dto).subscribe(() => {
-      this.courseService.getCourses().subscribe(list => {
-        this.course.set(list.find(c => c.id === dto.courseId) || null);
-      });
-      this.closeCreateModal();
+      this.courseService.getCourses().subscribe(list =>
+        this.course.set(list.find(c => c.id === dto.courseId) || null)
+      );
       this.newLesson.set({ title: '', description: '', content: '', courseId: dto.courseId });
-    });
-  }
-
-  updateTitle(value: string): void {
-    this.newLesson.update(l => ({ ...l, title: value }));
-  }
-
-  updateDescription(value: string): void {
-    this.newLesson.update(l => ({ ...l, description: value }));
-  }
-
-  updateContent(value: string): void {
-    this.newLesson.update(l => ({ ...l, content: value }));
-  }
-
-  loadUsers(): void {
-    this.userService.getAllUsers().subscribe((res: UsersResponseDto) => {
-      this.users.set(res.users);
+      this.closeCreateModal();
     });
   }
 
   openUsersModal(): void {
-    this.loadUsers();
-    this.showUsersModal.set(true);
+    const cid = this.currentCourseId();
+    this.userService.getAllUsers().subscribe((res: UsersResponseDto) => {
+      this.users.set(res.users);
+    });
+    this.userService
+      .listCourseProgressByCourse(cid)
+      .subscribe((list: CourseProgressWithUserDto[]) => {
+        this.enrolledUsers.set(list.map(cp => cp.user));
+        this.showUsersModal.set(true);
+      });
   }
 
   closeUsersModal(): void {
     this.showUsersModal.set(false);
     this.filterTerm.set('');
-  }
-
-  onUserClick(user: UserDto): void {
-    const courseId = this.currentCourseId();
-    if (this.isEnrolled(user)) return;
-
-    this.userService.enrollUserToCourse(user.id, courseId).subscribe({
-      next: () => this.loadUsers(),
-      error: err => console.error(err)
-    });
   }
 
   filteredUsers(): UserDto[] {
@@ -182,6 +150,31 @@ export class CourseDetailPageComponent implements OnInit {
   }
 
   isEnrolled(user: UserDto): boolean {
-    return user.courses.some((c: CourseDto) => c.id === this.currentCourseId());
+    return this.enrolledUsers().some(u => u.id === user.id);
   }
+
+  onUserClick(user: UserDto): void {
+    const courseId = this.currentCourseId();
+
+    if (this.isEnrolled(user)) {
+      const msg = `Are you sure you want to remove ${user.givingName} ${user.familyName} from this course? This will delete all their progress.`;
+      if (!window.confirm(msg)) {
+        return;
+      }
+      this.userService.unenrollUserFromCourse(user.id, courseId)
+        .subscribe(() => {
+          this.userService
+            .listCourseProgressByCourse(courseId)
+            .subscribe(list => this.enrolledUsers.set(list.map(cp => cp.user)));
+        });
+    } else {
+      this.userService.enrollUserToCourse(user.id, courseId)
+        .subscribe(() => {
+          this.userService
+            .listCourseProgressByCourse(courseId)
+            .subscribe(list => this.enrolledUsers.set(list.map(cp => cp.user)));
+        });
+    }
+  }
+
 }

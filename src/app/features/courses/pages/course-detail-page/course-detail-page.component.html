@@ -11,7 +11,6 @@
       </div>
     </div>
 
-    <!-- Правая часть: прогресс-круг -->
     <div
       class="progress-circle"
       [style.--offset]="completionPercentage()"
@@ -20,7 +19,6 @@
         <!-- фоновая дорожка -->
         <circle class="track" cx="18" cy="18" r="16"></circle>
 
-        <!-- индикатор прогресса: динамический stroke-dasharray -->
         <circle
           class="indicator"
           cx="18"
@@ -30,7 +28,6 @@
         ></circle>
       </svg>
 
-      <!-- динамический процент -->
       <span class="percent">
     {{ completionPercentage() }}%
   </span>
@@ -52,18 +49,20 @@
           (toggleLesson)="onToggleLesson($event)"
         ></app-lessons-list>
 
-        <button
-          *ngIf="isTeacher()"
-          class="just-button mt-3"
-          (click)="openCreateModal()">
-          Add Lesson
-        </button>
-        <button
-          *ngIf="isTeacher()"
-          class="just-button mt-3"
-          (click)="openUsersModal()">
-          Show All Users
-        </button>
+        <div class="action-buttons">
+          <button
+            *ngIf="isTeacher()"
+            class="just-button mt-3"
+            (click)="openCreateModal()">
+            Add Lesson
+          </button>
+          <button
+            *ngIf="isTeacher()"
+            class="just-button mt-3"
+            (click)="openUsersModal()">
+            Show All Users
+          </button>
+        </div>
       </div>
     </div>
 
@@ -86,7 +85,7 @@
             type="text"
             [value]="newLesson().title"
             (input)="updateTitle($any($event.target).value)"
-            placeholder="Enter title" />
+            placeholder="Enter title"/>
         </label>
 
         <label>
@@ -110,7 +109,7 @@
     <div class="modal-backdrop" (click)="closeUsersModal()"></div>
     <div class="modal-wrapper">
       <div class="modal-content">
-        <h2>Users</h2>
+        <h3>Users</h3>
         <input
           type="text"
           placeholder="Search by name or email"
@@ -121,7 +120,8 @@
           <li
             *ngFor="let user of filteredUsers()"
             class="user-item"
-            [ngClass]="{ 'enrolled': isEnrolled(user), 'clickable': !isEnrolled(user) }"
+            [class.enrolled]="isEnrolled(user)"
+            [class.clickable]="!isEnrolled(user)"
             (click)="onUserClick(user)"
           >
             <div class="user-info">
@@ -133,13 +133,7 @@
         </ul>
 
         <div class="modal-actions">
-          <button
-            type="button"
-            class="cancel-btn"
-            (click)="closeUsersModal()"
-          >
-            Close
-          </button>
+          <button class="cancel-btn" (click)="closeUsersModal()">Close</button>
         </div>
       </div>
     </div>

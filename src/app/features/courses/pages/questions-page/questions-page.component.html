@@ -1,6 +1,8 @@
+<app-notification></app-notification>
+
 <app-questions-list [questions]="questions"></app-questions-list>
 
-<!-- Студенты видят кнопку отправки ответов -->
+
 <button
   *ngIf="!isTeacher()"
   class="submit-button"

@@ -42,6 +42,14 @@ export class UserService {
       headers: { 'Accept': 'application/json' }
     });
   }
+  unenrollUserFromCourse(userId: number, courseId: number): Observable<void> {
+    const url = `${this.baseUrl}/${userId}/courses/${courseId}`;
+    return this.http.delete<void>(url, {
+      headers: { 'Accept': 'application/json' }
+    });
+  }
+
+
   setUserCourseRating(
     userId: string,
     courseId: number,
@@ -100,7 +108,6 @@ export class UserService {
     const roles: string[] = claims.realm_access?.roles || [];
     const isTeacher = roles.map(r => r.toUpperCase()).includes('TEACHER');
     const role = isTeacher ? UserRole.TEACHER : UserRole.STUDENT;
-    console.log('🎭 Роль из токена:', roles, '→', role);
 
     const u: UserModel = {
       id: claims.sub,
