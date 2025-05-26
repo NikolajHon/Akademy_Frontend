@@ -23,7 +23,6 @@ export class CourseListPageComponent implements OnInit {
   private router = inject(Router);
   courses: Course[] = [];
   filtered: Course[] = [];
-  // Сигналы для списка и поиска
   private coursesSig: WritableSignal<Course[]> = signal([]);
   private searchQuery: WritableSignal<string> = signal('');
 
@@ -70,11 +69,11 @@ export class CourseListPageComponent implements OnInit {
           error: (err: HttpErrorResponse) => {
             if (err.status === 404) {
               window.alert(
-                'У вас нет доступа к этому курсу. Обратитесь к вашему учителю для предоставления доступа.'
+                'You do not have access to this course. Contact your teacher to grant access.'
               );
             } else {
               console.error(err);
-              window.alert('Не удалось проверить доступ к курсу. Попробуйте ещё раз.');
+              window.alert('Failed to verify access to the course. Try again.');
             }
           }
         });
