@@ -9,7 +9,27 @@
   gap: 1.25rem;
   padding: 1rem;
 }
+.open-answer input{
+  flex: 1;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--text-secondary);
+  border-radius: 0.5rem;
+  background: var(--color-background);
+  color: var(--text-primary);
+  transition: border-color 0.3s, box-shadow 0.3s;
 
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-info);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-info) 20%, transparent);
+    transform: scale(1.02);
+  }
+}
 .question-card {
   position: relative;
   background: linear-gradient(
