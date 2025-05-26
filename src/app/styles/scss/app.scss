@@ -1,12 +1,50 @@
 .just-button {
-  padding: .45rem 1.15rem;
-  border: none;
+  padding: .75rem 1.5rem;
+  border: 2px solid rgba(0, 0, 0, 0.3);
   border-radius: .5rem;
-  background: var(--color-primary);
+  background: var(--color-button);
   color: #fff;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
   cursor: pointer;
   transition: transform .15s, box-shadow .15s;
 }
-.just-button:hover  { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0 0 0 /.2); }
-.just-button:active { transform: scale(.97); }
+
+.just-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .2);
+}
+
+.just-button:active {
+  transform: scale(.97);
+}
+.just-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cansel-button {
+  padding: .75rem 1.5rem;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: .5rem;
+  background: var(--cansel-button);
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+
+.cansel-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .2);
+}
+
+.cansel-button:active {
+  transform: scale(.97);
+}
+

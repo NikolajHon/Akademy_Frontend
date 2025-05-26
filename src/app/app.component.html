@@ -1,20 +1,16 @@
 <nav class="site-nav">
-  <!-- левая сторона -->
   <div class="nav-start">
     <a routerLink="/home" routerLinkActive="active">Home</a>
     <a routerLink="/course-page" routerLinkActive="active">Courses</a>
     <a routerLink="/forum" routerLinkActive="active">Forum</a>
   </div>
 
-  <!-- правая сторона -->
   <div class="nav-end">
-    <!-- переключатель темы -->
     <label class="theme-switch">
       <input type="checkbox"
              [checked]="isDarkTheme()"
              (change)="toggleTheme($event)">
 
-      <!-- track -->
       <span class="track">
         <span class="thumb"></span>
         <svg class="icon sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg>
@@ -25,7 +21,6 @@
       </span>
     </label>
 
-    <!-- кнопка -->
     <button class="just-button" (click)="user() ? logout() : login()">
       {{ user() ? 'Logout' : 'Login' }}
     </button>

@@ -98,8 +98,13 @@
         </label>
 
         <div class="modal-actions">
-          <button class="submit-btn" (click)="createLesson()">Submit</button>
-          <button class="cancel-btn" (click)="closeCreateModal()">Cancel</button>
+          <button class="cansel-button" (click)="closeCreateModal()">Cancel</button>
+          <button
+          class="just-button"
+          (click)="createLesson()"
+          [disabled]="!newLesson().title.trim() || !newLesson().content.trim()"
+          >Submit</button>
+
         </div>
       </div>
     </div>
@@ -133,7 +138,7 @@
         </ul>
 
         <div class="modal-actions">
-          <button class="cancel-btn" (click)="closeUsersModal()">Close</button>
+          <button class="cansel-button" (click)="closeUsersModal()">Close</button>
         </div>
       </div>
     </div>

@@ -1,14 +1,27 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
 @import 'scss/bootstrap/bootstrap';
 @import 'scss/variables';
 @import 'scss/mixins';
 @import 'scss/app';
 @import 'scss/dark-theme-overrides';
 @import "scss/_palette";
-/* базовый фон и цвет текста для всей страницы */
+:root {
+  --heading-font: 'Poppins', sans-serif;
+  --heading-color: #505A78;
+}
+
 html, body {
   background: var(--color-background);
   color: var(--text-primary);
+  font-family: var(--font-base, system-ui, sans-serif);
   transition: background .25s ease, color .25s ease;
-  min-height: 100%;          /* чтобы фон растягивался на всю страницу */
+  min-height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, .page-title {
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
 }

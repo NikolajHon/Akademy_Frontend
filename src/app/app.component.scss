@@ -1,12 +1,5 @@
-/* --------------------------------------------------
-   НАПОМИНАНИЕ: palette.scss уже импортируется в styles.scss,
-   так что все var(--color-...) доступны глобально!
-   -------------------------------------------------- */
-
-/* базовые сбросы */
 * { box-sizing: border-box; margin: 0; }
 
-/* ---------- NAVBAR ---------- */
 .site-nav {
   display: flex;
   align-items: center;
@@ -17,13 +10,11 @@
   color: var(--text-primary);
   box-shadow: 0 1px 4px rgba(0 0 0 /.12);
 
-  /* фиксируем сверху, если нужно */
   position: sticky;
   top: 0;
   z-index: 5;
 }
 
-/* ссылки */
 .site-nav a {
   margin-right: 1.25rem;
   font-weight: 600;
@@ -34,25 +25,8 @@
 .site-nav a:hover,
 .site-nav a.active { color: var(--color-primary); }
 
-/* контейнеры слева / справа */
 .nav-start, .nav-end { display: flex; align-items: center; }
 
-
-/* ---------- КНОПКА ---------- */
-.just-button {
-  padding: .45rem 1.15rem;
-  border: none;
-  border-radius: .5rem;
-  background: var(--color-primary);
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform .15s, box-shadow .15s;
-}
-.just-button:hover  { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0 0 0 /.2); }
-.just-button:active { transform: scale(.97); }
-
-/* ---------- ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ ---------- */
 .theme-switch {
   position: relative;
   width: 60px;

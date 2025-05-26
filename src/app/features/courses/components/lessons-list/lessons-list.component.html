@@ -1,9 +1,10 @@
+<!-- lessons-list.component.html -->
 <div class="lessons-list">
-  <div class="lesson-card"
-       *ngFor="let lesson of lessons; index as i"
-       [style.--delay]="i * 80 + 'ms'">
-
-
+  <div
+    class="lesson-card"
+    *ngFor="let lesson of lessons; index as i"
+    [style.--delay]="i * 80 + 'ms'"
+  >
     <div class="info">
       <h4>
         {{ lesson.title }}
@@ -13,20 +14,25 @@
           [class.pending]="!isCompleted(lesson)"
           (click)="onToggle(lesson)"
           [attr.aria-label]="
-    isCompleted(lesson)
-      ? 'Mark lesson as not completed'
-      : 'Mark lesson as completed'
-  ">
-          {{ isCompleted(lesson) ? '✓' : '×' }}
+            isCompleted(lesson)
+              ? 'Mark lesson as incomplete'
+              : 'Mark lesson as complete'
+          "
+        >
+          ✓
         </button>
-
       </h4>
       <p>{{ lesson.content }}</p>
-
       <div class="actions">
-        <button class="just-button" (click)="openVideo(lesson)">GO TO LESSON</button>
-        <button class="just-button" (click)="openPractise(lesson)">PRACTISE</button>
-        <button class="just-button" (click)="openQuestions(lesson)">QUESTIONS</button>
+        <button class="just-button" (click)="openVideo(lesson)">
+          GO TO LESSON
+        </button>
+        <button class="just-button" (click)="openPractise(lesson)">
+          PRACTISE
+        </button>
+        <button class="just-button" (click)="openQuestions(lesson)">
+          QUESTIONS
+        </button>
       </div>
     </div>
   </div>
