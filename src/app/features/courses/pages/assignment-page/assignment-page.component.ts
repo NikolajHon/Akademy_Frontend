@@ -29,7 +29,6 @@ export class AssignmentPageComponent implements OnInit {
   lessonId!: number;
   showCreateModal = false;
 
-  // объявляем поле без инициализации
   public user!: ReturnType<UserService['getUserSignal']>;
   public UserRole = UserRole;
 
@@ -39,7 +38,6 @@ export class AssignmentPageComponent implements OnInit {
     private userService: UserService,
     private toast: ToastService
   ) {
-    // здесь this.userService уже доступен
     this.user = this.userService.getUserSignal();
   }
 
@@ -53,11 +51,9 @@ export class AssignmentPageComponent implements OnInit {
     this.assignmentService.getAssignmentsByLesson(this.lessonId).subscribe({
       next: data => {
         this.assignments = data;
-        this.toast.success('Задания загружены', 'Успех');
       },
       error: err => {
         console.error(err);
-        this.toast.error('Не удалось загрузить задания', 'Ошибка');
       }
     });
   }
@@ -71,11 +67,9 @@ export class AssignmentPageComponent implements OnInit {
     this.assignmentService.getAssignmentsByLesson(this.lessonId).subscribe({
       next: data => {
         this.assignments = data;
-        this.toast.success('Новое задание успешно создано', 'Успех');
       },
       error: err => {
         console.error(err);
-        this.toast.error('Ошибка при создании задания', 'Ошибка');
       }
     });
   }

@@ -81,14 +81,9 @@
       }
     }
 
-    .btn-delete {
+    .cansel-button {
       display: block;
       margin: 1rem auto;
-      background-color: var(--color-error);
-      color: var(--color-background);
-      border: none;
-      padding: 0.5rem 1.2rem;
-      border-radius: 4px;
       cursor: pointer;
       transition: filter 0.2s;
 

@@ -1,25 +1,26 @@
 <div class="page-container">
   <h2 class="page-title">Course Catalog</h2>
 
-  <!-- Поле поиска курсов -->
-  <input
-    type="search"
-    class="course-search"
-    placeholder="Search course…"
-    (input)="onSearch($any($event.target).value)" />
+  <div class="search-create">
+    <input
+      type="search"
+      class="course-search"
+      placeholder="Search course…"
+      (input)="onSearch($any($event.target).value)"
+    />
+    <button
+      class="just-button create-course-btn"
+      (click)="openNewCourseModal()"
+    >
+      Create Course
+    </button>
+  </div>
 
-  <!-- Кнопка создания нового курса -->
-  <button class="just-button" (click)="openNewCourseModal()">
-    Create Course
-  </button>
-
-  <!-- Список курсов -->
   <app-course-list
     [courses]="filteredCourses()"
-    (select)="openCourse($event)">
-  </app-course-list>
+    (select)="openCourse($event)"
+  ></app-course-list>
 
-  <!-- Модальное окно создания курса -->
   <ng-container *ngIf="isModalOpen()">
     <div class="modal-backdrop" (click)="closeModal()"></div>
     <div class="modal-content">
@@ -30,7 +31,8 @@
         <input
           type="text"
           [(ngModel)]="newCourseName"
-          placeholder="Enter course name" />
+          placeholder="Enter course name"
+        />
       </label>
 
       <label>
@@ -38,12 +40,27 @@
         <textarea
           rows="5"
           [(ngModel)]="newCourseDescription"
-          placeholder="Enter description"></textarea>
+          placeholder="Enter description"
+        ></textarea>
       </label>
 
       <div class="modal-actions">
-        <button class="submit-btn" (click)="submitNewCourse()">Submit</button>
-        <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+        <button
+          class="cancel-btn"
+          (click)="closeModal()"
+        >
+          Cancel
+        </button>
+        <button
+          class="submit-btn"
+          (click)="submitNewCourse()"
+          [disabled]="
+            !newCourseName?.trim() ||
+            !newCourseDescription?.trim()
+          "
+        >
+          Submit
+        </button>
       </div>
     </div>
   </ng-container>
