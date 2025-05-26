@@ -67,7 +67,7 @@ export class RegisterComponent {
 
       const tokenRes = await firstValueFrom(
         this.http.post<any>(
-          'auth/realms/master/protocol/openid-connect/token',
+          'realms/master/protocol/openid-connect/token',
           tokenParams.toString(),
           { headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }) }
         )
@@ -87,7 +87,7 @@ export class RegisterComponent {
 
       const createRes = await firstValueFrom(
         this.http.post<HttpResponse<any>>(
-          `auth/admin/realms/${realm}/users`,
+          `admin/realms/${realm}/users`,
           payload,
           {
             headers: new HttpHeaders({
@@ -103,7 +103,7 @@ export class RegisterComponent {
 
       const rolesList = await firstValueFrom(
         this.http.get<any[]>(
-          `auth/admin/realms/${realm}/roles`,
+          `admin/realms/${realm}/roles`,
           { headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }) }
         )
       );
@@ -112,7 +112,7 @@ export class RegisterComponent {
         await firstValueFrom(
           this.http.request(
             'DELETE',
-            `auth/admin/realms/${realm}/users/${keycloakId}/role-mappings/realm`,
+            `admin/realms/${realm}/users/${keycloakId}/role-mappings/realm`,
             {
               headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }),
               body: [defaultRole]
@@ -125,7 +125,7 @@ export class RegisterComponent {
       if (!wantedRole) throw new Error(`Role "${this.user.role}" not found in realm`);
       await firstValueFrom(
         this.http.post(
-          `auth/admin/realms/${realm}/users/${keycloakId}/role-mappings/realm`,
+          `admin/realms/${realm}/users/${keycloakId}/role-mappings/realm`,
           [wantedRole],
           { headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }) }
         )
@@ -133,7 +133,7 @@ export class RegisterComponent {
 
       await firstValueFrom(
         this.http.put(
-          `auth/admin/realms/${realm}/users/${keycloakId}/execute-actions-email?lifespan=86400`,
+          `admin/realms/${realm}/users/${keycloakId}/execute-actions-email?lifespan=86400`,
           ['VERIFY_EMAIL', 'UPDATE_PASSWORD'],
           { headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }) }
         )

@@ -7,6 +7,7 @@ import {TopicListComponent} from '../../components/topic-list/topic-list.compone
 import {PostFormComponent} from '../../components/post-form/post-form.component';
 import {PostTreeComponent} from '../../components/post-tree/post-tree.component';
 import {NgForOf, NgIf} from '@angular/common';
+import {NotificationComponent} from '../../../../notification-component/notification.component';
 
 @Component({
   selector: 'app-forum-page',
@@ -18,7 +19,8 @@ import {NgForOf, NgIf} from '@angular/common';
     PostFormComponent,
     PostTreeComponent,
     NgIf,
-    NgForOf
+    NgForOf,
+    NotificationComponent
   ]
 })
 export class ForumPageComponent {
