@@ -1,7 +1,7 @@
 export interface AnswerOption {
   id: number;
   text: string;
-  isCorrect: boolean;   // ← именно так
+  isCorrect: boolean;
 }
 
 export type QuestionType = 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE' | 'OPEN';

@@ -1,96 +1,131 @@
-.modal.show.d-block {
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(3px);
+// Используем глобальные переменные из :root / .dark-theme
+// ----------------------------------------
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.modal-dialog {
+.modal-container {
+  width: 100%;
   max-width: 600px;
-  margin: 2rem auto;
+  padding: 1rem;
 }
 
-.modal-content {
+.modal-test {
   background: var(--color-surface);
-  color: var(--text-primary);
-  border: none;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
+.modal-header,
+.modal-footer {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: var(--color-surface);
+}
+
 .modal-header {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--color-background);
+  justify-content: space-between;
+  border-bottom: 1px solid var(--text-secondary);
 
   .modal-title {
     margin: 0;
     font-size: 1.25rem;
-    font-weight: 600;
     color: var(--text-primary);
   }
+}
 
-  .btn-close {
-    background: transparent;
-    border: none;
-    font-size: 1.25rem;
-    line-height: 1;
-    opacity: 0.6;
-    transition: opacity 0.2s;
+.close-button {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--text-secondary);
+  cursor: pointer;
 
-    &:hover {
-      opacity: 1;
-      cursor: pointer;
-    }
+  &:hover {
+    color: var(--text-primary);
   }
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 1rem;
+  background: var(--color-background);
+  color: var(--text-primary);
 
-  .form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  .form-control,
-  .form-select,
-  textarea.form-control {
-    width: 100%;
-    background: var(--color-background);
-    color: var(--text-primary);
-    border: 1px solid var(--color-secondary);
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.75rem;
+  .field {
     margin-bottom: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
 
-    &:focus {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
-    }
-
-    &::placeholder {
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
       color: var(--text-secondary);
     }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.5rem;
+      font: inherit;
+      border: 1px solid var(--text-secondary);
+      border-radius: 0.25rem;
+      background: var(--color-surface);
+      color: var(--text-primary);
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-primary);
+      }
+    }
   }
 
-  .border-rounded {
-    border: 1px solid var(--color-secondary);
-    border-radius: 0.5rem;
-    padding: 1rem;
+  .test-case {
     margin-bottom: 1rem;
+    padding: 0.75rem;
+    border: 1px solid var(--text-secondary);
+    border-radius: 0.25rem;
+
+    label {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      display: block;
+      color: var(--text-secondary);
+    }
+
+    input {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .remove-button {
+    background: var(--color-error);
+    color: #fff;
+    padding: 0.3rem 0.6rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
   }
 }
 
 .modal-footer {
-  padding: 1rem 1.5rem;
-  background: var(--color-background);
-  border-top: 1px solid var(--color-background);
-  display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
+  border-top: 1px solid var(--text-secondary);
 
-
+  button + button {
+    margin-left: 0.75rem;
+  }
 }

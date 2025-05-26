@@ -1,80 +1,98 @@
 <div class="question-modal-overlay" (click)="onClose()">
   <div class="question-modal" (click)="$event.stopPropagation()">
     <h2>Create New Question</h2>
-    <form (ngSubmit)="onSave()" #qForm="ngForm">
+
+    <form (ngSubmit)="onSave()">
+      <!-- Текст -->
       <div class="form-group">
-        <label for="q-text">Question Text</label>
+        <label>Question Text</label>
         <input
-          id="q-text"
-          name="text"
           type="text"
-          required
           [(ngModel)]="text"
+          name="text"
+          required
         />
       </div>
 
+      <!-- Тип -->
       <div class="form-group">
-        <label for="q-type">Type</label>
+        <label>Type</label>
         <select
-          id="q-type"
-          name="type"
           [(ngModel)]="type"
+          name="type"
+          required
         >
-          <option value="OPEN">Open</option>
+          <option value="OPEN">Open Answer</option>
           <option value="SINGLE_CHOICE">Single Choice</option>
           <option value="MULTIPLE_CHOICE">Multiple Choice</option>
         </select>
       </div>
 
-      <div *ngIf="type !== 'OPEN'" class="form-group">
+      <!-- Open Answer -->
+      <div *ngIf="type === 'OPEN'" class="form-group">
+        <label>Correct Answer</label>
+        <input
+          type="text"
+          [(ngModel)]="answer"
+          name="answer"
+          required
+        />
+      </div>
+
+      <!-- Single Choice -->
+      <div *ngIf="type === 'SINGLE_CHOICE'" class="form-group">
         <h3>Options</h3>
-        <div
-          *ngFor="let opt of options; let i = index"
-          class="option-row"
-        >
+        <div *ngFor="let opt of options; let i = index" class="option-row">
           <input
-            name="optText{{i}}"
             type="text"
             placeholder="Option text"
-            required
             [(ngModel)]="opt.text"
+            name="optText{{i}}"
+            required
           />
           <label>
             <input
-              name="optCorrect{{i}}"
-              type="checkbox"
-              [(ngModel)]="opt.correct"
+              type="radio"
+              [(ngModel)]="singleCorrectIndex"
+              name="selectedOption"
+              [value]="i"
+              required
             />
             Correct
           </label>
-          <button
-            type="button"
-            class="remove-btn"
-            (click)="removeOption(i)"
-          >×</button>
+          <button type="button" class="remove-btn" (click)="removeOption(i)">×</button>
         </div>
-        <button
-          type="button"
-          class="add-btn"
-          (click)="addOption()"
-        >+ Add option</button>
+        <button type="button" class="add-btn" (click)="addOption()">+ Add option</button>
       </div>
 
+      <!-- Multiple Choice -->
+      <div *ngIf="type === 'MULTIPLE_CHOICE'" class="form-group">
+        <h3>Options</h3>
+        <div *ngFor="let opt of options; let i = index" class="option-row">
+          <input
+            type="text"
+            placeholder="Option text"
+            [(ngModel)]="opt.text"
+            name="optText{{i}}"
+            required
+          />
+          <label>
+            <input
+              type="checkbox"
+              [(ngModel)]="opt.correct"
+              name="optCorrect{{i}}"
+            />
+            Correct
+          </label>
+          <button type="button" class="remove-btn" (click)="removeOption(i)">×</button>
+        </div>
+        <button type="button" class="add-btn" (click)="addOption()">+ Add option</button>
+      </div>
+
+      <!-- Действия -->
       <div class="modal-actions">
-        <button
-          type="button"
-          class="btn-secondary"
-          (click)="onClose()"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          class="btn-primary"
-          [disabled]="qForm.invalid"
-        >
-          Save
-        </button>
+        <button type="button" class="cansel-button" (click)="onClose()">Cancel</button>
+        <button type="submit" class="just-button" [disabled]="isSaveDisabled">Save</button>
       </div>
     </form>
   </div>
