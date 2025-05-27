@@ -113,7 +113,7 @@ export class CourseDetailPageComponent implements OnInit {
   createLesson() {
     const dto = this.newLesson();
     if (!dto.courseId) return;
-    this.lessonService.createLesson(dto).subscribe(() => {
+    this.courseService.createLesson(dto).subscribe(() => {
       this.courseService.getCourses().subscribe(list =>
         this.course.set(list.find(c => c.id === dto.courseId) || null)
       );

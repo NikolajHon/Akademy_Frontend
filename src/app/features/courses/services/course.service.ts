@@ -1,8 +1,9 @@
 // src/app/services/course.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import {Observable, map, tap, catchError, throwError} from 'rxjs';
 import { Course } from '../models/course.model';
+import {CreateLessonRequestDto} from '../models/lesson.model';
 
 export interface CreateCourseRequestDto {
   name: string;
@@ -27,6 +28,14 @@ export class CourseService {
 
   createCourse(dto: CreateCourseRequestDto): Observable<void> {
     return this.http.post<void>(this.apiUrl, dto);
+  }
+  createLesson(request: CreateLessonRequestDto): Observable<void> {
+    const url = `${this.apiUrl}/lessons`;
+
+    return this.http.post<void>(url, request).pipe(
+      tap(() => console.log('✅ POST succeeded:', url)),
+      catchError(err => throwError(() => err))
+    );
   }
 
   getCompletedLessonIds(courseId: number, userId: string): Observable<number[]> {
