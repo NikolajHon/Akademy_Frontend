@@ -1,7 +1,13 @@
 <app-notification></app-notification>
 
-<app-questions-list [questions]="questions"></app-questions-list>
+<div class="quiz-intro">
+  <h2>Welcome to the interactive quiz!</h2>
+  <p>
+    Test your knowledge and receive instant feedback. Complete all questions to see your final score.
+  </p>
+</div>
 
+<app-questions-list [questions]="questions"></app-questions-list>
 
 <button
   *ngIf="!isTeacher()"

@@ -6,6 +6,10 @@
   flex-direction: column;
   gap: 1rem;
 }
+.name {
+  font-weight: 700;
+  text-transform: uppercase;
+}
 
 .top-five-list > h3 {
   position: relative;

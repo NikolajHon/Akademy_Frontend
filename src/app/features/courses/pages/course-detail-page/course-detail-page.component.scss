@@ -46,10 +46,13 @@ $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .badge {
-    background: var(--color-primary) !important;
+    background: var(--color-button) !important;
     color: var(--text-on-primary, #fff) !important;
     font-weight: 500;
+    padding: 1em 1em;
+    border-radius: 0.25em;
   }
+
 
   .progress {
     background: var(--color-background);
@@ -265,10 +268,7 @@ $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   flex-direction: column;
   gap: 0.75rem;
 }
-.just-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+
 .progress-circle {
   --size: 8rem;
   width: var(--size);
@@ -291,7 +291,7 @@ $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
   .indicator {
     fill: none;
-    stroke: $primary;
+    stroke: #47719b;
     stroke-width: 4;
     stroke-linecap: round;
     stroke-dasharray: var(--offset, 0) 100;
@@ -304,7 +304,7 @@ $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     inset: 0;
     font-size: .875rem;
     font-weight: 600;
-    color: $primary;
+    color: var(--text-primary);
   }
 }
 .action-buttons {
@@ -314,6 +314,7 @@ $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   margin-top: 1rem;
 }
 .user-item {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -327,7 +328,6 @@ $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     transform 0.1s ease;
 
   &:hover {
-    background: var(--color-surface-hover);
     transform: translateY(-2px);
   }
 
