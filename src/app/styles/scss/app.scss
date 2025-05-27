@@ -10,6 +10,13 @@
   letter-spacing: .05em;
   cursor: pointer;
   transition: transform .15s, box-shadow .15s;
+
+  /* ---------- МАЛЫЕ ЭКРАНЫ ---------- */
+  @media (max-width: 480px) {
+    padding: .3rem;      // меньше «мяса» вокруг текста
+    font-size: .875rem;       // ~14px
+    border-radius: .4rem;     // чуть менее округлая
+  }
 }
 
 .just-button:hover {

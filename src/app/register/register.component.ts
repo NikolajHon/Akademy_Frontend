@@ -14,15 +14,15 @@ import {
 import { firstValueFrom } from 'rxjs';
 import { UserRole } from '../core/models/user-role-enum';
 import { UserService } from '../core/services/user.service';
-import {ToastService} from '../features/courses/services/toast.service';
-import {NotificationComponent} from '../notification-component/notification.component';
+import { ToastService } from '../features/courses/services/toast.service';
+import { NotificationComponent } from '../notification-component/notification.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule, NotificationComponent],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
   user = {
@@ -58,6 +58,9 @@ export class RegisterComponent {
 
     const realm = 'Academia_project';
 
+    let adminToken: string | null = null;
+    let keycloakId: string | null = null;
+
     try {
       const tokenParams = new HttpParams()
         .set('grant_type', 'password')
@@ -72,7 +75,7 @@ export class RegisterComponent {
           { headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }) }
         )
       );
-      const adminToken = tokenRes.access_token as string;
+      adminToken = tokenRes.access_token as string;
 
       const payload = {
         username: this.user.username,
@@ -99,30 +102,27 @@ export class RegisterComponent {
         )
       );
       const location = createRes.headers.get('location') || '';
-      const keycloakId = location.substring(location.lastIndexOf('/') + 1);
+      keycloakId = location.substring(location.lastIndexOf('/') + 1);
 
       const rolesList = await firstValueFrom(
-        this.http.get<any[]>(
-          `admin/realms/${realm}/roles`,
-          { headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }) }
-        )
+        this.http.get<any[]>(`admin/realms/${realm}/roles`, {
+          headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` })
+        })
       );
+
       const defaultRole = rolesList.find(r => r.name === `default-roles-${realm}`);
       if (defaultRole) {
         await firstValueFrom(
-          this.http.request(
-            'DELETE',
-            `admin/realms/${realm}/users/${keycloakId}/role-mappings/realm`,
-            {
-              headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }),
-              body: [defaultRole]
-            }
-          )
+          this.http.request('DELETE', `admin/realms/${realm}/users/${keycloakId}/role-mappings/realm`, {
+            headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` }),
+            body: [defaultRole]
+          })
         );
       }
 
       const wantedRole = rolesList.find(r => r.name === this.user.role);
       if (!wantedRole) throw new Error(`Role "${this.user.role}" not found in realm`);
+
       await firstValueFrom(
         this.http.post(
           `admin/realms/${realm}/users/${keycloakId}/role-mappings/realm`,
@@ -146,16 +146,29 @@ export class RegisterComponent {
         role: this.user.role,
         keycloakId
       };
-      console.log(dto);
+
       await firstValueFrom(this.userService.createUser(dto));
 
       this.toastService.success('User successfully registered', 'Registration Complete');
       this.loading = false;
     } catch (err: any) {
-      const message =
-        err.status === 409
-          ? 'User already exists'
-          : err.message || 'An unexpected error occurred';
+      if (adminToken && keycloakId) {
+        try {
+          await firstValueFrom(
+            this.http.delete(`admin/realms/${realm}/users/${keycloakId}`, {
+              headers: new HttpHeaders({ Authorization: `Bearer ${adminToken}` })
+            })
+          );
+          console.info(`[Rollback] Deleted Keycloak user ${keycloakId}`);
+        } catch (rollbackErr) {
+          console.error('[Rollback] Failed to delete Keycloak user', rollbackErr);
+        }
+      }
+
+      const message = err?.status === 409
+        ? 'User already exists'
+        : err?.message || 'An unexpected error occurred';
+
       this.toastService.error(message, 'Registration Failed');
       this.error = message;
       this.loading = false;

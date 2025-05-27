@@ -81,7 +81,6 @@
 .theme-switch .sun  { right: 8px; }
 .theme-switch .moon { left: 8px; }
 
-/* ---- состояние Checked (тёмная тема) ---- */
 .theme-switch > input:checked ~ .track {
   background: rgba( var(--color-primary-rgb, 30,136,229), .35 );
 }
@@ -89,11 +88,9 @@
 .theme-switch > input:checked ~ .track .sun  { opacity: 1; }
 .theme-switch > input:checked ~ .track .moon { opacity: 0; }
 
-/* ---- Unchecked (светлая) ---- */
 .theme-switch > input:not(:checked) ~ .track .sun  { opacity: 0; }
 .theme-switch > input:not(:checked) ~ .track .moon { opacity: 1; }
 
-/* ---------- DARK‑TWEAKS ---------- */
 html.dark-theme {
   .site-nav { box-shadow: 0 1px 4px rgba(0 0 0 /.5); }
   .theme-switch .thumb { background: var(--color-secondary); } /* жёлтый бегунок на тёмном фоне */

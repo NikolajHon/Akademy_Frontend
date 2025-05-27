@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -33,7 +33,7 @@ export class CourseDetailPageComponent implements OnInit {
   private courseService = inject(CourseService);
   private lessonService = inject(LessonService);
   private userService = inject(UserService);
-
+  private router = inject(Router);
   course          = signal<Course | null>(null);
   completedLessonIds = signal<number[]>([]);
   enrolledUsers   = signal<UserDto[]>([]);
@@ -134,7 +134,9 @@ export class CourseDetailPageComponent implements OnInit {
         this.showUsersModal.set(true);
       });
   }
-
+  openRegister(): void{
+    this.router.navigate(['/register-form']);
+  }
   closeUsersModal(): void {
     this.showUsersModal.set(false);
     this.filterTerm.set('');

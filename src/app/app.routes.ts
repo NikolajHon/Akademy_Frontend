@@ -45,7 +45,7 @@ export const routes: Routes = [
     canActivate: [canActiveHome]
   },
 
-  { path: 'test', component: RegisterComponent, canActivate: [canActiveHome] },
+  { path: 'register-form', component: RegisterComponent, canActivate: [canActiveHome] },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
 ];
