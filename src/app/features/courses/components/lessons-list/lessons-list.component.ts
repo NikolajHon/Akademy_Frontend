@@ -47,12 +47,7 @@ export class LessonsListComponent implements OnInit {
   }
 
   openQuestions(lesson: Lesson) {
-    this.router.navigate([
-      '/course-page',
-      this.courseId,
-      'questions',
-      lesson.id
-    ]);
+    this.router.navigate(['/course-page', lesson.id, 'questions']);
   }
 
   openVideo(lesson: Lesson) {

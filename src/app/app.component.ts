@@ -20,14 +20,11 @@ export class AppComponent {
   private userService = inject(UserService);
   user = this.userService.getUserSignal();
 
-  // реактивный сигнал темы
   private dark = signal<boolean>(localStorage.getItem('dark') === '1');
 
-  /* ---------- user ---------- */
   login()  { this.userService.login(); }
   logout() { this.userService.logout(); }
 
-  /* ---------- theme ---------- */
   isDarkTheme() { return this.dark(); }
 
   toggleTheme(evt?: Event) {
@@ -37,9 +34,7 @@ export class AppComponent {
     localStorage.setItem('dark', isDark ? '1' : '0');
   }
 
-  /* Автовосстановление темы на старте */
   constructor() {
-    // ставим класс, если был сохранён
     if (this.isDarkTheme()) {
       document.documentElement.classList.add('dark-theme');
     }
