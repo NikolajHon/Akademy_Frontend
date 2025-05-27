@@ -22,7 +22,8 @@ import { NotificationComponent } from '../../../../notification-component/notifi
     AssignmentCreateModalComponent,
     NotificationComponent
   ],
-  templateUrl: './assignment-page.component.html'
+  templateUrl: './assignment-page.component.html',
+  styleUrl: './assignment-page.component.scss'
 })
 export class AssignmentPageComponent implements OnInit {
   assignments: Assignment[] = [];

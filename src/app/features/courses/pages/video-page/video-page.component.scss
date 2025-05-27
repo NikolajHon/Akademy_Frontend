@@ -93,6 +93,7 @@
     }
   }
 
+
   .overlay {
     position: fixed;
     inset: 0;
@@ -191,7 +192,13 @@
     }
   }
 }
+.video-page {
+  text-align: center;
+}
 
+.video-page .just-button {
+  margin: 1rem 0;
+}
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }

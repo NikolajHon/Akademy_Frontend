@@ -22,6 +22,45 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
+.field.with-info {
+  position: relative;  /* чтобы спозиционировать tooltip относительно этого блока */
+}
+
+.info-icon {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  line-height: 1rem;
+  margin-left: 0.5rem;
+  text-align: center;
+  border: 1px solid #888;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  color: #888;
+  cursor: default;
+  position: relative;
+}
+
+.tooltip-text {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+  width: 12rem;
+  background: #333;
+  color: #fff;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.info-icon:hover .tooltip-text {
+  display: block;
+}
 
 .modal-header,
 .modal-footer {

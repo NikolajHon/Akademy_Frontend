@@ -12,7 +12,15 @@
     --card-color: #f9f9f9;
   }
 }
+.lesson-card .info {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
+.lesson-card .actions {
+  margin-top: auto;
+}
 $primary: #4f46e5;
 $secondary: #6366f1;
 $shadow: 0 6px 16px rgba(0, 0, 0, .08);

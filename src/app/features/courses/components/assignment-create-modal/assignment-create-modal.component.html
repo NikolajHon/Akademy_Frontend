@@ -28,24 +28,43 @@
               <label>Description</label>
               <textarea formControlName="description" rows="3"></textarea>
             </div>
-            <div class="field">
-              <label>Teacher Code</label>
+            <div class="field with-info">
+              <label>Teacher Code
+                <span class="info-icon">i
+                  <span class="tooltip-text">
+                    <p>Enter the complete solution code (e.g., in C):</p>
+                    <ul>
+                      <li>Include a proper <code>int main(void)</code> and all necessary headers</li>
+                      <li>Use the placeholders <code>{{'INPUT'}}</code> and <code>{{'STUDENT_CODE'}}</code></li>
+                      <li>At the end, output the result using <code>printf</code></li>
+                    </ul>
+                  </span>
+                </span>
+              </label>
               <textarea
                 formControlName="teacherCode"
                 rows="10"
-                placeholder="Напиши здесь полный С-код с плейсхолдерами {{'INPUT'}} и {{'STUDENT_CODE'}}"
+                placeholder="Write the full code here with {{'INPUT'}} and {{'STUDENT_CODE'}}"
               ></textarea>
             </div>
+
+
             <div class="field">
-              <label>Template Code</label>
+              <label>Template Code
+                <span class="info-icon">i
+                  <span class="tooltip-text">
+                    <p>Write a method signature:</p>
+                      You just need to write the method signature itself, method names, variables and function type
+                  </span>
+                </span></label>
               <textarea
                 formControlName="templateCode"
                 rows="5"
-                placeholder="Что увидит студент — сигнатура метода и TODO"
+                placeholder="What the student will see - method signature and TODOs"
               ></textarea>
             </div>
             <div class="field">
-              <label>Expected Output</label>
+              <label>Programming language</label>
               <input
                 type="text"
                 formControlName="expectedOutput"
@@ -53,7 +72,6 @@
             </div>
           </ng-container>
 
-          <!-- Step 2 -->
           <ng-container *ngIf="step === 2">
             <div class="field">
               <label>Output Type</label>

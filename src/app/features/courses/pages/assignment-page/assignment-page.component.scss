@@ -1,0 +1,17 @@
+.assignments-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  flex-direction: column;
+}
+
+.assignments-header h2 {
+  margin: 0;
+}
+.assignments-button {
+  display: block;
+  margin: 0.5rem auto;
+}
