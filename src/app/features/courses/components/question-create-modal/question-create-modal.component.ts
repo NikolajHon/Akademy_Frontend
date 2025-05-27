@@ -1,97 +1,67 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import {CreateQuestionRequestDto, QuestionType} from '../../models/question.model';
-import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
+import { Component, EventEmitter, Output } from '@angular/core'
+import { CreateQuestionRequestDto, QuestionType } from '../../models/question.model'
+import { FormsModule } from '@angular/forms'
+import { NgForOf, NgIf } from '@angular/common'
 
 @Component({
   selector: 'app-question-create-modal',
+  standalone: true,
+  imports: [FormsModule, NgIf, NgForOf],
   templateUrl: './question-create-modal.component.html',
-  imports: [
-    FormsModule,
-    NgIf,
-    NgForOf
-  ],
   styleUrls: ['./question-create-modal.component.scss']
 })
 export class QuestionCreateModalComponent {
-  @Output() save  = new EventEmitter<CreateQuestionRequestDto>();
-  @Output() close = new EventEmitter<void>();
+  @Output() save = new EventEmitter<CreateQuestionRequestDto>()
+  @Output() close = new EventEmitter<void>()
 
-  text: string = '';
-  type: QuestionType = 'OPEN';
-  options: Array<{ text: string; correct: boolean }> = [];
-  singleCorrectIndex: number | null = null;
-  answer: string = '';
+  text = ''
+  type: QuestionType = 'SINGLE_CHOICE'
+  options: Array<{ text: string; correct: boolean }> = []
+  singleCorrectIndex: number | null = null
 
   addOption() {
-    this.options.push({ text: '', correct: false });
+    this.options.push({ text: '', correct: false })
   }
 
   removeOption(i: number) {
-    this.options.splice(i, 1);
+    this.options.splice(i, 1)
     if (this.singleCorrectIndex !== null) {
       if (i < this.singleCorrectIndex) {
-        this.singleCorrectIndex!--;
+        this.singleCorrectIndex!--
       } else if (i === this.singleCorrectIndex) {
-        this.singleCorrectIndex = null;
+        this.singleCorrectIndex = null
       }
     }
   }
 
   get isSaveDisabled(): boolean {
-    // 1) Вопрос без текста
-    if (!this.text.trim()) {
-      return true;
-    }
-
-    // 2) Open answer: нужен ответ
-    if (this.type === 'OPEN') {
-      return !this.answer.trim();
-    }
-
-    // 3) Для Choice-типа сначала нужен хотя бы один вариант
-    if (this.options.length === 0) {
-      return true;
-    }
-    // все варианты должны иметь непустой текст
-    if (this.options.some(opt => !opt.text.trim())) {
-      return true;
-    }
-
-    if (this.type === 'SINGLE_CHOICE') {
-      // Single: обязательно выбрать ровно один
-      return this.singleCorrectIndex === null;
-    }
-
-    if (this.type === 'MULTIPLE_CHOICE') {
-      // Multiple: минимум один correct=true
-      return !this.options.some(opt => opt.correct);
-    }
-
-    return true;
+    if (!this.text.trim()) return true
+    if (this.options.length === 0 || this.options.some(o => !o.text.trim())) return true
+    if (this.type === 'SINGLE_CHOICE') return this.singleCorrectIndex === null
+    if (this.type === 'MULTIPLE_CHOICE') return !this.options.some(o => o.correct)
+    return true
   }
 
   onSave() {
-    // собираем options по DTO
     const opts = this.options.map((opt, i) => ({
-      text: opt.text,
+      text: opt.text.trim(),
       correct:
-        this.type === 'OPEN'
-          ? true
-          : this.type === 'SINGLE_CHOICE'
-            ? i === this.singleCorrectIndex
-            : opt.correct
-    }));
+        this.type === 'SINGLE_CHOICE'
+          ? i === this.singleCorrectIndex
+          : opt.correct
+    }))
 
-    const dto: CreateQuestionRequestDto = {
-      text: this.text,
+    const payload: CreateQuestionRequestDto = {
+      text: this.text.trim(),
       type: this.type,
       options: opts
-    };
-    this.save.emit(dto);
+    }
+
+    console.log('CreateQuestion payload:', JSON.stringify(payload))
+    this.save.emit(payload)
   }
 
   onClose() {
-    this.close.emit();
+    this.close.emit()
   }
 }

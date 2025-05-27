@@ -3,7 +3,6 @@
     <h2>Create New Question</h2>
 
     <form (ngSubmit)="onSave()">
-      <!-- Текст -->
       <div class="form-group">
         <label>Question Text</label>
         <input
@@ -14,7 +13,6 @@
         />
       </div>
 
-      <!-- Тип -->
       <div class="form-group">
         <label>Type</label>
         <select
@@ -22,24 +20,11 @@
           name="type"
           required
         >
-          <option value="OPEN">Open Answer</option>
           <option value="SINGLE_CHOICE">Single Choice</option>
           <option value="MULTIPLE_CHOICE">Multiple Choice</option>
         </select>
       </div>
 
-      <!-- Open Answer -->
-      <div *ngIf="type === 'OPEN'" class="form-group">
-        <label>Correct Answer</label>
-        <input
-          type="text"
-          [(ngModel)]="answer"
-          name="answer"
-          required
-        />
-      </div>
-
-      <!-- Single Choice -->
       <div *ngIf="type === 'SINGLE_CHOICE'" class="form-group">
         <h3>Options</h3>
         <div *ngFor="let opt of options; let i = index" class="option-row">
@@ -65,7 +50,6 @@
         <button type="button" class="add-btn" (click)="addOption()">+ Add option</button>
       </div>
 
-      <!-- Multiple Choice -->
       <div *ngIf="type === 'MULTIPLE_CHOICE'" class="form-group">
         <h3>Options</h3>
         <div *ngFor="let opt of options; let i = index" class="option-row">
@@ -89,7 +73,6 @@
         <button type="button" class="add-btn" (click)="addOption()">+ Add option</button>
       </div>
 
-      <!-- Действия -->
       <div class="modal-actions">
         <button type="button" class="cansel-button" (click)="onClose()">Cancel</button>
         <button type="submit" class="just-button" [disabled]="isSaveDisabled">Save</button>

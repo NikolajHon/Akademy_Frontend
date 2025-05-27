@@ -1,16 +1,20 @@
 <div class="questions-container">
   <div
-    class="question-card"
     *ngFor="let q of questions; let i = index"
+    class="question-card"
     [attr.data-type]="q.type"
   >
     <div class="question-header">
-      <span class="question-index">{{ i + 1 }}.</span>
-      <h3 class="question-text">{{ q.text }}</h3>
-    </div>
-
-    <div *ngIf="q.type === 'OPEN'" class="open-answer">
-      <input type="text" placeholder="Your answer…" />
+      <span class="question-index">{{ i + 1 }}</span>
+      <p class="question-text">{{ q.text }}</p>
+      <button
+        *ngIf="isTeacher()"
+        class="btn-delete"
+        (click)="onDelete(q.id)"
+        aria-label="Delete question"
+      >
+        Delete
+      </button>
     </div>
 
     <ul *ngIf="q.type !== 'OPEN'" class="options-list">
@@ -19,13 +23,24 @@
           *ngIf="q.type === 'SINGLE_CHOICE'"
           type="radio"
           [name]="'q' + q.id"
+          (change)="onOptionChanged(q, opt.id, $event)"
         />
         <input
           *ngIf="q.type === 'MULTIPLE_CHOICE'"
           type="checkbox"
+          (change)="onOptionChanged(q, opt.id, $event)"
         />
         <label>{{ opt.text }}</label>
       </li>
     </ul>
+
+    <div *ngIf="q.type === 'OPEN'" class="open-answer">
+      <input
+        class="open-input"
+        type="text"
+        placeholder="Your answer (open question)"
+        disabled
+      />
+    </div>
   </div>
 </div>

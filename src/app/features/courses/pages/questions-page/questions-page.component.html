@@ -1,5 +1,5 @@
 <app-notification></app-notification>
-
+<div>
 <div class="quiz-intro">
   <h2>Welcome to the interactive quiz!</h2>
   <p>
@@ -7,31 +7,38 @@
   </p>
 </div>
 
-<app-questions-list [questions]="questions"></app-questions-list>
+  <app-questions-list
+    [questions]="questions"
+    (answerChange)="onAnswerChange($event.questionId, $event.optionId, $event.checked, $event.type)"
+    (deleteQuestion)="deleteQuestion($event)"
+  ></app-questions-list>
 
-<button
-  *ngIf="!isTeacher()"
-  class="submit-button"
-  [disabled]="submitting"
-  (click)="submitAnswers()"
->
-  {{ submitting ? 'Submitting…' : 'Submit Answers' }}
-</button>
+  <div class="toolbar mb-3">
+    <button
+      *ngIf="isTeacher()"
+      class="just-button"
+      (click)="openCreateModal()"
+    >
+      Create Question
+    </button>
 
-<div *ngIf="rating !== null" class="result">
-  Your score: {{ rating }}%
+    <button
+      *ngIf="!isTeacher()"
+      class="just-button"
+      [disabled]="submitting || questions.length === 0"
+      (click)="submitAnswers()"
+    >
+      {{ submitting ? 'Submitting...' : 'Submit Answers' }}
+    </button>
+  </div>
+  <div *ngIf="rating !== null" class="alert alert-info mt-3">
+    Ваш результат: <strong>{{ rating }}%</strong>
+  </div>
+
+
+  <app-question-create-modal
+    *ngIf="showCreateModal"
+    (save)="onSave($event)"
+    (close)="closeCreateModal()"
+  ></app-question-create-modal>
 </div>
-
-<button
-  *ngIf="isTeacher()"
-  class="just-button"
-  (click)="openCreateModal()"
->
-  Create New Question
-</button>
-
-<app-question-create-modal
-  *ngIf="showCreateModal"
-  (save)="onSave($event)"
-  (close)="closeCreateModal()"
-></app-question-create-modal>
