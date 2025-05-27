@@ -37,6 +37,8 @@ export interface QuestionsResponse {
   questions: Question[]
   page: number
   size: number
+  totalElements: number
+  totalPages: number
 }
 
 export interface CreateQuestionRequestDto {
@@ -44,14 +46,13 @@ export interface CreateQuestionRequestDto {
   type: QuestionType
   options?: { text: string; correct: boolean }[]
 }
-
 export interface UpdateQuestionRequestDto extends CreateQuestionRequestDto {
   id: number
 }
 
 export interface UserAnswerDto {
   questionId: number
-  selectedOptionId: number
+  selectedOptionIds: number[]
 }
 
 export interface AnswerResultDto {

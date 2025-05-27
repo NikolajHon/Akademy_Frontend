@@ -107,11 +107,13 @@ export class QuestionsPageComponent implements OnInit {
     }
     this.submitting = true;
 
+    // Собираем payload — по 1 объекту UserAnswerDto на каждый вопрос
     const payload: UserAnswerDto[] = [];
     this.answersMap.forEach((optIds, questionId) => {
-      optIds.forEach(optId =>
-        payload.push({ questionId, selectedOptionId: optId })
-      );
+      payload.push({
+        questionId,
+        selectedOptionIds: optIds    // <-- теперь массив
+      });
     });
 
     this.questionService
@@ -128,6 +130,7 @@ export class QuestionsPageComponent implements OnInit {
         }
       });
   }
+
 
   deleteQuestion(qId: number): void {
     this.questionService
