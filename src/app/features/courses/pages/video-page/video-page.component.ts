@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { VideoMaterialService } from '../../services/video.service';
-import { CreateVideoMaterialRequest, VideoMaterial } from '../../models/video.model';
-import { NgForOf, NgIf } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import {NotificationComponent} from '../../../../notification-component/notification.component';
-import {ToastService} from '../../services/toast.service';
+import { NgForOf, NgIf } from '@angular/common';
+import { CreateVideoMaterialRequest, VideoMaterial } from '../../models/video.model';
+import { VideoMaterialService } from '../../services/video.service';
+import { ToastService } from '../../services/toast.service';
+import { NotificationComponent } from '../../../../notification-component/notification.component';
 
 @Component({
   selector: 'app-video-page',
   templateUrl: './video-page.component.html',
   styleUrls: ['./video-page.component.scss'],
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     NgIf,
@@ -25,14 +26,12 @@ export class VideoPageComponent implements OnInit {
   form!: FormGroup;
   loading = false;
   error: string | null = null;
-
   modalOpen = false;
-
-  safeUrls: { [id: number]: SafeResourceUrl } = {};
+  safeUrls: Record<number, SafeResourceUrl> = {};
 
   constructor(
     private route: ActivatedRoute,
-    private svc: VideoMaterialService,
+    private videoService: VideoMaterialService,
     private fb: FormBuilder,
     private sanitizer: DomSanitizer,
     private toast: ToastService
@@ -42,78 +41,76 @@ export class VideoPageComponent implements OnInit {
     this.lessonId = Number(this.route.snapshot.paramMap.get('lessonId'));
     this.form = this.fb.group({
       title: ['', Validators.required],
-      url:   ['', [Validators.required]]
+      url: ['', Validators.required]
     });
-    this.reload();
+    this.loadVideos();
   }
 
-  reload(): void {
+  loadVideos(): void {
     this.loading = true;
     this.error = null;
-    this.svc.getByLesson(this.lessonId).subscribe({
-      next: list => {
-        this.videoMaterials = list;
-        this.prepareSafeUrls();
+    this.videoService.getByLesson(this.lessonId).subscribe({
+      next: videos => {
+        this.videoMaterials = videos;
+        this.buildSafeUrls();
         this.loading = false;
       },
-      error: _ => {
-        this.error = 'Не удалось загрузить видео';
+      error: () => {
+        this.error = 'Failed to load videos';
         this.loading = false;
       }
     });
   }
 
-  // Открыть модалку
   openModal(): void {
-    console.log("we are open our modal")
     this.modalOpen = true;
   }
 
-  // Закрыть модалку
   closeModal(): void {
     this.modalOpen = false;
     this.form.reset();
   }
 
   onSubmit(): void {
-    if (this.form.invalid) return;
-    const dto: CreateVideoMaterialRequest = this.form.value;
-    this.svc.create(this.lessonId, dto).subscribe({
-      next: vm => {
-        this.toast.success('Video successfully added', 'Success');
-        this.videoMaterials.push(vm);
-        if (this.isYouTube(vm.url)) {
-          const embed = this.toYouTubeEmbed(vm.url);
-          this.safeUrls[vm.id] = this.sanitizer.bypassSecurityTrustResourceUrl(embed);
-        }
+    if (this.form.invalid) {
+      return;
+    }
+
+    const dto = this.form.value as CreateVideoMaterialRequest;
+
+    this.videoService.create(this.lessonId, dto).subscribe({
+      next: () => {
+        this.toast.success('Video added');
         this.closeModal();
+        this.videoService.getByLesson(this.lessonId).subscribe(
+          videos => {
+            this.videoMaterials = videos;
+            this.buildSafeUrls();
+          },
+          () => this.toast.error('Failed to refresh video list')
+        );
       },
-      error: err => {
-        this.toast.error('Failed to add video', 'Error');
-        console.error(err);
-      }
+      error: () => this.toast.error('Failed to add video')
     });
   }
 
   onDelete(vm: VideoMaterial): void {
-    if (!confirm(`Удалить "${vm.title}"?`)) return;
-    this.svc.delete(this.lessonId, vm.id).subscribe({
+    this.videoService.delete(this.lessonId, vm.id).subscribe({
       next: () => {
         this.videoMaterials = this.videoMaterials.filter(x => x.id !== vm.id);
-        this.toast.info('Video deleted', 'Information');
+        delete this.safeUrls[vm.id];
+        this.toast.info('Video removed');
       },
-      error: () => {
-        this.toast.error('Failed to delete the video', 'Error');
-      }
+      error: () => this.toast.error('Failed to remove video')
     });
   }
 
-  private prepareSafeUrls(): void {
+  private buildSafeUrls(): void {
     this.safeUrls = {};
     this.videoMaterials.forEach(vm => {
       if (this.isYouTube(vm.url)) {
-        const embed = this.toYouTubeEmbed(vm.url);
-        this.safeUrls[vm.id] = this.sanitizer.bypassSecurityTrustResourceUrl(embed);
+        const embedUrl = this.toYouTubeEmbed(vm.url);
+        this.safeUrls[vm.id] = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
       }
     });
   }
@@ -123,7 +120,7 @@ export class VideoPageComponent implements OnInit {
   }
 
   toYouTubeEmbed(url: string): string {
-    let videoId: string|null = null;
+    let videoId: string | null;
     if (url.includes('youtu.be/')) {
       videoId = url.split('youtu.be/')[1].split(/[?&]/)[0];
     } else {

@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap, catchError, throwError } from 'rxjs';
+
 import {
   Question,
   QuestionsResponse,
   CreateQuestionRequestDto,
-  UpdateQuestionRequestDto,
-  RatingDto    // ← импортируем
+  UpdateQuestionRequestDto
 } from '../models/question.model';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionService {
   private readonly baseUrl = 'api/lessons';
-  private readonly questionsUrl = 'questions'; // без ведущего slash
+  private readonly questionsUrl = 'questions';
 
   constructor(private http: HttpClient) {}
 
@@ -69,5 +69,4 @@ export class QuestionService {
         catchError(err => throwError(() => err))
       );
   }
-
 }
