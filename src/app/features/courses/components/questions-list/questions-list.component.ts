@@ -1,6 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {Component, Input, Output, EventEmitter, inject, signal, computed} from '@angular/core';
 import { QuestionPublic } from '../../models/question.model';
 import {NgForOf, NgIf} from '@angular/common';
+import {UserService} from '../../../../core/services/user.service';
+import {Router} from '@angular/router';
+import {Course} from '../../models/course.model';
+import {UserDto} from '../../../../core/models/user-model';
+import {UserRole} from '../../../../core/models/user-role-enum';
 
 @Component({
   selector: 'app-questions-list',
@@ -21,10 +26,10 @@ export class QuestionsListComponent {
   }>();
   @Output() deleteQuestion = new EventEmitter<number>();
 
-  isTeacher(): boolean {
-    // заменить на реальную логику
-    return false;
-  }
+  private userService = inject(UserService);
+   private userSignal = this.userService.getUserSignal();
+  isTeacher       = computed(() => this.userSignal()?.role === UserRole.TEACHER);
+
 
   onOptionChanged(q: QuestionPublic, optId: number, event: Event) {
     const input = event.target as HTMLInputElement;

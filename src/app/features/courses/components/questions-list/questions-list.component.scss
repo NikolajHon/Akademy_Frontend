@@ -60,7 +60,33 @@
     display: flex;
     align-items: flex-start;
     gap: 0.5rem;
+    position: relative;
+    padding-right: 2.5rem; // чтобы крестик не наехал на текст
 
+    .btn-delete {
+      position: absolute;
+      right: 0.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      padding: 0;
+      background: transparent;
+      border: none;
+      font-size: 1.25rem;
+      line-height: 1;
+      cursor: pointer;
+      color: #888;
+      transition: color 0.2s ease, transform 0.1s ease;
+
+      &:hover {
+        color: #e00;
+        transform: scale(1.1);
+      }
+
+      &:focus {
+        outline: 2px solid #66afe9;
+        outline-offset: 2px;
+      }
+    }
     .question-index {
       font-weight: 700;
       color: var(--text-secondary);

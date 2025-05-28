@@ -63,7 +63,7 @@ export class QuestionService {
   }
 
   deleteQuestion(questionId: number): Observable<void> {
-    const url = `/${this.questionsUrl}/${questionId}`
+    const url = `api/questions/${questionId}`
     return this.http
       .delete<void>(url)
       .pipe(
