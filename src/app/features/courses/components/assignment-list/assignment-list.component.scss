@@ -60,49 +60,6 @@
     }
   }
 
-  /* ───── Buttons ───── */
-  .just-button,
-  .trash-button {
-    margin-top: 1rem;
-    margin-right: 0.75rem;
-    padding: 0.5rem 1.25rem;
-    font-size: 1rem;
-    font-weight: 500;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: filter 0.2s, transform 0.2s;
-  }
-
-  .just-button {
-    background: var(--color-primary);
-    color: #fff;
-
-    &:hover:not(:disabled) {
-      filter: brightness(0.9);
-      transform: translateY(-1px);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-  }
-
-  .trash-button {
-    background: var(--color-error);
-    color: #fff;
-
-    &:hover:not(:disabled) {
-      filter: brightness(0.9);
-      transform: scale(1.02);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-  }
 
   app-submission-result {
     margin-top: 1rem;

@@ -28,10 +28,14 @@ export class AssignmentService {
   ): Observable<Assignment> {
     const url = `${this.lessonsUrl}/${lessonId}/assignments`;
     return this.http.post<Assignment>(url, req).pipe(
-      tap(() => console.log('✅ POST assignment', url)),
+      tap(() => {
+        console.log('✅ POST assignment to:', url);
+        console.log('📤 Payload:', JSON.stringify(req, null, 2));
+      }),
       catchError(err => throwError(() => err))
     );
   }
+
 
   submitAssignment(
     assignmentId: number,

@@ -36,10 +36,11 @@ export class AssignmentCreateModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
+      title: ['', Validators.required],       // added title control
       description: ['', Validators.required],
       teacherCode: ['', Validators.required],
       templateCode: ['', Validators.required],
-      expectedOutput: ['', Validators.required],
+      language: ['', Validators.required],    // still in form but stepped to step 2
       outputType: ['', Validators.required],
       testCases: this.fb.array([])
     });
@@ -65,10 +66,10 @@ export class AssignmentCreateModalComponent implements OnInit {
 
   next(): void {
     if (
+      this.form.get('title')?.valid &&           // check title
       this.form.get('description')?.valid &&
       this.form.get('teacherCode')?.valid &&
-      this.form.get('templateCode')?.valid &&
-      this.form.get('expectedOutput')?.valid
+      this.form.get('templateCode')?.valid
     ) {
       this.step = 2;
     } else {
@@ -83,10 +84,11 @@ export class AssignmentCreateModalComponent implements OnInit {
   submit(): void {
     if (this.form.valid) {
       const payload: CreateAssignmentRequestDto = {
+        title:          this.form.value.title,        // include title in payload
         description:    this.form.value.description,
         teacherCode:    this.form.value.teacherCode,
         templateCode:   this.form.value.templateCode,
-        expectedOutput: this.form.value.expectedOutput,
+        language:       this.form.value.language,
         outputType:     this.form.value.outputType,
         testCases:      this.form.value.testCases
       };

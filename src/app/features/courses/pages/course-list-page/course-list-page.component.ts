@@ -25,7 +25,7 @@ export class CourseListPageComponent implements OnInit {
   filtered: Course[] = [];
   private coursesSig: WritableSignal<Course[]> = signal([]);
   private searchQuery: WritableSignal<string> = signal('');
-
+  private userService = inject(UserService);
   isModalOpen: WritableSignal<boolean> = signal(false);
   newCourseName = '';
   newCourseDescription = '';
@@ -40,9 +40,8 @@ export class CourseListPageComponent implements OnInit {
         c.description.toLowerCase().includes(q)
       );
   });
-  constructor(
-    private userService: UserService
-  ) {}
+  private userSignal = this.userService.getUserSignal();
+  isTeacher       = computed(() => this.userSignal()?.role === UserRole.TEACHER);
   ngOnInit() {
     this.currentUser = this.userService.getUserSignal()!();
     this.loadCourses();

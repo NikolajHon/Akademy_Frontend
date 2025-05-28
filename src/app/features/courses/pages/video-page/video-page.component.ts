@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgForOf, NgIf } from '@angular/common';
@@ -7,6 +7,10 @@ import { CreateVideoMaterialRequest, VideoMaterial } from '../../models/video.mo
 import { VideoMaterialService } from '../../services/video.service';
 import { ToastService } from '../../services/toast.service';
 import { NotificationComponent } from '../../../../notification-component/notification.component';
+import {UserService} from '../../../../core/services/user.service';
+import {Course} from '../../models/course.model';
+import {UserDto} from '../../../../core/models/user-model';
+import {UserRole} from '../../../../core/models/user-role-enum';
 
 @Component({
   selector: 'app-video-page',
@@ -28,6 +32,10 @@ export class VideoPageComponent implements OnInit {
   error: string | null = null;
   modalOpen = false;
   safeUrls: Record<number, SafeResourceUrl> = {};
+  private userService = inject(UserService);
+
+  private userSignal = this.userService.getUserSignal();
+  isTeacher       = computed(() => this.userSignal()?.role === UserRole.TEACHER);
 
   constructor(
     private route: ActivatedRoute,

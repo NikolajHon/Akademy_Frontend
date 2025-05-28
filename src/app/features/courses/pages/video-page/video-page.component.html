@@ -3,7 +3,7 @@
 
   <h2>Lesson {{ lessonId }} Video Materials</h2>
   <p class="subtitle">Enhance your skills with curated video lessons</p>
-  <button class="just-button" (click)="modalOpen = true">Add New Video</button>
+  <button *ngIf="isTeacher()" class="just-button" (click)="modalOpen = true">Add New Video</button>
 
   <ng-container *ngIf="modalOpen">
     <div class="overlay" (click)="modalOpen = false">

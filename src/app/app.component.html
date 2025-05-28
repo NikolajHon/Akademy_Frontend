@@ -1,30 +1,32 @@
-<nav class="site-nav">
-  <div class="nav-start">
-    <a routerLink="/home" routerLinkActive="active">Home</a>
-    <a routerLink="/course-page" routerLinkActive="active">Courses</a>
-    <a routerLink="/forum" routerLinkActive="active">Forum</a>
-  </div>
 
-  <div class="nav-end">
-    <label class="theme-switch">
-      <input type="checkbox"
-             [checked]="isDarkTheme()"
-             (change)="toggleTheme($event)">
+  <nav class="site-nav">
+    <div class="nav-start">
+      <a routerLink="/home" routerLinkActive="active">Home</a>
+      <a routerLink="/course-page" routerLinkActive="active">Courses</a>
+      <a routerLink="/forum" routerLinkActive="active">Forum</a>
+    </div>
 
-      <span class="track">
+    <div class="nav-end">
+      <label class="theme-switch">
+        <input type="checkbox"
+               [checked]="isDarkTheme()"
+               (change)="toggleTheme($event)">
+
+        <span class="track">
         <span class="thumb"></span>
-        <svg class="icon sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg>
+        <svg class="icon sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg>
         <svg class="icon moon" viewBox="0 0 24 24">
           <path d="M21 12.79A9 9 0 0 1 11.21 3
                    7 7 0 1 0 21 12.79Z"/>
         </svg>
       </span>
-    </label>
+      </label>
 
-    <button class="just-button" (click)="user() ? logout() : login()">
-      {{ user() ? 'Logout' : 'Login' }}
-    </button>
-  </div>
-</nav>
-
-<router-outlet></router-outlet>
+      <button class="just-button" (click)="user() ? logout() : login()">
+        {{ user() ? 'Logout' : 'Login' }}
+      </button>
+    </div>
+  </nav>
+  <div class="main-wrapper">
+  <router-outlet></router-outlet>
+</div>

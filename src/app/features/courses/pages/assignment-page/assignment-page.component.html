@@ -3,7 +3,9 @@
 <div class="container py-4">
   <div class="row">
     <div class="assignments-header col-md-9">
-      <h2>Assignments</h2>
+      <div class="intro-text">
+        <h3 class="course-title mb-2">Welcome to the Assignments page! Here you can browse, create, and manage all your course assignments.</h3>
+      </div>
       <ng-container *ngIf="user() as u">
         <button
           *ngIf="u.role === UserRole.TEACHER"

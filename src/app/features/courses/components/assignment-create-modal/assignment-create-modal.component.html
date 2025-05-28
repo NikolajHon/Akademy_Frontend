@@ -25,93 +25,63 @@
           <!-- Step 1 -->
           <ng-container *ngIf="step === 1">
             <div class="field">
+              <label>Title</label>
+              <input type="text" formControlName="title"/>
+            </div>
+            <div class="field">
               <label>Description</label>
               <textarea formControlName="description" rows="3"></textarea>
             </div>
             <div class="field with-info">
               <label>Teacher Code
                 <span class="info-icon">i
-                  <span class="tooltip-text">
-                    <p>Enter the complete solution code (e.g., in C):</p>
-                    <ul>
-                      <li>Include a proper <code>int main(void)</code> and all necessary headers</li>
-                      <li>Use the placeholders <code>{{'INPUT'}}</code> and <code>{{'STUDENT_CODE'}}</code></li>
-                      <li>At the end, output the result using <code>printf</code></li>
-                    </ul>
-                  </span>
-                </span>
+              <span class="tooltip-text">
+                <p>Enter the complete solution code (e.g., in C):</p>
+                <ul>
+                  <li>Include a proper <code>int main(void)</code> and all necessary headers</li>
+                  <li>Use the placeholders <code>{{ 'INPUT' }}</code> and <code>{{ 'STUDENT_CODE' }}</code></li>
+                  <li>At the end, output the result using <code>printf</code></li>
+                </ul>
+              </span>
+            </span>
               </label>
-              <textarea
-                formControlName="teacherCode"
-                rows="10"
-                placeholder="Write the full code here with {{'INPUT'}} and {{'STUDENT_CODE'}}"
-              ></textarea>
+              <textarea formControlName="teacherCode" rows="10"
+                        placeholder="Write the full code here with {{'INPUT'}} and {{'STUDENT_CODE'}}"></textarea>
             </div>
-
-
             <div class="field">
               <label>Template Code
                 <span class="info-icon">i
-                  <span class="tooltip-text">
-                    <p>Write a method signature:</p>
-                      You just need to write the method signature itself, method names, variables and function type
-                  </span>
-                </span></label>
-              <textarea
-                formControlName="templateCode"
-                rows="5"
-                placeholder="What the student will see - method signature and TODOs"
-              ></textarea>
-            </div>
-            <div class="field">
-              <label>Programming language</label>
-              <input
-                type="text"
-                formControlName="expectedOutput"
-              />
+              <span class="tooltip-text">
+                <p>Write a method signature:</p>
+                You just need to write the method signature itself, method names, variables and function type
+              </span>
+            </span>
+              </label>
+              <textarea formControlName="templateCode" rows="5"
+                        placeholder="What the student will see - method signature and TODOs"></textarea>
             </div>
           </ng-container>
 
+          <!-- Step 2 -->
           <ng-container *ngIf="step === 2">
+            <div class="field">
+              <label>Programming language</label>
+              <input type="text" formControlName="language"/>
+            </div>
             <div class="field">
               <label>Output Type</label>
               <select formControlName="outputType">
-                <option *ngFor="let o of outputTypes" [value]="o.value">
-                  {{ o.label }}
-                </option>
+                <option *ngFor="let o of outputTypes" [value]="o.value">{{ o.label }}</option>
               </select>
             </div>
-
             <div formArrayName="testCases">
-              <div
-                *ngFor="let tc of testCases.controls; let i = index"
-                [formGroupName]="i"
-                class="test-case"
-              >
+              <div *ngFor="let tc of testCases.controls; let i = index" [formGroupName]="i" class="test-case">
                 <label>Test Case {{ i + 1 }}</label>
-                <input
-                  formControlName="input"
-                  placeholder="Input"
-                />
-                <input
-                  formControlName="expectedOutput"
-                  placeholder="Expected Output"
-                />
-                <button
-                  type="button"
-                  class="remove-button"
-                  (click)="removeTestCase(i)"
-                >
-                  Remove
-                </button>
+                <input formControlName="input" placeholder="Input"/>
+                <input formControlName="expectedOutput" placeholder="Expected Output"/>
+                <button type="button" class="remove-button" (click)="removeTestCase(i)">Remove</button>
               </div>
-              <button
-                type="button"
-                class="just-button"
-                (click)="addTestCase()"
-              >
-                Add Test Case
-              </button>
+              <button type="button" class="just-button" (click)="addTestCase()">Add Test Case</button>
             </div>
           </ng-container>
         </form>
@@ -119,49 +89,14 @@
 
       <!-- Footer -->
       <div class="modal-footer">
-        <button
-          type="button"
-          class="cansel-button"
-          (click)="close()"
-        >
-          Cancel
-        </button>
-
-        <button
-          *ngIf="step === 2"
-          type="button"
-          class="cansel-button"
-          (click)="back()"
-        >
-          Back
-        </button>
-
-        <button
-          *ngIf="step === 1"
-          type="button"
-          class="just-button"
-          (click)="next()"
-          [disabled]="
-            form.get('description')!.invalid ||
-            form.get('teacherCode')!.invalid ||
-            form.get('templateCode')!.invalid ||
-            form.get('expectedOutput')!.invalid
-          "
-        >
+        <button type="button" class="cansel-button" (click)="close()">Cancel</button>
+        <button *ngIf="step === 2" type="button" class="cansel-button" (click)="back()">Back</button>
+        <button *ngIf="step === 1" type="button" class="just-button" (click)="next()"
+                [disabled]="form.get('title')!.invalid || form.get('description')!.invalid || form.get('teacherCode')!.invalid || form.get('templateCode')!.invalid">
           Next
         </button>
-
-        <button
-          *ngIf="step === 2"
-          type="button"
-          class="just-button"
-          (click)="submit()"
-          [disabled]="
-            form.get('outputType')!.invalid ||
-            testCases.controls.length === 0 ||
-            form.get('testCases')!.invalid
-          "
-        >
+        <button *ngIf="step === 2" type="button" class="just-button" (click)="submit()"
+                [disabled]="form.get('language')!.invalid || form.get('outputType')!.invalid || testCases.controls.length === 0 || form.get('testCases')!.invalid">
           Submit
         </button>
       </div>

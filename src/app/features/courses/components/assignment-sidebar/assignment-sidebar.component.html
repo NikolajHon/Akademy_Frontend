@@ -3,7 +3,7 @@
   <ul class="assignment-links">
     <li *ngFor="let assignment of assignments">
       <button class="just-button" (click)="scrollToAssignment(assignment.id)">
-        {{ assignment.description }}
+        {{ assignment.title }}
       </button>
     </li>
   </ul>

@@ -1,16 +1,18 @@
 export interface Assignment {
   id: number;
   description: string;
+  title: string;
   templateCode: string;
   expectedOutput: string;
   outputType: 'STRING' | 'INT' | 'JSON';
 }
 
 export interface CreateAssignmentRequestDto {
+  title: string;
   description: string;
   teacherCode: string;
   templateCode: string;
-  expectedOutput: string;
+  language: string;
   outputType: 'STRING' | 'INT' | 'JSON';
   testCases: Array<{
     input: string;

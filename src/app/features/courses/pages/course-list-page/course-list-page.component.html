@@ -9,6 +9,7 @@
       (input)="onSearch($any($event.target).value)"
     />
     <button
+      *ngIf="isTeacher()"
       class="just-button create-course-btn"
       (click)="openNewCourseModal()"
     >
