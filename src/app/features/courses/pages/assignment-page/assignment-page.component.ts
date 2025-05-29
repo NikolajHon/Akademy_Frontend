@@ -43,7 +43,7 @@ export class AssignmentPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.lessonId = Number(this.route.snapshot.paramMap.get('id'));
+    this.lessonId = Number(this.route.snapshot.paramMap.get('lessonId'));
     this.loadAssignments();
   }
 

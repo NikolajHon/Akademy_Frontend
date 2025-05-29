@@ -12,7 +12,7 @@ import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot} from
 import {UserRole} from '../models/user-role-enum';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {catchError, map, Observable, switchMap, throwError} from 'rxjs';
+import {catchError, map, Observable, of, switchMap, throwError} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -61,6 +61,7 @@ export class UserService {
       map(current => current.rating),
       switchMap(currentRating => {
         const sumDto: RatingDto = { rating: currentRating + ratingDto.rating };
+        console.log(url)
         return this.http.put<void>(url, sumDto, {
           headers: { 'Content-Type': 'application/json' }
         });
@@ -70,11 +71,18 @@ export class UserService {
   }
 
   getUserCourseRating(userId: string, courseId: number): Observable<RatingDto> {
-    const url = `${this.baseUrl}/${userId}/courses/${courseId}/rating`;
+    const url = `/api/users/${userId}/courses/${courseId}/rating`;
     return this.http.get<RatingDto>(url, {
       headers: { 'Accept': 'application/json' }
-    });
+    }).pipe(
+      catchError(err =>
+        err.status === 404
+          ? of({ rating: 0 })        // если нет записи — считаем рейтинг = 0
+          : throwError(() => err)
+      )
+    );
   }
+
 
   listCourseProgressByCourse(courseId: number): Observable<CourseProgressWithUserDto[]> {
     const url = `${this.baseUrl}/courses/${courseId}/ratings`;

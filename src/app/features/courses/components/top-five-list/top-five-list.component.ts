@@ -1,4 +1,3 @@
-// src/app/components/top-five-list/top-five-list.component.ts
 import {
   Component,
   Input,
@@ -6,8 +5,9 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../../../core/services/user.service';
 import {CourseProgressWithUserDto, UserDto} from '../../../../core/models/user-model';
-import {UserService} from '../../../../core/services/user.service';
+
 
 @Component({
   selector: 'app-top-five-list',
@@ -38,6 +38,7 @@ export class TopFiveListComponent implements OnChanges {
       .listCourseProgressByCourse(this.courseId)
       .subscribe(list => {
         this.users = list
+          .filter(cp => cp.user.role === 'Student')
           .sort((a, b) => b.rating - a.rating)
           .slice(0, 5);
       });

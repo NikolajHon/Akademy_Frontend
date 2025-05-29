@@ -1,26 +1,21 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Assignment } from '../../models/assignment.model';
+import {NgForOf, ViewportScroller} from '@angular/common';
+import {Assignment} from '../../models/assignment.model';
 
 @Component({
   selector: 'app-assignment-sidebar',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './assignment-sidebar.component.html',
+  imports: [
+    NgForOf
+  ],
   styleUrls: ['./assignment-sidebar.component.scss']
 })
 export class AssignmentSidebarComponent {
   @Input() assignments: Assignment[] = [];
 
-  scrollToAssignment(assignmentId: number): void {
-    const element = document.getElementById(`assignment-${assignmentId}`);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      element.classList.add('highlighted');
+  constructor(private viewport: ViewportScroller) {}
 
-      setTimeout(() => {
-        element.classList.remove('highlighted');
-      }, 2000);
-    }
+  scrollToAssignment(id: number) {
+    this.viewport.scrollToAnchor(`assignment-${id}`);
   }
 }

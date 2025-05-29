@@ -1,11 +1,14 @@
-<div class="top-five-list" >
-  <h3 class="title">Top 5 Users</h3>
+<div class="top-five-list">
+  <h3 class="title">Top 5 Students</h3>
   <div class="user-cards">
-    <div class="user-card" *ngFor="let u of users; let i = index">
+    <div
+      class="user-card"
+      *ngFor="let u of users; let i = index"
+    >
       <div class="avatar">
         <img
           [src]="getAvatarUrl(u.user)"
-          alt="{{ u.user.givingName }}'s avatar"
+          [alt]="u.user.givingName + ' ' + u.user.familyName + '\'s avatar'"
         />
         <div class="rank">#{{ i + 1 }}</div>
       </div>
@@ -13,8 +16,16 @@
         <div class="name">
           {{ u.user.givingName }} {{ u.user.familyName }}
         </div>
-        <div class="score">Score: <strong>{{ u.rating }}</strong></div>
+        <div class="score">
+          Score: <strong>{{ u.rating }}</strong>
+        </div>
       </div>
+    </div>
+    <div
+      class="no-results"
+      *ngIf="users.length === 0"
+    >
+      No students enrolled or no ratings available.
     </div>
   </div>
 </div>

@@ -7,7 +7,7 @@ import { ForumPageComponent } from './features/forum/pages/forum-page/forum-page
 import { AssignmentPageComponent } from './features/courses/pages/assignment-page/assignment-page.component';
 import { RegisterComponent } from './register/register.component';
 import { QuestionsPageComponent } from './features/courses/pages/questions-page/questions-page.component';
-import { VideoPageComponent } from './features/courses/pages/video-page/video-page.component';  // <-- ваш компонент
+import { VideoPageComponent } from './features/courses/pages/video-page/video-page.component';
 import { canActiveHome } from './core/services/user.service';
 
 export const routes: Routes = [
@@ -29,12 +29,12 @@ export const routes: Routes = [
     canActivate: [canActiveHome]
   },
   {
-    path: 'course-page/:id/assignment/:assignmentId',
+    path: 'course-page/:id/assignment/:lessonId',
     component: AssignmentPageComponent,
     canActivate: [canActiveHome]
   },
   {
-    path: 'course-page/:lessonId/questions',
+    path: 'course-page/:coursesId/lessons/:lessonId/questions',
     component: QuestionsPageComponent,
     canActivate: [canActiveHome]
   },

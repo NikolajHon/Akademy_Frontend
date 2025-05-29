@@ -84,7 +84,7 @@ export class AssignmentCreateModalComponent implements OnInit {
   submit(): void {
     if (this.form.valid) {
       const payload: CreateAssignmentRequestDto = {
-        title:          this.form.value.title,        // include title in payload
+        title:          this.form.value.title,
         description:    this.form.value.description,
         teacherCode:    this.form.value.teacherCode,
         templateCode:   this.form.value.templateCode,

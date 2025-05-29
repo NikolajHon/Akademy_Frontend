@@ -18,19 +18,16 @@ export class NotificationComponent implements OnInit {
   constructor(private toastService: ToastService) {}
 
   ngOnInit(): void {
-    // подписка на появление/удаление тостов
     this.toastService.getToasts().subscribe(list => {
       this.toasts = list;
     });
 
-    // подписка на автоматическое «истечение» тостов
     this.toastService.expire$.subscribe(id => {
       this.dismiss(id);
     });
   }
 
   dismiss(id: number): void {
-    // ставим флаг, чтобы добавить класс .toast--exit
     this.exitingMap[id] = true;
     // через 300мс (длительность slide-out) реально удаляем из сервиса
     setTimeout(() => {

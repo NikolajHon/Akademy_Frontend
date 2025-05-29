@@ -1,5 +1,5 @@
 <div class="assignments-list">
-  <div *ngFor="let a of assignments">
+  <div *ngFor="let a of assignments" [attr.id]="'assignment-' + a.id">
     <h3>{{ a.description }}</h3>
 
     <textarea #editor

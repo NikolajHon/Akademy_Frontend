@@ -124,13 +124,19 @@ export class CourseDetailPageComponent implements OnInit {
 
   openUsersModal(): void {
     const cid = this.currentCourseId();
+
     this.userService.getAllUsers().subscribe((res: UsersResponseDto) => {
-      this.users.set(res.users);
+      const students = res.users.filter(u => u.role === 'Student');
+      this.users.set(students);
     });
+
     this.userService
       .listCourseProgressByCourse(cid)
       .subscribe((list: CourseProgressWithUserDto[]) => {
-        this.enrolledUsers.set(list.map(cp => cp.user));
+        const studentUsers = list
+          .filter(cp => cp.user.role === 'Student')
+          .map(cp => cp.user);
+        this.enrolledUsers.set(studentUsers);
         this.showUsersModal.set(true);
       });
   }
